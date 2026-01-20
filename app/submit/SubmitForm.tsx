@@ -98,13 +98,19 @@ export default function SubmitForm() {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+          <label
+            htmlFor="title"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+          >
             标题
           </label>
           <div className="relative">
             <input
               {...register("title")}
+              id="title"
               placeholder="为你的点子起个吸引人的标题"
+              aria-invalid={!!errors.title}
+              aria-describedby={errors.title ? "title-error" : undefined}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
             />
             <span className="absolute right-3 bottom-3 text-xs text-gray-500">
@@ -112,19 +118,27 @@ export default function SubmitForm() {
             </span>
           </div>
           {errors.title && (
-            <p className="mt-1 text-sm text-red-500">{errors.title.message}</p>
+            <p id="title-error" className="mt-1 text-sm text-red-500">
+              {errors.title.message}
+            </p>
           )}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2"
+          >
             描述
           </label>
           <div className="relative">
             <textarea
               {...register("description")}
+              id="description"
               rows={6}
               placeholder="详细描述你的点子，包括它解决什么问题、如何实现等"
+              aria-invalid={!!errors.description}
+              aria-describedby={errors.description ? "description-error" : undefined}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500 resize-none"
             />
             <span className="absolute right-3 bottom-3 text-xs text-gray-500">
@@ -132,22 +146,23 @@ export default function SubmitForm() {
             </span>
           </div>
           {errors.description && (
-            <p className="mt-1 text-sm text-red-500">
+            <p id="description-error" className="mt-1 text-sm text-red-500">
               {errors.description.message}
             </p>
           )}
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+        <fieldset>
+          <legend className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
             标签
-          </label>
-          <div className="flex flex-wrap gap-2">
+          </legend>
+          <div className="flex flex-wrap gap-2" role="group" aria-label="选择标签">
             {TAGS.map((tag) => (
               <button
                 key={tag}
                 type="button"
                 onClick={() => toggleTag(tag)}
+                aria-pressed={selectedTags.includes(tag)}
                 className={cn(
                   "px-4 py-1.5 rounded-full text-sm font-medium transition-all border",
                   selectedTags.includes(tag)
@@ -162,7 +177,7 @@ export default function SubmitForm() {
           {errors.tags && (
             <p className="mt-1 text-sm text-red-500">{errors.tags.message}</p>
           )}
-        </div>
+        </fieldset>
 
         <button
           type="submit"
