@@ -1,28 +1,43 @@
-import { render, screen } from '@testing-library/react';
-import Hero from '@/components/Hero';
+import { render, screen } from '@testing-library/react'
 
-describe('Hero Component', () => {
-  it('renders the title', () => {
-    render(<Hero />);
-    const title = screen.getByText(/点子实验室/i);
-    expect(title).toBeInTheDocument();
-  });
+import Hero from '@/components/Hero'
 
-  it('renders the subtitle', () => {
-    render(<Hero />);
-    const subtitle = screen.getByText(/你的创意，我们来实现/i);
-    expect(subtitle).toBeInTheDocument();
-  });
+describe('Hero', () => {
+  it('显示标题"点子实验室"', () => {
+    render(<Hero />)
+    expect(
+      screen.getByRole('heading', { level: 1, name: '点子实验室' }),
+    ).toBeInTheDocument()
+  })
 
-  it('renders CTA buttons with correct links', () => {
-    render(<Hero />);
-    const submitBtn = screen.getByRole('link', { name: /提交点子/i });
-    const toolsBtn = screen.getByRole('link', { name: /浏览工具/i });
+  it('显示副标题"你的创意，我们来实现"', () => {
+    render(<Hero />)
+    expect(screen.getByText('你的创意，我们来实现')).toBeInTheDocument()
+  })
 
-    expect(submitBtn).toBeInTheDocument();
-    expect(submitBtn).toHaveAttribute('href', '/submit');
-    
-    expect(toolsBtn).toBeInTheDocument();
-    expect(toolsBtn).toHaveAttribute('href', '#tools');
-  });
-});
+  it('CTA 按钮1 存在且 href="/submit"', () => {
+    render(<Hero />)
+    expect(screen.getByRole('link', { name: '提交点子' })).toHaveAttribute(
+      'href',
+      '/submit',
+    )
+  })
+
+  it('CTA 按钮2 存在且 href="#tools"', () => {
+    render(<Hero />)
+    expect(screen.getByRole('link', { name: '浏览工具' })).toHaveAttribute(
+      'href',
+      '#tools',
+    )
+  })
+
+  it('包含背景渐变类', () => {
+    render(<Hero />)
+    const heading = screen.getByRole('heading', { level: 1, name: '点子实验室' })
+    const section = heading.closest('section')
+    expect(section).toHaveClass('bg-gradient-to-br')
+    expect(section).toHaveClass('from-blue-700')
+    expect(section).toHaveClass('via-cyan-700')
+    expect(section).toHaveClass('to-white')
+  })
+})
