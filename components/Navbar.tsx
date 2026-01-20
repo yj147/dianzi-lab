@@ -45,8 +45,10 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
+              type="button"
               className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800"
-              aria-expanded="false"
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
             >
               <span className="sr-only">打开主菜单</span>
               {/* Icon when menu is closed */}
@@ -77,7 +79,11 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <div className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white dark:bg-black`}>
+      <div
+        id="mobile-menu"
+        hidden={!isOpen}
+        className={`${isOpen ? 'block' : 'hidden'} md:hidden bg-white dark:bg-black`}
+      >
         <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
           <Link
             href="/"
