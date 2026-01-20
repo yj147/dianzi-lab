@@ -1,0 +1,47 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  ideas     Idea[]
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Idea {
+  id          String     @id @default(cuid())
+  title       String     @db.VarChar(50)
+  description String     @db.VarChar(1000)
+  status      IdeaStatus @default(PENDING)
+  tags        String[]
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  isDeleted   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+enum IdeaStatus {
+  PENDING
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+}
