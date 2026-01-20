@@ -1,18 +1,29 @@
 import Hero from "@/components/Hero";
+import IdeaCard from "@/components/IdeaCard";
+import { prisma } from "@/lib/db";
 
-export default function Home() {
+async function getCompletedIdeas() {
+  return prisma.idea.findMany({
+    where: { status: "COMPLETED", isDeleted: false },
+    orderBy: { updatedAt: "desc" },
+    select: { id: true, title: true, description: true, tags: true },
+  });
+}
+
+export default async function Home() {
+  const ideas = await getCompletedIdeas();
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <Hero />
 
-      <section
-        id="tools"
-        className="mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-4 px-6 py-24 text-center"
-      >
-        <h2 className="text-3xl font-bold">浏览工具</h2>
-        <p className="text-base text-gray-600 dark:text-gray-300">
-          工具区域（#22 实现）
-        </p>
+      <section id="tools" className="mx-auto max-w-7xl px-6 py-24">
+        <h2 className="mb-12 text-center text-3xl font-bold">已完成的工具</h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {ideas.map((idea) => (
+            <IdeaCard key={idea.id} idea={idea} />
+          ))}
+        </div>
       </section>
     </main>
   );
