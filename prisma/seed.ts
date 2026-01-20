@@ -11,7 +11,7 @@ async function main() {
     update: {},
     create: {
       email: 'admin@dianzi.com',
-      password: adminPassword,
+      passwordHash: adminPassword,
       role: 'ADMIN',
     },
   })

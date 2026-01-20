@@ -12,7 +12,7 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String
+  passwordHash String @map("password")
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   ideas     Idea[]

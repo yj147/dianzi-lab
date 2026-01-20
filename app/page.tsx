@@ -1,12 +1,17 @@
+import Hero from "@/components/Hero";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <section className="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-24">
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-          点子 Lab
-        </h1>
-        <p className="text-balance text-base text-gray-600 dark:text-gray-300 sm:text-lg">
-          创意点子发现平台：收集、整理并发现灵感。
+      <Hero />
+
+      <section
+        id="tools"
+        className="mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-4 px-6 py-24 text-center"
+      >
+        <h2 className="text-3xl font-bold">浏览工具</h2>
+        <p className="text-base text-gray-600 dark:text-gray-300">
+          工具区域（#22 实现）
         </p>
       </section>
     </main>
