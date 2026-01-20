@@ -1,22 +1,16 @@
-import Link from "next/link";
+import SubmitForm from "./SubmitForm";
 
 export default function SubmitPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground">
-      <section className="mx-auto flex max-w-3xl flex-col items-center gap-4 px-6 py-24 text-center">
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-          提交点子
-        </h1>
-        <p className="text-base text-gray-600 dark:text-gray-300 sm:text-lg">
-          功能开发中...
-        </p>
-        <Link
-          href="/"
-          className="mt-4 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
-        >
-          返回首页
-        </Link>
-      </section>
+    <main className="min-h-screen pt-24 pb-12 px-4 flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-[10%] -left-[10%] w-[40%] h-[40%] rounded-full bg-purple-500/10 blur-[120px]" />
+        <div className="absolute -bottom-[10%] -right-[10%] w-[40%] h-[40%] rounded-full bg-blue-500/10 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 w-full flex justify-center">
+        <SubmitForm />
+      </div>
     </main>
   );
 }
