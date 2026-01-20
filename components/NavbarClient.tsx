@@ -17,6 +17,12 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
     await logout();
   };
 
+  const handleMobileLogout = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsOpen(false);
+    await logout();
+  };
+
   return (
     <nav className="fixed top-0 z-50 w-full bg-white/80 backdrop-blur-md dark:bg-black/80">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -127,11 +133,10 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
           {isLoggedIn ? (
             <div className="px-3 py-2">
               <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{userEmail}</div>
-              <form onSubmit={handleLogout}>
+              <form onSubmit={handleMobileLogout}>
                 <button
                   type="submit"
                   className="w-full text-left block rounded-md bg-gray-200 px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-300 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-                  onClick={() => setIsOpen(false)}
                 >
                   退出
                 </button>

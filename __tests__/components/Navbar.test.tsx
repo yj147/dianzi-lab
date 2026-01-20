@@ -48,7 +48,6 @@ describe('Navbar (Server Component)', () => {
 
 describe('auth-actions', () => {
   it('logout action 清除 cookie 并重定向', async () => {
-    // We need to use the actual implementation for this test or mock it correctly
     const { logout } = jest.requireActual('@/lib/auth-actions')
     
     await logout()
@@ -75,13 +74,12 @@ describe('NavbarClient', () => {
   })
 
   it('点击退出按钮调用 logout action', async () => {
-    const logoutSpy = jest.spyOn(authActions, 'logout')
     render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
     
-    const logoutButton = screen.getByRole('button', { name: '退出' })
+    const logoutButton = screen.getAllByRole('button', { name: '退出' })[0]
     fireEvent.click(logoutButton)
     
-    expect(logoutSpy).toHaveBeenCalled()
+    expect(authActions.logout).toHaveBeenCalled()
   })
 
   it('可切换移动端菜单（未登录状态）', () => {
@@ -97,12 +95,10 @@ describe('NavbarClient', () => {
 
     const mobileNav = within(mobileMenu as HTMLElement)
     
-    // Test clicking home link
     fireEvent.click(mobileNav.getByRole('link', { name: '首页' }))
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
     
     fireEvent.click(toggle)
-    // Test clicking submit link
     fireEvent.click(mobileNav.getByRole('link', { name: '提交点子' }))
     expect(toggle).toHaveAttribute('aria-expanded', 'false')
     
