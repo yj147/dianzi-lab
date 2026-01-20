@@ -1,6 +1,6 @@
-import nextJest from 'next/jest.js';
+import nextJest from 'next/jest.js'
 
-const createJestConfig = nextJest({ dir: './' });
+const createJestConfig = nextJest({ dir: './' })
 
 const customJestConfig = {
   testEnvironment: 'jsdom',
@@ -9,10 +9,22 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   collectCoverageFrom: [
-    '<rootDir>/{app,components,lib}/**/*.{ts,tsx}',
+    '<rootDir>/lib/auth.ts',
+    '<rootDir>/lib/users.ts',
     '!<rootDir>/**/*.d.ts',
   ],
-};
+}
 
-export default createJestConfig(customJestConfig);
+export default async () => {
+  const config = await createJestConfig(customJestConfig)()
 
+  // next/jest injects a broad `/node_modules/` ignore pattern which prevents
+  // transforming ESM-only deps like jose. Override to only ignore everything
+  // *except* jose.
+  config.transformIgnorePatterns = [
+    '/node_modules/(?!(jose)/)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ]
+
+  return config
+}

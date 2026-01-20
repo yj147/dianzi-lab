@@ -1,18 +1,101 @@
-import { render, screen } from '@testing-library/react'
-
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { useRouter } from 'next/navigation'
 import LoginPage from '@/app/login/page'
+import { loginUser } from '@/app/login/actions'
 
-describe('Login Page', () => {
-  it('渲染标题和注册链接', () => {
-    render(<LoginPage />)
+jest.mock('next/navigation', () => ({
+  useRouter: jest.fn(),
+}))
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: '登录' }),
-    ).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '没有账号？立即注册' })).toHaveAttribute(
-      'href',
-      '/register',
-    )
-  })
+jest.mock('@/app/login/actions', () => ({
+  loginUser: jest.fn(),
+}))
+
+jest.mock('next/link', () => {
+  return ({ children, href }: { children: React.ReactNode; href: string }) => (
+    <a href={href}>{children}</a>
+  )
 })
 
+describe('Login Page', () => {
+  const useRouterMock = useRouter as jest.Mock
+  const loginUserMock = loginUser as jest.Mock
+  const pushMock = jest.fn()
+
+  beforeEach(() => {
+    jest.clearAllMocks()
+    useRouterMock.mockReturnValue({ push: pushMock })
+  })
+
+  it('renders login form correctly', () => {
+    render(<LoginPage />)
+
+    expect(screen.getByRole('heading', { name: /登录/i })).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/邮箱地址/i)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/密码/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /登录/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /立即注册/i })).toHaveAttribute('href', '/register')
+  })
+
+  it('shows validation errors for invalid input', async () => {
+    render(<LoginPage />)
+    
+    const submitButton = screen.getByRole('button', { name: /登录/i })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(screen.getByText(/请输入有效的邮箱地址/i)).toBeInTheDocument()
+    })
+  })
+
+  it('shows error message from server action', async () => {
+    loginUserMock.mockResolvedValue({ success: false, error: '邮箱或密码错误' })
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/邮箱或密码错误/i)).toBeInTheDocument()
+    })
+  })
+
+  it('redirects to dashboard on successful login', async () => {
+    loginUserMock.mockResolvedValue({ success: true })
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith('/dashboard')
+    })
+  })
+
+  it('shows generic error for unknown exceptions', async () => {
+    loginUserMock.mockRejectedValue(new Error('Unknown error'))
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/发生未知错误，请稍后再试/i)).toBeInTheDocument()
+    })
+  })
+})
