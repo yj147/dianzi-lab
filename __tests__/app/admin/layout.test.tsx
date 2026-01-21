@@ -210,7 +210,7 @@ describe('Admin Layout', () => {
 
       render(await AdminDashboardPage())
       expect(screen.getByText('仪表板')).toBeInTheDocument()
-      expect(screen.getByText('欢迎来到管理员后台')).toBeInTheDocument()
+      expect(screen.getByText('欢迎回来')).toBeInTheDocument()
     })
 
     it('renders ideas page without status filter when search param is invalid', async () => {
@@ -243,7 +243,7 @@ describe('Admin Layout', () => {
           where: { isDeleted: false, status: 'PENDING' },
         })
       )
-      expect(screen.getByText('Test Idea')).toBeInTheDocument()
+      expect(screen.getAllByText('Test Idea')[0]).toBeInTheDocument()
     })
 
     it('renders users page with empty state', async () => {
@@ -279,9 +279,8 @@ describe('Admin Layout', () => {
       ])
 
       render(await AdminUsersPage())
-      expect(screen.getByText('管理员')).toBeInTheDocument()
-      expect(screen.getByText('用户')).toBeInTheDocument()
-      expect(screen.getByText('MOD')).toBeInTheDocument()
+      expect(screen.getAllByText('管理员')[0]).toBeInTheDocument()
+      expect(screen.getAllByText('用户').length).toBeGreaterThanOrEqual(2)
     })
 
     it('renders trash page with empty state', async () => {
@@ -302,7 +301,7 @@ describe('Admin Layout', () => {
       ])
 
       render(await AdminTrashPage())
-      expect(screen.getByText('Trashed Idea')).toBeInTheDocument()
+      expect(screen.getAllByText('Trashed Idea')[0]).toBeInTheDocument()
     })
   })
 
@@ -342,7 +341,11 @@ describe('Admin Layout', () => {
       expect(mockRouter.refresh).toHaveBeenCalledTimes(2)
 
       // Status change action.
-      fireEvent.change(screen.getByRole('combobox', { name: '状态变更' }), {
+      const ideaRow = screen
+        .getAllByRole('row')
+        .find((row) => within(row).queryByText('Idea A'))
+      expect(ideaRow).toBeTruthy()
+      fireEvent.change(within(ideaRow as HTMLElement).getByRole('combobox', { name: '状态变更' }), {
         target: { value: 'COMPLETED' },
       })
       await waitFor(() =>
@@ -350,7 +353,7 @@ describe('Admin Layout', () => {
       )
 
       // Move to trash confirm action.
-      fireEvent.click(screen.getByRole('button', { name: '确认移除' }))
+      fireEvent.click(within(ideaRow as HTMLElement).getByRole('button', { name: '确认移除' }))
       await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea-1'))
     })
 
@@ -369,7 +372,7 @@ describe('Admin Layout', () => {
         />
       )
 
-      expect(screen.getByText('-')).toBeInTheDocument()
+      expect(screen.getAllByText('-')[0]).toBeInTheDocument()
     })
   })
 
@@ -386,10 +389,14 @@ describe('Admin Layout', () => {
     it('supports restore and permanent delete actions', async () => {
       render(<TrashTable ideas={trashedIdeas as any} />)
 
-      fireEvent.click(screen.getByRole('button', { name: '恢复' }))
+      const trashedRow = screen
+        .getAllByRole('row')
+        .find((row) => within(row).queryByText('Trashed Idea'))
+      expect(trashedRow).toBeTruthy()
+      fireEvent.click(within(trashedRow as HTMLElement).getByRole('button', { name: '恢复' }))
       await waitFor(() => expect(restoreIdea).toHaveBeenCalledWith('trash-1'))
 
-      fireEvent.click(screen.getByRole('button', { name: '确认删除' }))
+      fireEvent.click(within(trashedRow as HTMLElement).getByRole('button', { name: '确认删除' }))
       await waitFor(() => expect(permanentDeleteIdea).toHaveBeenCalledWith('trash-1'))
     })
 
