@@ -5,6 +5,7 @@ import Home from '@/app/(main)/page'
 
 jest.mock('lucide-react', () => ({
   Sparkles: () => null,
+  ChevronDown: () => <svg data-testid="chevron-down" />,
 }))
 
 jest.mock('@/lib/db', () => ({
@@ -58,5 +59,17 @@ describe('Home Page', () => {
     expect(
       screen.queryByText('暂无已完成的工具，敬请期待！'),
     ).not.toBeInTheDocument()
+  })
+
+  it('工具区域有正确的背景渐变类', async () => {
+    findManyMock.mockResolvedValue([])
+
+    const element = await Home()
+    const { container } = render(element)
+
+    const toolsSection = container.querySelector('#tools')
+    expect(toolsSection).toHaveClass('bg-gradient-to-b')
+    expect(toolsSection).toHaveClass('from-slate-50')
+    expect(toolsSection).toHaveClass('to-white')
   })
 })
