@@ -83,11 +83,12 @@ describe('Admin Ideas Page + Table', () => {
     render(page)
 
     expect(screen.getByText('点子管理')).toBeInTheDocument()
-    expect(screen.getByText('Idea 1')).toBeInTheDocument()
-    expect(screen.getByText('u1@example.com')).toBeInTheDocument()
+    // Data appears in both desktop and mobile views
+    expect(screen.getAllByText('Idea 1').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('u1@example.com').length).toBeGreaterThan(0)
     expect(screen.getAllByText('待审核').length).toBeGreaterThan(0)
-    expect(screen.getByText('Idea 2')).toBeInTheDocument()
-    expect(screen.getByText('u2@example.com')).toBeInTheDocument()
+    expect(screen.getAllByText('Idea 2').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('u2@example.com').length).toBeGreaterThan(0)
     expect(screen.getAllByText('已采纳').length).toBeGreaterThan(0)
   })
 
@@ -137,8 +138,9 @@ describe('Admin Ideas Page + Table', () => {
       />,
     )
 
-    const statusSelect = screen.getByLabelText('状态变更') as HTMLSelectElement
-    fireEvent.change(statusSelect, { target: { value: 'APPROVED' } })
+    // Get all status change selects (desktop + mobile), pick the first one
+    const statusSelects = screen.getAllByLabelText('状态变更') as HTMLSelectElement[]
+    fireEvent.change(statusSelects[0], { target: { value: 'APPROVED' } })
 
     await waitFor(() => {
       expect(updateIdeaStatusMock).toHaveBeenCalledWith('idea_1', 'APPROVED')
@@ -162,12 +164,9 @@ describe('Admin Ideas Page + Table', () => {
       />,
     )
 
-    // Click the delete button (icon button on desktop)
-    const deleteButtons = screen.getAllByRole('button')
-    const trashButton = deleteButtons.find(btn => btn.querySelector('svg'))
-    if (trashButton) {
-      fireEvent.click(trashButton)
-    }
+    // Click the delete button by aria-label
+    const trashButtons = screen.getAllByRole('button', { name: '移至垃圾箱' })
+    fireEvent.click(trashButtons[0])
 
     await waitFor(() => {
       expect(screen.getByText('确认移至垃圾箱？')).toBeInTheDocument()

@@ -216,6 +216,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                                   <button
                                     type="button"
                                     className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+                                    aria-label="移至垃圾箱"
                                   >
                                     <Trash2 className="h-4 w-4" />
                                   </button>

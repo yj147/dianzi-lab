@@ -113,19 +113,21 @@ describe('Admin: Dashboard + Users', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: '用户管理' })).toBeInTheDocument()
 
+    // Desktop table headers
     expect(screen.getByText('邮箱')).toBeInTheDocument()
     expect(screen.getByText('角色')).toBeInTheDocument()
     expect(screen.getByText('注册时间')).toBeInTheDocument()
     expect(screen.getByText('提交点子数')).toBeInTheDocument()
 
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument()
-    expect(screen.getByText('user@example.com')).toBeInTheDocument()
-    expect(screen.getByText('管理员')).toBeInTheDocument()
-    expect(screen.getByText('用户')).toBeInTheDocument()
-    expect(screen.getByText('2025-01-20')).toBeInTheDocument()
-    expect(screen.getByText('2025-01-19')).toBeInTheDocument()
-    expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('0')).toBeInTheDocument()
+    // User data appears in both desktop and mobile views, so use getAllByText
+    expect(screen.getAllByText('admin@example.com').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('user@example.com').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('管理员').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('用户').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('2025-01-20').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('2025-01-19').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('3').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('0').length).toBeGreaterThan(0)
 
     expect(prisma.user.findMany).toHaveBeenCalledWith({
       orderBy: { createdAt: 'desc' },
@@ -139,4 +141,3 @@ describe('Admin: Dashboard + Users', () => {
     })
   })
 })
-
