@@ -1,10 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import LoginPage from '@/app/login/page'
 import { loginUser } from '@/app/login/actions'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }))
 
 jest.mock('@/app/login/actions', () => ({
@@ -19,22 +20,30 @@ jest.mock('next/link', () => {
 
 describe('Login Page', () => {
   const useRouterMock = useRouter as jest.Mock
+  const useSearchParamsMock = useSearchParams as jest.Mock
   const loginUserMock = loginUser as jest.Mock
   const pushMock = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
     useRouterMock.mockReturnValue({ push: pushMock })
+    useSearchParamsMock.mockReturnValue({
+      get: jest.fn().mockReturnValue(null),
+    })
   })
 
   it('renders login form correctly', () => {
     render(<LoginPage />)
 
-    expect(screen.getByRole('heading', { name: /登录/i })).toBeInTheDocument()
+    expect(screen.getAllByRole('heading', { name: /登录/i }).length).toBeGreaterThan(0)
     expect(screen.getByPlaceholderText(/邮箱地址/i)).toBeInTheDocument()
     expect(screen.getByPlaceholderText(/密码/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /登录/i })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /立即注册/i })).toHaveAttribute('href', '/register')
+    const registerLinks = screen.getAllByRole('link', { name: /立即注册/i })
+    expect(registerLinks.length).toBeGreaterThan(0)
+    for (const link of registerLinks) {
+      expect(link).toHaveAttribute('href', '/register')
+    }
   })
 
   it('shows validation errors for invalid input', async () => {
@@ -97,5 +106,28 @@ describe('Login Page', () => {
     await waitFor(() => {
       expect(screen.getByText(/发生未知错误，请稍后再试/i)).toBeInTheDocument()
     })
+  })
+
+  it('redirects to callbackUrl on successful login', async () => {
+    useSearchParamsMock.mockReturnValue({
+      get: jest.fn().mockReturnValue('/submit'),
+    })
+    loginUserMock.mockResolvedValue({ success: true })
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith('/submit')
+    })
+
+    const formData = loginUserMock.mock.calls[0][0] as FormData
+    expect(formData.get('callbackUrl')).toBe('/submit')
   })
 })
