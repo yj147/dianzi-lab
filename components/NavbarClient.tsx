@@ -92,7 +92,7 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
               {isLoggedIn ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="ml-4 flex items-center space-x-2 rounded-full bg-gray-100/50 p-1 transition-colors hover:bg-gray-200/50 dark:bg-gray-800/50 dark:hover:bg-gray-700/50 focus:outline-none">
+                    <button className="ml-4 flex items-center space-x-2 rounded-full bg-gray-100/50 p-1 transition-colors hover:bg-gray-200/50 dark:bg-gray-800/50 dark:hover:bg-gray-700/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
                       <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center dark:bg-blue-900">
                         <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                       </div>
@@ -144,7 +144,7 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
+              className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
               aria-expanded={isOpen}
               aria-controls="mobile-menu"
             >
