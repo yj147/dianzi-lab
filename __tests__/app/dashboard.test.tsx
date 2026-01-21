@@ -85,4 +85,30 @@ describe('Dashboard Page', () => {
     expect(screen.getByText('这是一个测试点子的描述')).toBeInTheDocument()
     expect(screen.getByText('待审核')).toBeInTheDocument()
   })
+
+  it('truncates long descriptions', async () => {
+    const mockSession = {
+      sub: 'user-1',
+      email: 'test@example.com',
+      role: 'USER',
+    }
+    const longDescription = 'A'.repeat(200)
+    const mockIdeas = [
+      {
+        id: 'idea-2',
+        title: '长描述点子',
+        description: longDescription,
+        status: 'PENDING',
+        createdAt: new Date('2025-01-20'),
+      },
+    ]
+    ;(getSession as jest.Mock).mockResolvedValue(mockSession)
+    ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
+
+    const PageContent = await DashboardPage()
+    render(PageContent)
+
+    const truncatedText = 'A'.repeat(150) + '...'
+    expect(screen.getByText(truncatedText)).toBeInTheDocument()
+  })
 })
