@@ -65,18 +65,22 @@ export default function AdminSidebar({ userEmail, className, onItemClick }: Admi
         })}
       </nav>
 
-      <div className="border-t p-4">
+      <div className="md:hidden border-t p-4">
         <div className="mb-4 px-3">
           <p className="truncate text-xs font-medium text-gray-500 dark:text-gray-400">登录账号</p>
           <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{userEmail}</p>
         </div>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
+          className="flex w-full items-center rounded-lg px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors focus:ring-2 focus:ring-blue-500 focus:outline-none"
         >
           <LogOut className="mr-3 h-5 w-5" />
           退出登录
         </button>
+      </div>
+
+      <div className="py-4 text-center text-xs text-gray-400 dark:text-gray-500">
+        © 2026 点子 Lab
       </div>
     </aside>
   );
