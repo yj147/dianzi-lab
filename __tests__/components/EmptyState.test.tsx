@@ -1,0 +1,50 @@
+import { render, screen } from '@testing-library/react';
+import EmptyState from '@/components/EmptyState';
+import React from 'react';
+
+// Mock SparklesIcon to test for its presence easily
+jest.mock('@heroicons/react/24/outline', () => ({
+  SparklesIcon: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg data-testid="sparkles-icon" {...props} />
+  ),
+}));
+
+describe('EmptyState Component', () => {
+  const defaultMessage = '暂无已完成的工具，敬请期待！';
+
+  it('renders the message correctly with default style', () => {
+    render(<EmptyState message={defaultMessage} />);
+    const messageElement = screen.getByText(defaultMessage);
+    expect(messageElement).toBeInTheDocument();
+    expect(messageElement).toHaveClass('text-gray-500');
+  });
+
+  it('renders the default SparklesIcon when no icon is provided', () => {
+    render(<EmptyState message={defaultMessage} />);
+    const icon = screen.getByTestId('sparkles-icon');
+    expect(icon).toBeInTheDocument();
+    expect(icon).toHaveClass('w-12 h-12');
+    
+    // Check icon container classes
+    const iconContainer = icon.parentElement;
+    expect(iconContainer).toHaveClass('text-gray-400 mb-4 w-12 h-12 mx-auto');
+  });
+
+  it('renders a custom icon when provided', () => {
+    render(
+      <EmptyState 
+        message={defaultMessage} 
+        icon={<span data-testid="custom-icon" />} 
+      />
+    );
+    
+    expect(screen.queryByTestId('sparkles-icon')).not.toBeInTheDocument();
+    expect(screen.getByTestId('custom-icon')).toBeInTheDocument();
+  });
+
+  it('has correct container layout classes', () => {
+    const { container } = render(<EmptyState message={defaultMessage} />);
+    const rootDiv = container.firstChild;
+    expect(rootDiv).toHaveClass('text-center py-16');
+  });
+});
