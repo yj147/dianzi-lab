@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 
 import { prisma } from '@/lib/db'
-import Home from '@/app/page'
+import Home from '@/app/(main)/page'
 
 jest.mock('lucide-react', () => ({
   Sparkles: () => null,

@@ -3,8 +3,8 @@ import { redirect } from 'next/navigation'
 
 import { getUserByEmail } from '@/lib/users'
 import { signJWT, setSessionCookie } from '@/lib/auth'
-import { loginUser } from '@/app/login/actions'
-import { loginSchema } from '@/app/login/schema'
+import { loginUser } from '@/app/(main)/login/actions'
+import { loginSchema } from '@/app/(main)/login/schema'
 
 jest.mock('@/lib/users', () => ({
   getUserByEmail: jest.fn(),

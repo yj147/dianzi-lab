@@ -1,14 +1,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import LoginPage from '@/app/login/page'
-import { loginUser } from '@/app/login/actions'
+import LoginPage from '@/app/(main)/login/page'
+import { loginUser } from '@/app/(main)/login/actions'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
   useSearchParams: jest.fn(),
 }))
 
-jest.mock('@/app/login/actions', () => ({
+jest.mock('@/app/(main)/login/actions', () => ({
   loginUser: jest.fn(),
 }))
 
