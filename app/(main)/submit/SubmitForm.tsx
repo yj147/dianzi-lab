@@ -56,6 +56,7 @@ export default function SubmitForm() {
       const result: ActionResult = await submitIdea(formData);
       if (result.success) {
         toast({
+          variant: "success",
           title: "提交成功",
           description: "您的点子已成功提交！",
         });

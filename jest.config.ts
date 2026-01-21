@@ -9,10 +9,18 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   collectCoverageFrom: [
-    '<rootDir>/lib/auth.ts',
-    '<rootDir>/lib/users.ts',
+    '<rootDir>/components/**/*.{ts,tsx}',
+    '!<rootDir>/components/**/*.stories.tsx',
     '!<rootDir>/**/*.d.ts',
   ],
+  coverageThreshold: {
+    global: {
+      statements: 90,
+      branches: 90,
+      functions: 90,
+      lines: 90,
+    },
+  },
 }
 
 export default async () => {
