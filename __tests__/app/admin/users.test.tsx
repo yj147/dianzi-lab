@@ -57,7 +57,7 @@ describe('Admin: Dashboard + Users', () => {
     // Verify quick actions
     expect(screen.getByText('点子管理')).toBeInTheDocument()
     expect(screen.getByText('用户管理')).toBeInTheDocument()
-    expect(screen.getByText('垃圾箱')).toBeInTheDocument()
+    expect(screen.getByText('回收站')).toBeInTheDocument()
 
     expect(prisma.$transaction).toHaveBeenCalledTimes(1)
     expect(prisma.idea.count).toHaveBeenCalledWith({ where: { isDeleted: false } })
@@ -74,6 +74,19 @@ describe('Admin: Dashboard + Users', () => {
       where: { status: 'COMPLETED', isDeleted: false },
     })
     expect(prisma.user.count).toHaveBeenCalledTimes(1)
+  })
+
+  it('当 session 为 null 时，显示默认头像字母和管理员文本', async () => {
+    const { getSession } = await import('@/lib/auth')
+    ;(getSession as jest.Mock).mockResolvedValueOnce(null)
+    ;(prisma.$transaction as jest.Mock).mockResolvedValue([0, 0, 0, 0, 0, 0])
+
+    const element = await AdminDashboardPage()
+    render(element)
+
+    // Verify fallback avatar letter 'A' and fallback text '管理员'
+    expect(screen.getByText('A')).toBeInTheDocument()
+    expect(screen.getByText('管理员')).toBeInTheDocument()
   })
 
   it('渲染用户列表，并查询点子数量', async () => {
