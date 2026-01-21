@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import EmptyState from '@/components/EmptyState';
 import React from 'react';
 
-// Mock SparklesIcon to test for its presence easily
-jest.mock('@heroicons/react/24/outline', () => ({
-  SparklesIcon: (props: React.SVGProps<SVGSVGElement>) => (
+// Mock Sparkles to test for its presence easily
+jest.mock('lucide-react', () => ({
+  Sparkles: (props: React.SVGProps<SVGSVGElement>) => (
     <svg data-testid="sparkles-icon" {...props} />
   ),
 }));

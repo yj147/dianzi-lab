@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react'
 import { prisma } from '@/lib/db'
 import Home from '@/app/page'
 
-jest.mock('@heroicons/react/24/outline', () => ({
-  SparklesIcon: () => null,
+jest.mock('lucide-react', () => ({
+  Sparkles: () => null,
 }))
 
 jest.mock('@/lib/db', () => ({
