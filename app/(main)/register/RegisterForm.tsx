@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { registerUser, ActionResult } from "./actions";
 import { registerSchema } from "./schema";
 import { z } from "zod";
@@ -54,7 +55,7 @@ export default function RegisterForm() {
   };
 
   return (
-    <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-xl shadow-lg p-8 border border-white/20">
+    <div className="w-full max-w-md bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl p-8 ring-1 ring-white/30">
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           创建新账号
@@ -114,9 +115,17 @@ export default function RegisterForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          aria-busy={isSubmitting}
+          className="w-full py-3 flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          {isSubmitting ? "注册中..." : "创建账号"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" />
+              注册中...
+            </>
+          ) : (
+            "创建账号"
+          )}
         </button>
       </form>
 

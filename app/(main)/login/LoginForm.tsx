@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
 import { loginUser, ActionResult } from "./actions";
 import { loginSchema } from "./schema";
 import { z } from "zod";
@@ -61,58 +62,125 @@ export default function LoginForm() {
     }
   };
 
-  return (
-    <div className="w-full max-w-md bg-white/10 backdrop-blur-md rounded-xl shadow-lg p-8 border border-white/20">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          登录
-        </h1>
-        <p className="text-gray-600 dark:text-gray-300 mt-2">
-          欢迎回来，请登录你的账号
-        </p>
-      </div>
+    return (
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div>
-          <input
-            {...register("email")}
-            type="email"
-            placeholder="邮箱地址"
-            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-          )}
-        </div>
+      <div className="w-full max-w-md bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl p-8 ring-1 ring-white/30">
 
-        <div>
-          <input
-            {...register("password")}
-            type="password"
-            placeholder="密码"
-            className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.password.message}
-            </p>
-          )}
-        </div>
+        <div className="mb-8 text-center">
 
-        {errors.root && (
-          <p className="text-sm text-red-500 text-center">
-            {errors.root.message}
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+
+            登录
+
+          </h1>
+
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+
+            欢迎回来，请登录你的账号
+
           </p>
-        )}
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
-        >
-          {isSubmitting ? "登录中..." : "登录"}
-        </button>
-      </form>
+        </div>
+
+  
+
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+
+          <div>
+
+            <input
+
+              {...register("email")}
+
+              type="email"
+
+              placeholder="邮箱地址"
+
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
+
+            />
+
+            {errors.email && (
+
+              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+
+            )}
+
+          </div>
+
+  
+
+          <div>
+
+            <input
+
+              {...register("password")}
+
+              type="password"
+
+              placeholder="密码"
+
+              className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
+
+            />
+
+            {errors.password && (
+
+              <p className="mt-1 text-sm text-red-500">
+
+                {errors.password.message}
+
+              </p>
+
+            )}
+
+          </div>
+
+  
+
+          {errors.root && (
+
+            <p className="text-sm text-red-500 text-center">
+
+              {errors.root.message}
+
+            </p>
+
+          )}
+
+  
+
+          <button
+
+            type="submit"
+
+            disabled={isSubmitting}
+
+            aria-busy={isSubmitting}
+
+            className="w-full py-3 flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+
+          >
+
+            {isSubmitting ? (
+
+              <>
+
+                <Loader2 className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" />
+
+                登录中...
+
+              </>
+
+            ) : (
+
+              "登录"
+
+            )}
+
+          </button>
+
+        </form>
 
       <div className="mt-8 text-center text-sm">
         <span className="text-gray-600 dark:text-gray-400">没有账号？</span>
