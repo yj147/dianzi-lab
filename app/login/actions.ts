@@ -56,6 +56,10 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
   setSessionCookie(token)
 
   // Validate callbackUrl to prevent open redirect
-  const safeCallbackUrl = callbackUrl.startsWith('/') ? callbackUrl : '/dashboard'
+  // Must start with '/' but not '//' (protocol-relative URL) and not contain backslash
+  const safeCallbackUrl =
+    callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\')
+      ? callbackUrl
+      : '/dashboard'
   redirect(safeCallbackUrl)
 }
