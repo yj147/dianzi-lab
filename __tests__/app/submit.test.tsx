@@ -1,14 +1,14 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
-import SubmitPage from '@/app/submit/page'
-import { submitIdea } from '@/app/submit/actions'
-import { TAGS } from '@/app/submit/schema'
+import SubmitPage from '@/app/(main)/submit/page'
+import { submitIdea } from '@/app/(main)/submit/actions'
+import { TAGS } from '@/app/(main)/submit/schema'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }))
 
-jest.mock('@/app/submit/actions', () => ({
+jest.mock('@/app/(main)/submit/actions', () => ({
   submitIdea: jest.fn(),
 }))
 

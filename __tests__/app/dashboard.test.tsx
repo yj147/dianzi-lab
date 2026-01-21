@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import DashboardPage from '@/app/dashboard/page'
+import DashboardPage from '@/app/(main)/dashboard/page'
 
 jest.mock('next/navigation', () => ({
   redirect: jest.fn().mockImplementation((url: string) => {
