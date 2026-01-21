@@ -108,6 +108,36 @@ describe('Login Page', () => {
     })
   })
 
+  it('shows loading state during submission', async () => {
+    loginUserMock.mockImplementation(
+      () =>
+        new Promise((resolve) =>
+          setTimeout(() => resolve({ success: true }), 100)
+        )
+    )
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+      target: { value: 'password123' },
+    })
+
+    const submitButton = screen.getByRole('button', { name: /登录/i })
+    fireEvent.click(submitButton)
+
+    await waitFor(() => {
+      expect(submitButton).toHaveAttribute('aria-busy', 'true')
+      expect(screen.getByText(/登录中.../i)).toBeInTheDocument()
+      expect(submitButton).toBeDisabled()
+    })
+
+    await waitFor(() => {
+      expect(pushMock).toHaveBeenCalledWith('/dashboard')
+    })
+  })
+
   it('redirects to callbackUrl on successful login', async () => {
     useSearchParamsMock.mockReturnValue({
       get: jest.fn().mockReturnValue('/submit'),
