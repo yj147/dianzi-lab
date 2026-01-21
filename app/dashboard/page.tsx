@@ -1,5 +1,21 @@
+import Link from 'next/link'
 import { redirect } from 'next/navigation'
+import { formatDistanceToNow } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
 import { getSession } from '@/lib/auth'
+import { prisma } from '@/lib/db'
+import LogoutButton from '@/components/LogoutButton'
+import StatusBadge from '@/components/StatusBadge'
+import EmptyState from '@/components/EmptyState'
+import { Lightbulb } from 'lucide-react'
+
+async function getMyIdeas(userId: string) {
+  return prisma.idea.findMany({
+    where: { userId, isDeleted: false },
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, title: true, description: true, status: true, createdAt: true },
+  })
+}
 
 export default async function DashboardPage() {
   const session = await getSession()
@@ -8,33 +24,65 @@ export default async function DashboardPage() {
     redirect('/login')
   }
 
+  const ideas = await getMyIdeas(session.sub)
+
   return (
-    <div className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md space-y-8 rounded-xl bg-white p-8 shadow-lg">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            控制面板
-          </h1>
-          <p className="mt-2 text-sm text-gray-600">
-            欢迎回来，<span className="font-medium text-indigo-600">{session.email}</span>
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
+      <header className="container mx-auto flex items-center justify-between px-4 py-6">
+        <Link href="/" className="text-blue-600 hover:text-blue-800">
+          ← 返回首页
+        </Link>
+        <div className="flex items-center gap-4">
+          <span className="text-gray-600">{session.email}</span>
+          <LogoutButton />
         </div>
+      </header>
 
-        <div className="mt-8 border-t border-gray-100 pt-8">
-          <div className="rounded-lg bg-indigo-50 p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium text-indigo-800">当前角色</span>
-              <span className="inline-flex items-center rounded-full bg-indigo-100 px-2.5 py-0.5 text-xs font-medium text-indigo-800 uppercase">
-                {session.role}
-              </span>
-            </div>
+      <main className="container mx-auto px-4 py-8">
+        <h1 className="mb-8 text-3xl font-bold">我的点子</h1>
+
+        {ideas.length > 0 ? (
+          <div className="space-y-4">
+            {ideas.map((idea) => (
+              <div
+                key={idea.id}
+                className="rounded-xl bg-white p-6 shadow-md transition-shadow hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="min-w-0 flex-1">
+                    <h3 className="mb-2 text-lg font-semibold text-gray-900">{idea.title}</h3>
+                    <p className="mb-3 text-gray-600">
+                      {idea.description.length > 150
+                        ? idea.description.slice(0, 150) + '...'
+                        : idea.description}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      {formatDistanceToNow(idea.createdAt, { addSuffix: true, locale: zhCN })}
+                    </p>
+                  </div>
+                  <StatusBadge status={idea.status} />
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
+        ) : (
+          <EmptyState
+            icon={<Lightbulb className="h-12 w-12" />}
+            message="还没有提交过点子"
+          />
+        )}
 
-        <div className="mt-6 text-center text-xs text-gray-400">
-          这是您的个人仪表盘占位页
-        </div>
-      </div>
+        {ideas.length === 0 && (
+          <div className="mt-4 text-center">
+            <Link
+              href="/submit"
+              className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+            >
+              提交第一个点子
+            </Link>
+          </div>
+        )}
+      </main>
     </div>
   )
 }
