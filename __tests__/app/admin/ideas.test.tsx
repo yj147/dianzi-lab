@@ -164,12 +164,9 @@ describe('Admin Ideas Page + Table', () => {
       />,
     )
 
-    // Click the first delete button (icon button)
-    const deleteButtons = screen.getAllByRole('button')
-    const trashButton = deleteButtons.find(btn => btn.querySelector('svg'))
-    if (trashButton) {
-      fireEvent.click(trashButton)
-    }
+    // Click the delete button by aria-label
+    const trashButtons = screen.getAllByRole('button', { name: '移至垃圾箱' })
+    fireEvent.click(trashButtons[0])
 
     await waitFor(() => {
       expect(screen.getByText('确认移至垃圾箱？')).toBeInTheDocument()

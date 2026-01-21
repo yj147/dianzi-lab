@@ -114,15 +114,9 @@ describe('Admin Trash Page + Table', () => {
       />,
     )
 
-    // Find restore button (icon button with RotateCcw icon)
-    const buttons = screen.getAllByRole('button')
-    const restoreButton = buttons.find(btn => {
-      const svg = btn.querySelector('svg')
-      return svg && !btn.textContent?.includes('删除')
-    })
-    if (restoreButton) {
-      fireEvent.click(restoreButton)
-    }
+    // Find restore button by aria-label
+    const restoreButtons = screen.getAllByRole('button', { name: '恢复' })
+    fireEvent.click(restoreButtons[0])
 
     await waitFor(() => {
       expect(restoreIdeaMock).toHaveBeenCalledWith('idea_1')
@@ -146,16 +140,9 @@ describe('Admin Trash Page + Table', () => {
       />,
     )
 
-    // Find permanent delete button (has Trash2 icon)
-    const buttons = screen.getAllByRole('button')
-    const deleteButton = buttons.find(btn => {
-      const svg = btn.querySelector('svg')
-      // The delete button is the second icon button
-      return svg && buttons.indexOf(btn) > 0
-    })
-    if (deleteButton) {
-      fireEvent.click(deleteButton)
-    }
+    // Find permanent delete button by aria-label
+    const deleteButtons = screen.getAllByRole('button', { name: '永久删除' })
+    fireEvent.click(deleteButtons[0])
 
     await waitFor(() => {
       expect(screen.getByText('此操作不可撤销，是否继续？')).toBeInTheDocument()
