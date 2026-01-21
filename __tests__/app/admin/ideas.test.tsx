@@ -124,7 +124,7 @@ describe('Admin Ideas Page + Table', () => {
     })
   })
 
-  it('moveToTrash button calls moveToTrash + refresh', async () => {
+  it('moveToTrash button shows confirmation dialog and calls moveToTrash + refresh', async () => {
     const { default: IdeasTable } = await import('@/app/admin/ideas/_components/IdeasTable')
     render(
       <IdeasTable
@@ -141,6 +141,12 @@ describe('Admin Ideas Page + Table', () => {
     )
 
     fireEvent.click(screen.getByRole('button', { name: '移至垃圾箱' }))
+
+    await waitFor(() => {
+      expect(screen.getByText('确认移至垃圾箱？')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByRole('button', { name: '确认移除' }))
 
     await waitFor(() => {
       expect(moveToTrashMock).toHaveBeenCalledWith('idea_1')
