@@ -49,14 +49,14 @@ export default async function DashboardPage() {
             {ideas.map((idea) => (
               <div
                 key={idea.id}
-                className="rounded-xl bg-white/80 backdrop-blur-xl border border-white/20 p-6 shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer"
+                className="rounded-xl bg-white/80 backdrop-blur-xl border border-white/20 p-6 shadow-md transition-shadow transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <h3 className="mb-2 text-lg font-semibold text-gray-900">{idea.title}</h3>
                     <p className="mb-3 text-gray-600">
                       {idea.description.length > 150
-                        ? idea.description.slice(0, 150) + '...'
+                        ? idea.description.slice(0, 150) + '…'
                         : idea.description}
                     </p>
                     <p className="text-sm text-gray-400">

@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/db'
-import EmptyState from '@/components/EmptyState'
 import TrashTable from './_components/TrashTable'
 
 async function getTrashedIdeas() {
@@ -19,12 +18,7 @@ export default async function AdminTrashPage() {
         <h1 className="text-3xl font-bold tracking-tight">回收站</h1>
       </div>
 
-      {ideas.length === 0 ? (
-        <EmptyState message="回收站为空" />
-      ) : (
-        <TrashTable ideas={ideas} />
-      )}
+      <TrashTable ideas={ideas} />
     </div>
   )
 }
-

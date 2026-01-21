@@ -31,6 +31,28 @@ function getIdeaFindManyMock(): jest.Mock {
   return jest.requireMock('@/lib/db').prisma.idea.findMany as jest.Mock
 }
 
+// Helper to create complete mock idea data
+function createMockIdea(overrides: {
+  id: string
+  title: string
+  status: IdeaStatus
+  createdAt: Date
+  email: string
+}) {
+  return {
+    id: overrides.id,
+    title: overrides.title,
+    status: overrides.status,
+    createdAt: overrides.createdAt,
+    description: 'Test description',
+    tags: [],
+    userId: 'user_1',
+    isDeleted: false,
+    updatedAt: overrides.createdAt,
+    user: { email: overrides.email },
+  }
+}
+
 describe('Admin Ideas Page + Table', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -39,20 +61,20 @@ describe('Admin Ideas Page + Table', () => {
 
   it('renders ideas list from prisma (isDeleted=false)', async () => {
     const ideas = [
-      {
+      createMockIdea({
         id: 'idea_1',
         title: 'Idea 1',
         status: 'PENDING' as IdeaStatus,
         createdAt: new Date('2026-01-01T00:00:00Z'),
-        user: { email: 'u1@example.com' },
-      },
-      {
+        email: 'u1@example.com',
+      }),
+      createMockIdea({
         id: 'idea_2',
         title: 'Idea 2',
         status: 'APPROVED' as IdeaStatus,
         createdAt: new Date('2026-01-02T00:00:00Z'),
-        user: { email: 'u2@example.com' },
-      },
+        email: 'u2@example.com',
+      }),
     ]
     getIdeaFindManyMock().mockResolvedValue(ideas)
 
@@ -104,13 +126,13 @@ describe('Admin Ideas Page + Table', () => {
     render(
       <IdeasTable
         ideas={[
-          {
+          createMockIdea({
             id: 'idea_1',
             title: 'Idea 1',
             status: 'PENDING' as IdeaStatus,
             createdAt: new Date('2026-01-01T00:00:00Z'),
-            user: { email: 'u1@example.com' },
-          },
+            email: 'u1@example.com',
+          }),
         ]}
       />,
     )
@@ -129,18 +151,23 @@ describe('Admin Ideas Page + Table', () => {
     render(
       <IdeasTable
         ideas={[
-          {
+          createMockIdea({
             id: 'idea_1',
             title: 'Idea 1',
             status: 'PENDING' as IdeaStatus,
             createdAt: new Date('2026-01-01T00:00:00Z'),
-            user: { email: 'u1@example.com' },
-          },
+            email: 'u1@example.com',
+          }),
         ]}
       />,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: '移至垃圾箱' }))
+    // Click the delete button (icon button on desktop)
+    const deleteButtons = screen.getAllByRole('button')
+    const trashButton = deleteButtons.find(btn => btn.querySelector('svg'))
+    if (trashButton) {
+      fireEvent.click(trashButton)
+    }
 
     await waitFor(() => {
       expect(screen.getByText('确认移至垃圾箱？')).toBeInTheDocument()

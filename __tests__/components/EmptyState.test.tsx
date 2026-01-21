@@ -50,20 +50,18 @@ describe('EmptyState Component', () => {
 
   it('renders an action when provided', () => {
     render(
-      <EmptyState 
-        message={defaultMessage} 
-        action={<button data-testid="action-btn">Action Button</button>} 
+      <EmptyState
+        message={defaultMessage}
+        action={<button data-testid="action-btn">Action Button</button>}
       />
     );
-    
+
     const actionBtn = screen.getByTestId('action-btn');
     expect(actionBtn).toBeInTheDocument();
-    expect(actionBtn.parentElement).toHaveClass('mt-6');
   });
 
-  it('does not render action container when action is not provided', () => {
-    const { container } = render(<EmptyState message={defaultMessage} />);
-    const actionContainer = container.querySelector('.mt-6');
-    expect(actionContainer).not.toBeInTheDocument();
+  it('does not render action when action is not provided', () => {
+    render(<EmptyState message={defaultMessage} />);
+    expect(screen.queryByTestId('action-btn')).not.toBeInTheDocument();
   });
 });

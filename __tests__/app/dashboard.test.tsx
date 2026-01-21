@@ -108,7 +108,7 @@ describe('Dashboard Page', () => {
     const PageContent = await DashboardPage()
     render(PageContent)
 
-    const truncatedText = 'A'.repeat(150) + '...'
+    const truncatedText = 'A'.repeat(150) + '…'
     expect(screen.getByText(truncatedText)).toBeInTheDocument()
   })
 })
