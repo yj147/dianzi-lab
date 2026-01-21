@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
 import { submitIdea, ActionResult } from "./actions";
 import { submitIdeaSchema, SubmitIdeaInput, TAGS } from "./schema";
 import { useToast } from "@/components/ui/use-toast";
@@ -87,7 +88,7 @@ export default function SubmitForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-white/10 backdrop-blur-md rounded-xl shadow-lg p-8 border border-white/20">
+    <div className="w-full max-w-2xl bg-white/20 backdrop-blur-xl rounded-xl shadow-2xl p-8 ring-1 ring-white/30">
       <div className="mb-8 text-center">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
           提交新点子
@@ -111,13 +112,19 @@ export default function SubmitForm() {
               id="title"
               placeholder="为你的点子起个吸引人的标题"
               aria-invalid={!!errors.title}
-              aria-describedby={errors.title ? "title-error" : undefined}
+              aria-describedby={cn(
+                "title-helper",
+                errors.title && "title-error"
+              )}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500"
             />
             <span className="absolute right-3 bottom-3 text-xs text-gray-500">
               {title.length}/50
             </span>
           </div>
+          <p id="title-helper" className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
+            简洁明了，让大家一眼就知道你的点子
+          </p>
           {errors.title && (
             <p id="title-error" className="mt-1 text-sm text-red-500">
               {errors.title.message}
@@ -139,13 +146,19 @@ export default function SubmitForm() {
               rows={6}
               placeholder="详细描述你的点子，包括它解决什么问题、如何实现等"
               aria-invalid={!!errors.description}
-              aria-describedby={errors.description ? "description-error" : undefined}
+              aria-describedby={cn(
+                "description-helper",
+                errors.description && "description-error"
+              )}
               className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 outline-none transition-all text-gray-900 dark:text-white placeholder:text-gray-500 resize-none"
             />
             <span className="absolute right-3 bottom-3 text-xs text-gray-500">
               {description.length}/1000
             </span>
           </div>
+          <p id="description-helper" className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
+            详细描述你的想法、解决的问题、实现思路等
+          </p>
           {errors.description && (
             <p id="description-error" className="mt-1 text-sm text-red-500">
               {errors.description.message}
@@ -153,7 +166,7 @@ export default function SubmitForm() {
           )}
         </div>
 
-        <fieldset>
+        <fieldset aria-describedby="tags-helper">
           <legend className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
             标签
           </legend>
@@ -175,6 +188,9 @@ export default function SubmitForm() {
               </button>
             ))}
           </div>
+          <p id="tags-helper" className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">
+            选择相关标签，帮助大家发现你的点子（可选）
+          </p>
           {errors.tags && (
             <p className="mt-1 text-sm text-red-500">{errors.tags.message}</p>
           )}
@@ -183,9 +199,17 @@ export default function SubmitForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full py-4 rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+          aria-busy={isSubmitting}
+          className="w-full py-4 flex items-center justify-center rounded-lg bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:-translate-y-0.5 active:translate-y-0"
         >
-          {isSubmitting ? "提交中..." : "发布点子"}
+          {isSubmitting ? (
+            <>
+              <Loader2 className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none" />
+              提交中...
+            </>
+          ) : (
+            "发布点子"
+          )}
         </button>
       </form>
     </div>

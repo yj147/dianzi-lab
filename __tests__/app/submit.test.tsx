@@ -1,11 +1,16 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
+import { getSession } from '@/lib/auth'
 import SubmitPage from '@/app/(main)/submit/page'
 import { submitIdea } from '@/app/(main)/submit/actions'
 import { TAGS } from '@/app/(main)/submit/schema'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
+}))
+
+jest.mock('@/lib/auth', () => ({
+  getSession: jest.fn(),
 }))
 
 jest.mock('@/app/(main)/submit/actions', () => ({
@@ -24,6 +29,16 @@ function getToastMock(): jest.Mock {
   return jest.requireMock('@/components/ui/use-toast').__toast as jest.Mock
 }
 
+function createDeferred<T>() {
+  let resolve!: (value: T) => void
+  let reject!: (reason?: unknown) => void
+  const promise = new Promise<T>((res, rej) => {
+    resolve = res
+    reject = rej
+  })
+  return { promise, resolve, reject }
+}
+
 async function click(element: HTMLElement) {
   await act(async () => {
     fireEvent.click(element)
@@ -33,15 +48,40 @@ async function click(element: HTMLElement) {
 describe('Submit Page', () => {
   const useRouterMock = useRouter as jest.Mock
   const submitIdeaMock = submitIdea as jest.Mock
+  const getSessionMock = getSession as jest.Mock
   const pushMock = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
     useRouterMock.mockReturnValue({ push: pushMock })
+    getSessionMock.mockResolvedValue({
+      sub: 'user-id',
+      email: 'test@test.com',
+      role: 'USER',
+    })
   })
 
-  it('渲染表单（标题、描述、标签字段）', () => {
-    render(<SubmitPage />)
+  it('未登录时渲染登录提示卡片', async () => {
+    getSessionMock.mockResolvedValue(null)
+    const PageContent = await SubmitPage()
+    render(PageContent)
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: '登录后即可提交点子' }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('分享你的创意，让大家一起完善它')).toBeInTheDocument()
+
+    const loginLink = screen.getByRole('link', { name: '立即登录' })
+    expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
+
+    expect(
+      screen.queryByRole('heading', { level: 1, name: '提交新点子' }),
+    ).not.toBeInTheDocument()
+  })
+
+  it('渲染表单（标题、描述、标签字段）', async () => {
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     expect(screen.getByRole('heading', { level: 1, name: '提交新点子' })).toBeInTheDocument()
     expect(screen.getByText('分享你的创意，让大家一起完善它')).toBeInTheDocument()
@@ -50,12 +90,28 @@ describe('Submit Page', () => {
     expect(screen.getByText('描述')).toBeInTheDocument()
     expect(screen.getByText('标签')).toBeInTheDocument()
 
-    expect(screen.getByPlaceholderText('为你的点子起个吸引人的标题')).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等')).toBeInTheDocument()
+    const titleInput = screen.getByPlaceholderText('为你的点子起个吸引人的标题')
+    const descriptionInput = screen.getByPlaceholderText(
+      '详细描述你的点子，包括它解决什么问题、如何实现等',
+    )
+
+    expect(titleInput).toHaveAttribute('aria-describedby', 'title-helper')
+    expect(descriptionInput).toHaveAttribute(
+      'aria-describedby',
+      'description-helper',
+    )
+
+    const tagsFieldset = screen.getByText('标签').closest('fieldset')
+    expect(tagsFieldset).toHaveAttribute('aria-describedby', 'tags-helper')
+
+    expect(screen.getByText(/简洁明了/)).toBeInTheDocument()
+    expect(screen.getByText(/详细描述你的想法/)).toBeInTheDocument()
+    expect(screen.getByText(/选择相关标签/)).toBeInTheDocument()
   })
 
-  it('显示预设标签', () => {
-    render(<SubmitPage />)
+  it('显示预设标签', async () => {
+    const PageContent = await SubmitPage()
+    render(PageContent)
     for (const tag of TAGS) {
       expect(screen.getByRole('button', { name: tag })).toBeInTheDocument()
     }
@@ -63,7 +119,8 @@ describe('Submit Page', () => {
 
   it('点击标签可切换选中状态（提交时 tags 体现）', async () => {
     submitIdeaMock.mockResolvedValue({ success: true, ideaId: 'idea_1' })
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
       target: { value: 't' },
@@ -95,7 +152,8 @@ describe('Submit Page', () => {
   })
 
   it('必填字段校验：标题/描述为空时显示错误', async () => {
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     await click(screen.getByRole('button', { name: '发布点子' }))
 
@@ -107,10 +165,53 @@ describe('Submit Page', () => {
     expect(submitIdeaMock).not.toHaveBeenCalled()
   })
 
+  it('提交中显示 Loader2，并切换 aria-busy', async () => {
+    const deferred = createDeferred<{ success: true; ideaId: string }>()
+    submitIdeaMock.mockImplementation(() => deferred.promise)
+
+    const PageContent = await SubmitPage()
+    render(PageContent)
+
+    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+      target: { value: 't' },
+    })
+    fireEvent.change(
+      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      {
+        target: { value: 'd' },
+      },
+    )
+
+    const submitButton = screen.getByRole('button', { name: '发布点子' })
+    expect(submitButton).not.toBeDisabled()
+    expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
+
+    await click(submitButton)
+
+    await waitFor(() => {
+      expect(submitButton).toBeDisabled()
+      expect(submitButton).toHaveAttribute('aria-busy', 'true')
+      expect(submitButton).toHaveTextContent('提交中...')
+      expect(submitButton.querySelector('svg.animate-spin')).toBeInTheDocument()
+    })
+
+    deferred.resolve({ success: true, ideaId: 'idea_1' })
+
+    await waitFor(() => {
+      expect(submitButton).not.toBeDisabled()
+      expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
+      expect(submitButton).toHaveTextContent('发布点子')
+      expect(
+        submitButton.querySelector('svg.animate-spin'),
+      ).not.toBeInTheDocument()
+    })
+  })
+
   it('提交成功：调用 action，显示成功 toast 并跳转', async () => {
     submitIdeaMock.mockResolvedValue({ success: true, ideaId: 'idea_1' })
 
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
       target: { value: 't' },
@@ -149,7 +250,8 @@ describe('Submit Page', () => {
       field: 'title',
     })
 
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
       target: { value: 't' },
@@ -172,7 +274,8 @@ describe('Submit Page', () => {
   it('提交失败：无 field 时显示 destructive toast', async () => {
     submitIdeaMock.mockResolvedValue({ success: false, error: '服务器错误' })
 
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
       target: { value: 't' },
@@ -199,7 +302,8 @@ describe('Submit Page', () => {
   it('提交异常：显示通用错误 toast', async () => {
     submitIdeaMock.mockRejectedValue(new Error('boom'))
 
-    render(<SubmitPage />)
+    const PageContent = await SubmitPage()
+    render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
       target: { value: 't' },

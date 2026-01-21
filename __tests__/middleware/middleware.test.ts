@@ -32,6 +32,17 @@ describe('middleware', () => {
     jest.resetModules()
   })
 
+  describe('matcher 配置', () => {
+    it('不应保护 /submit（允许未登录访问）', async () => {
+      const { config } = await import('@/middleware')
+
+      expect(config.matcher).toEqual(
+        expect.arrayContaining(['/dashboard/:path*', '/admin/:path*']),
+      )
+      expect(config.matcher).not.toContain('/submit')
+    })
+  })
+
   describe('公开路由', () => {
     it.each(['/', '/login', '/register'])(
       '%s 无需认证直接通过',
@@ -66,17 +77,6 @@ describe('middleware', () => {
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
         'http://localhost:3000/login?callbackUrl=%2Fadmin',
-      )
-    })
-
-    it('/submit 重定向到 /login?callbackUrl=/submit', async () => {
-      const { middleware } = await import('@/middleware')
-      const request = createRequest('/submit')
-      const response = await middleware(request)
-
-      expect(response.status).toBe(307)
-      expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login?callbackUrl=%2Fsubmit',
       )
     })
   })
@@ -114,16 +114,6 @@ describe('middleware', () => {
       expect(response.headers.get('location')).toBe(
         'http://localhost:3000/dashboard',
       )
-    })
-
-    it('/submit 允许访问', async () => {
-      const { middleware } = await import('@/middleware')
-      const token = await createTestToken('USER')
-      const request = createRequest('/submit', token)
-      const response = await middleware(request)
-
-      expect(response.status).toBe(200)
-      expect(response.headers.get('x-middleware-next')).toBe('1')
     })
   })
 
