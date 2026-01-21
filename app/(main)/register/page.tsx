@@ -1,9 +1,9 @@
-import { Metadata } from "next";
-import RegisterForm from "./RegisterForm";
+import { Metadata } from 'next'
+import RegisterForm from './RegisterForm'
 
 export const metadata: Metadata = {
-  title: "注册 | 点子 Lab",
-};
+  title: '注册 | 点子 Lab',
+}
 
 export default function RegisterPage() {
   return (
@@ -18,5 +18,5 @@ export default function RegisterPage() {
         <RegisterForm />
       </div>
     </main>
-  );
+  )
 }
