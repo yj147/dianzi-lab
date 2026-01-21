@@ -16,6 +16,14 @@ jest.mock('@/lib/db', () => ({
   },
 }))
 
+jest.mock('@/lib/auth', () => ({
+  getSession: jest.fn().mockResolvedValue({
+    sub: 'user-1',
+    email: 'admin@example.com',
+    role: 'ADMIN',
+  }),
+}))
+
 describe('Admin: Dashboard + Users', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -41,6 +49,15 @@ describe('Admin: Dashboard + Users', () => {
     expect(screen.getByText('4')).toBeInTheDocument()
     expect(screen.getByText('1')).toBeInTheDocument()
     expect(screen.getByText('5')).toBeInTheDocument()
+
+    // Verify welcome section shows admin email
+    expect(screen.getByText('欢迎回来')).toBeInTheDocument()
+    expect(screen.getByText('admin@example.com')).toBeInTheDocument()
+
+    // Verify quick actions
+    expect(screen.getByText('点子管理')).toBeInTheDocument()
+    expect(screen.getByText('用户管理')).toBeInTheDocument()
+    expect(screen.getByText('垃圾箱')).toBeInTheDocument()
 
     expect(prisma.$transaction).toHaveBeenCalledTimes(1)
     expect(prisma.idea.count).toHaveBeenCalledWith({ where: { isDeleted: false } })
