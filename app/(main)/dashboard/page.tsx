@@ -29,7 +29,10 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
       <header className="container mx-auto flex items-center justify-between px-4 py-6">
-        <Link href="/" className="text-blue-600 hover:text-blue-800">
+        <Link
+          href="/"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/50 backdrop-blur-sm hover:bg-white/70 transition-colors text-blue-600"
+        >
           ← 返回首页
         </Link>
         <div className="flex items-center gap-4">
@@ -46,14 +49,14 @@ export default async function DashboardPage() {
             {ideas.map((idea) => (
               <div
                 key={idea.id}
-                className="rounded-xl bg-white p-6 shadow-md transition-shadow hover:shadow-lg"
+                className="rounded-xl bg-white/80 backdrop-blur-xl border border-white/20 p-6 shadow-md transition-shadow transition-transform duration-300 hover:shadow-xl hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none"
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <h3 className="mb-2 text-lg font-semibold text-gray-900">{idea.title}</h3>
                     <p className="mb-3 text-gray-600">
                       {idea.description.length > 150
-                        ? idea.description.slice(0, 150) + '...'
+                        ? idea.description.slice(0, 150) + '…'
                         : idea.description}
                     </p>
                     <p className="text-sm text-gray-400">
@@ -69,18 +72,15 @@ export default async function DashboardPage() {
           <EmptyState
             icon={<Lightbulb className="h-12 w-12" />}
             message="还没有提交过点子"
+            action={
+              <Link
+                href="/submit"
+                className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
+              >
+                提交第一个点子
+              </Link>
+            }
           />
-        )}
-
-        {ideas.length === 0 && (
-          <div className="mt-4 text-center">
-            <Link
-              href="/submit"
-              className="inline-block rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700"
-            >
-              提交第一个点子
-            </Link>
-          </div>
         )}
       </main>
     </div>

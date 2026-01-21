@@ -47,4 +47,21 @@ describe('EmptyState Component', () => {
     const rootDiv = container.firstChild;
     expect(rootDiv).toHaveClass('text-center py-16');
   });
+
+  it('renders an action when provided', () => {
+    render(
+      <EmptyState
+        message={defaultMessage}
+        action={<button data-testid="action-btn">Action Button</button>}
+      />
+    );
+
+    const actionBtn = screen.getByTestId('action-btn');
+    expect(actionBtn).toBeInTheDocument();
+  });
+
+  it('does not render action when action is not provided', () => {
+    render(<EmptyState message={defaultMessage} />);
+    expect(screen.queryByTestId('action-btn')).not.toBeInTheDocument();
+  });
 });
