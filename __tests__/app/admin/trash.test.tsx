@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import type { IdeaStatus } from '@prisma/client'
 
 const refreshMock = jest.fn()
 
@@ -26,6 +27,27 @@ jest.mock('@/app/admin/trash/actions', () => ({
 
 function getIdeaFindManyMock(): jest.Mock {
   return jest.requireMock('@/lib/db').prisma.idea.findMany as jest.Mock
+}
+
+// Helper to create complete mock idea data for trash
+function createMockTrashedIdea(overrides: {
+  id: string
+  title: string
+  updatedAt: Date
+  email: string
+}) {
+  return {
+    id: overrides.id,
+    title: overrides.title,
+    status: 'PENDING' as IdeaStatus,
+    createdAt: new Date('2026-01-01T00:00:00Z'),
+    description: 'Test description',
+    tags: [],
+    userId: 'user_1',
+    isDeleted: true,
+    updatedAt: overrides.updatedAt,
+    user: { email: overrides.email },
+  }
 }
 
 describe('Admin Trash Page + Table', () => {
@@ -59,20 +81,21 @@ describe('Admin Trash Page + Table', () => {
 
   it('renders trashed ideas list', async () => {
     getIdeaFindManyMock().mockResolvedValue([
-      {
+      createMockTrashedIdea({
         id: 'idea_1',
         title: 'Idea 1',
         updatedAt: new Date('2026-01-02T00:00:00Z'),
-        user: { email: 'u1@example.com' },
-      },
+        email: 'u1@example.com',
+      }),
     ])
 
     const AdminTrashPage = (await import('@/app/admin/trash/page')).default
     const element = await AdminTrashPage()
     render(element)
 
-    expect(screen.getByText('Idea 1')).toBeInTheDocument()
-    expect(screen.getByText('u1@example.com')).toBeInTheDocument()
+    // Data appears in both desktop and mobile views
+    expect(screen.getAllByText('Idea 1').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('u1@example.com').length).toBeGreaterThan(0)
   })
 
   it('restore button calls restoreIdea + refresh', async () => {
@@ -81,17 +104,25 @@ describe('Admin Trash Page + Table', () => {
     render(
       <TrashTable
         ideas={[
-          {
+          createMockTrashedIdea({
             id: 'idea_1',
             title: 'Idea 1',
             updatedAt: new Date('2026-01-02T00:00:00Z'),
-            user: { email: 'u1@example.com' },
-          },
+            email: 'u1@example.com',
+          }),
         ]}
       />,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: '恢复' }))
+    // Find restore button (icon button with RotateCcw icon)
+    const buttons = screen.getAllByRole('button')
+    const restoreButton = buttons.find(btn => {
+      const svg = btn.querySelector('svg')
+      return svg && !btn.textContent?.includes('删除')
+    })
+    if (restoreButton) {
+      fireEvent.click(restoreButton)
+    }
 
     await waitFor(() => {
       expect(restoreIdeaMock).toHaveBeenCalledWith('idea_1')
@@ -105,18 +136,30 @@ describe('Admin Trash Page + Table', () => {
     render(
       <TrashTable
         ideas={[
-          {
+          createMockTrashedIdea({
             id: 'idea_1',
             title: 'Idea 1',
             updatedAt: new Date('2026-01-02T00:00:00Z'),
-            user: { email: 'u1@example.com' },
-          },
+            email: 'u1@example.com',
+          }),
         ]}
       />,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: '永久删除' }))
-    expect(screen.getByText('此操作不可撤销，是否继续？')).toBeInTheDocument()
+    // Find permanent delete button (has Trash2 icon)
+    const buttons = screen.getAllByRole('button')
+    const deleteButton = buttons.find(btn => {
+      const svg = btn.querySelector('svg')
+      // The delete button is the second icon button
+      return svg && buttons.indexOf(btn) > 0
+    })
+    if (deleteButton) {
+      fireEvent.click(deleteButton)
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('此操作不可撤销，是否继续？')).toBeInTheDocument()
+    })
 
     fireEvent.click(screen.getByRole('button', { name: '确认删除' }))
 
@@ -126,4 +169,3 @@ describe('Admin Trash Page + Table', () => {
     })
   })
 })
-
