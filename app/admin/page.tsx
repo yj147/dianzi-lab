@@ -73,7 +73,7 @@ const STAT_CARDS = [
 const QUICK_ACTIONS = [
   { href: '/admin/ideas', label: '点子管理', icon: Lightbulb, description: '审核和管理用户提交的点子' },
   { href: '/admin/users', label: '用户管理', icon: Users, description: '查看和管理平台用户' },
-  { href: '/admin/trash', label: '垃圾箱', icon: Trash2, description: '查看已删除的内容' },
+  { href: '/admin/trash', label: '回收站', icon: Trash2, description: '查看已删除的内容' },
 ];
 
 export default async function AdminDashboardPage() {
@@ -101,8 +101,9 @@ export default async function AdminDashboardPage() {
           <div
             key={key}
             className="group relative rounded-2xl border border-gray-200/60 bg-white p-6
-                       shadow-sm transition-all duration-300 ease-out
+                       shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out
                        hover:scale-[1.02] hover:shadow-lg hover:border-gray-300/60
+                       motion-reduce:transition-none motion-reduce:hover:scale-100
                        dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700"
           >
             <div className="flex items-start justify-between gap-4">
@@ -136,11 +137,11 @@ export default async function AdminDashboardPage() {
                 {session?.email?.charAt(0).toUpperCase() || 'A'}
               </span>
             </div>
-            <div>
+            <div className="min-w-0">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
                 欢迎回来
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
                 {session?.email || '管理员'}
               </p>
             </div>
@@ -157,10 +158,13 @@ export default async function AdminDashboardPage() {
                 key={href}
                 href={href}
                 className="group flex items-start gap-4 rounded-xl border border-gray-200/60
-                         bg-gray-50/50 p-4 transition-all duration-200
+                         bg-gray-50/50 p-4 transition-[border-color,background-color] duration-200
                          hover:border-blue-200 hover:bg-blue-50/50
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
+                         motion-reduce:transition-none
                          dark:border-gray-800 dark:bg-gray-800/50
-                         dark:hover:border-blue-800 dark:hover:bg-blue-900/20"
+                         dark:hover:border-blue-800 dark:hover:bg-blue-900/20
+                         dark:focus-visible:ring-offset-gray-900"
               >
                 <div className="rounded-lg bg-white p-2 shadow-sm ring-1 ring-gray-200/60
                               dark:bg-gray-800 dark:ring-gray-700">
