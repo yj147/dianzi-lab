@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { loginUser, ActionResult } from "./actions";
 import { loginSchema } from "./schema";
@@ -12,6 +12,8 @@ type LoginInput = z.infer<typeof loginSchema>;
 
 export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
   const {
     register,
     handleSubmit,
@@ -26,12 +28,13 @@ export default function LoginForm() {
     const formData = new FormData();
     formData.append("email", data.email);
     formData.append("password", data.password);
+    formData.append("callbackUrl", callbackUrl);
 
     try {
       const result: ActionResult = await loginUser(formData);
       if (result.success) {
         // Redirect handled by server action, but as a fallback
-        router.push("/dashboard");
+        router.push(callbackUrl);
       } else {
         if (result.field) {
           setError(result.field as keyof LoginInput, {

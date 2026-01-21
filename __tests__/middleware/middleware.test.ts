@@ -47,36 +47,36 @@ describe('middleware', () => {
   })
 
   describe('未登录用户', () => {
-    it('/dashboard 重定向到 /login', async () => {
+    it('/dashboard 重定向到 /login?callbackUrl=/dashboard', async () => {
       const { middleware } = await import('@/middleware')
       const request = createRequest('/dashboard')
       const response = await middleware(request)
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login',
+        'http://localhost:3000/login?callbackUrl=%2Fdashboard',
       )
     })
 
-    it('/admin 重定向到 /login', async () => {
+    it('/admin 重定向到 /login?callbackUrl=/admin', async () => {
       const { middleware } = await import('@/middleware')
       const request = createRequest('/admin')
       const response = await middleware(request)
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login',
+        'http://localhost:3000/login?callbackUrl=%2Fadmin',
       )
     })
 
-    it('/submit 重定向到 /login', async () => {
+    it('/submit 重定向到 /login?callbackUrl=/submit', async () => {
       const { middleware } = await import('@/middleware')
       const request = createRequest('/submit')
       const response = await middleware(request)
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login',
+        'http://localhost:3000/login?callbackUrl=%2Fsubmit',
       )
     })
   })
@@ -160,19 +160,19 @@ describe('middleware', () => {
   })
 
   describe('无效 token', () => {
-    it('篡改的 token 重定向到 /login 并清除 cookie', async () => {
+    it('篡改的 token 重定向到 /login?callbackUrl 并清除 cookie', async () => {
       const { middleware } = await import('@/middleware')
       const request = createRequest('/dashboard', 'invalid-token')
       const response = await middleware(request)
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login',
+        'http://localhost:3000/login?callbackUrl=%2Fdashboard',
       )
       expect(response.cookies.get('session')?.value).toBe('')
     })
 
-    it('过期的 token 重定向到 /login', async () => {
+    it('过期的 token 重定向到 /login?callbackUrl', async () => {
       const { middleware } = await import('@/middleware')
       const expiredToken = await new SignJWT({
         email: 'test@example.com',
@@ -188,7 +188,7 @@ describe('middleware', () => {
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login',
+        'http://localhost:3000/login?callbackUrl=%2Fdashboard',
       )
     })
   })

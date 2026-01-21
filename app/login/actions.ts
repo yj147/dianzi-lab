@@ -19,6 +19,7 @@ function getFormString(formData: FormData, key: string): string {
 export async function loginUser(formData: FormData): Promise<ActionResult> {
   const email = getFormString(formData, 'email')
   const password = getFormString(formData, 'password')
+  const callbackUrl = getFormString(formData, 'callbackUrl') || '/dashboard'
 
   const parsed = loginSchema.safeParse({ email, password })
   if (!parsed.success) {
@@ -54,5 +55,11 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
 
   setSessionCookie(token)
 
-  redirect('/dashboard')
+  // Validate callbackUrl to prevent open redirect
+  // Must start with '/' but not '//' (protocol-relative URL) and not contain backslash
+  const safeCallbackUrl =
+    callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\')
+      ? callbackUrl
+      : '/dashboard'
+  redirect(safeCallbackUrl)
 }
