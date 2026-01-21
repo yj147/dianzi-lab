@@ -2,6 +2,10 @@ import { render, screen } from '@testing-library/react'
 
 import Hero from '@/components/Hero'
 
+jest.mock('lucide-react', () => ({
+  ChevronDown: () => <svg data-testid="chevron-down" />,
+}))
+
 describe('Hero', () => {
   it('显示标题"点子实验室"', () => {
     render(<Hero />)
@@ -36,8 +40,20 @@ describe('Hero', () => {
     const heading = screen.getByRole('heading', { level: 1, name: '点子实验室' })
     const section = heading.closest('section')
     expect(section).toHaveClass('bg-gradient-to-br')
-    expect(section).toHaveClass('from-blue-700')
-    expect(section).toHaveClass('via-cyan-700')
-    expect(section).toHaveClass('to-white')
+    expect(section).toHaveClass('from-blue-600')
+    expect(section).toHaveClass('via-cyan-500')
+    expect(section).toHaveClass('to-blue-400')
+  })
+
+  it('显示下滑引导箭头', () => {
+    render(<Hero />)
+    expect(screen.getByText('向下滚动')).toBeInTheDocument()
+    expect(screen.getByTestId('chevron-down')).toBeInTheDocument()
+  })
+
+  it('下滑引导箭头链接到工具区域', () => {
+    render(<Hero />)
+    const scrollLink = screen.getByRole('link', { name: '滚动到工具区域' })
+    expect(scrollLink).toHaveAttribute('href', '#tools')
   })
 })
