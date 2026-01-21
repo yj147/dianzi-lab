@@ -3,6 +3,17 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import type { Idea, IdeaStatus, User } from '@prisma/client'
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import StatusBadge from '@/components/StatusBadge'
 import { STATUS_CONFIG } from '@/lib/constants'
 import { moveToTrash, updateIdeaStatus } from '../actions'
@@ -113,13 +124,31 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                         ))}
                       </select>
 
-                      <button
-                        type="button"
-                        className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
-                        onClick={() => handleMoveToTrash(idea.id)}
-                      >
-                        移至垃圾箱
-                      </button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <button
+                            type="button"
+                            className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+                          >
+                            移至垃圾箱
+                          </button>
+                        </AlertDialogTrigger>
+
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>确认移至垃圾箱？</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              此操作会将点子移至垃圾箱，您可以在垃圾箱中恢复或永久删除。
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>取消</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleMoveToTrash(idea.id)}>
+                              确认移除
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </td>
                 </tr>
