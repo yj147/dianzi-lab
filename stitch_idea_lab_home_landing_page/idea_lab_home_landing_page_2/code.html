@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>奇迹工坊 - 提交你的奇思妙想</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&amp;family=Quicksand:wght@300;400;500;600;700&amp;family=Ma+Shan+Zheng&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lavender: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                        },
+                        mint: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                        },
+                        coral: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Quicksand"', '"ZCOOL KuaiLe"', 'sans-serif'],
+                        script: ['"Ma Shan Zheng"', 'cursive'],
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite',
+                        'float-fast': 'float 4s ease-in-out infinite',
+                        'wiggle': 'wiggle 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    }
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-[#fdf8ff] text-slate-700 overflow-x-hidden;
+                background-image: 
+                    radial-gradient(circle at 10% 20%, rgba(237, 233, 254, 0.6) 0%, transparent 20%),
+                    radial-gradient(circle at 90% 80%, rgba(220, 252, 231, 0.6) 0%, transparent 20%);
+            }
+        }
+        .blob-shape {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        .blob-shape-2 {
+            border-radius: 40% 60% 70% 30% / 50% 60% 30% 60%;
+        }
+        .floating-card {
+            @apply bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[0_20px_60px_-15px_rgba(167,139,250,0.25)];
+            border-radius: 3rem;
+        }
+        .input-whimsical {
+            @apply w-full bg-white/50 border-2 border-lavender-200 rounded-2xl px-6 py-4 text-slate-600 placeholder-slate-400 focus:border-coral-300 focus:ring-4 focus:ring-coral-100 transition-all outline-none font-medium text-lg;
+        }
+        .label-whimsical {
+            @apply block text-slate-500 font-bold mb-2 ml-2 text-lg tracking-wide;
+        }.doodle-stroke {
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col">
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] blob-shape bg-gradient-to-br from-lavender-100/60 to-transparent blur-3xl opacity-70 animate-float-slow"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[60%] h-[60%] blob-shape-2 bg-gradient-to-tl from-mint-100/60 to-transparent blur-3xl opacity-70 animate-float-medium" style="animation-delay: 1s;"></div>
+<div class="absolute top-[40%] left-[20%] w-[30%] h-[30%] rounded-full bg-coral-100/30 blur-3xl opacity-50 animate-float-fast"></div>
+<svg class="absolute top-[15%] right-[15%] w-24 h-24 opacity-20 text-lavender-400 animate-float-slow" viewBox="0 0 100 100">
+<path d="M50 10 C20 10 5 35 15 60 C5 80 25 95 50 95 C80 95 95 75 90 50 C95 20 70 10 50 10 Z" fill="currentColor"></path>
+</svg>
+<svg class="absolute bottom-[20%] left-[10%] w-32 h-32 opacity-20 text-mint-300 animate-float-medium" viewBox="0 0 100 100">
+<path d="M40 15 C10 20 -5 50 10 75 C20 95 60 100 80 85 C100 70 95 30 70 15 C60 5 50 10 40 15 Z" fill="currentColor"></path>
+</svg>
+</div>
+<nav class="relative z-50 px-6 py-6 lg:px-12">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-4">
+<div class="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-lg shadow-lavender-200/50 border-2 border-lavender-100 transform rotate-[-5deg]">
+<svg class="w-8 h-8 text-coral-400 doodle-stroke" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+<path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"></path>
+</svg>
+</div>
+<span class="font-script text-3xl md:text-4xl text-slate-800 tracking-wider">奇迹工坊</span>
+</div>
+<div class="hidden md:flex items-center gap-8 bg-white/40 backdrop-blur-md rounded-full px-8 py-3 border border-white/60 shadow-sm">
+<a class="font-bold text-slate-600 hover:text-coral-500 transition-colors" href="#">幻象大厅</a>
+<a class="font-bold text-slate-600 hover:text-coral-500 transition-colors" href="#">造梦工具</a>
+<a class="font-bold text-slate-600 hover:text-coral-500 transition-colors" href="#">关于我们</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="bg-white text-slate-700 font-bold px-6 py-2.5 rounded-full hover:bg-mint-50 border-2 border-transparent hover:border-mint-200 transition-all shadow-sm">
+                    登录
+                </button>
+</div>
+</div>
+</nav>
+<main class="relative z-10 flex-grow flex items-center justify-center py-12 px-4 sm:px-6">
+<div class="max-w-6xl w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-5 text-center lg:text-left relative">
+<div class="hidden lg:block absolute -top-24 -left-12 w-32 h-32 animate-wiggle">
+<svg class="w-full h-full text-lavender-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 100 100">
+<path d="M50 10 Q70 5 80 25 T90 60 T70 90 T30 90 T10 60 T20 25 T50 10Z" stroke-dasharray="5,5"></path>
+<circle class="text-coral-300" cx="30" cy="40" fill="currentColor" r="5"></circle>
+<circle class="text-mint-300" cx="70" cy="60" fill="currentColor" r="8"></circle>
+</svg>
+</div>
+<div class="inline-block mb-6 px-5 py-2 bg-coral-50 text-coral-500 rounded-full text-sm font-bold border-2 border-coral-100 shadow-sm transform -rotate-2">
+                    ✨ 创意孵化器
+                </div>
+<h1 class="text-5xl lg:text-7xl font-black mb-6 leading-tight text-slate-800">
+<span class="block text-4xl lg:text-5xl font-script text-lavender-500 mb-2 transform -rotate-1 origin-bottom-left">点亮你的</span>
+                    奇思妙想
+                </h1>
+<p class="text-xl text-slate-500 font-medium mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0">
+                    在这个充满无限可能的梦境里，每一个小小的想法都是一颗等待发芽的魔法种子。准备好编织你的现实了吗？
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+<button class="px-8 py-4 rounded-full bg-white border-2 border-lavender-200 text-lavender-500 font-bold hover:bg-lavender-50 hover:border-lavender-300 transition-all shadow-sm flex items-center gap-2 justify-center">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"></path></svg>
+                        探索奇迹工坊
+                    </button>
+</div>
+<div class="absolute bottom-0 -left-10 w-24 h-24 hidden lg:block animate-float-slow">
+<svg class="w-full h-full text-mint-300" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+<path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke-linecap="round"></path>
+<circle cx="12" cy="12" fill="#dcfce7" r="4"></circle>
+</svg>
+</div>
+</div>
+<div class="lg:col-span-7 relative">
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-coral-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob"></div>
+<div class="absolute -bottom-10 -left-10 w-40 h-40 bg-lavender-200 rounded-full mix-blend-multiply filter blur-2xl opacity-40 animate-blob animation-delay-2000"></div>
+<div class="floating-card p-8 md:p-12 relative z-10 overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-lavender-300 via-coral-300 to-mint-300"></div>
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-4xl font-script text-slate-800 mb-1">记录你的奇遇</h2>
+<p class="text-slate-500 font-bold text-sm">Idea Lab #2026-SUB</p>
+</div>
+<div class="w-16 h-16 text-yellow-400 transform rotate-12 animate-wiggle">
+<svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24">
+<path d="M9 18h6"></path>
+<path d="M10 22h4"></path>
+<path d="M12 2v1"></path>
+<path d="M15.5 5.5l.5-.5"></path>
+<path d="M8.5 5.5l-.5-.5"></path>
+<path d="M17 12a5 5 0 0 0-5-5 5 5 0 0 0-5 5c0 3.5 2.5 4.5 3 6h4c.5-1.5 3-2.5 3-6z" fill="#fef08a" fill-opacity="0.5"></path>
+</svg>
+</div>
+</div>
+<form class="space-y-6">
+<div class="group">
+<label class="label-whimsical" for="title">点子名称</label>
+<div class="relative">
+<input class="input-whimsical pl-12" id="title" placeholder="给你的梦起个名字..." type="text"/>
+<div class="absolute left-4 top-1/2 -translate-y-1/2 text-lavender-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+</div>
+</div>
+</div>
+<div class="group">
+<label class="label-whimsical" for="description">梦境描述</label>
+<div class="relative">
+<textarea class="input-whimsical min-h-[140px] pl-12 resize-none" id="description" placeholder="哪怕是最荒诞的细节，也请告诉我们..."></textarea>
+<div class="absolute left-4 top-5 text-mint-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M17.5 19c0-3.037-2.463-5.5-5.5-5.5S6.5 15.963 6.5 19h-2c0-4.142 3.358-7.5 7.5-7.5s7.5 3.358 7.5 7.5h-2Z"></path><path d="M12 11.5c0-1.657-1.343-3-3-3s-3 1.343-3 3"></path></svg>
+</div>
+</div>
+</div>
+<div class="group">
+<label class="label-whimsical" for="tags">奇思标签</label>
+<div class="relative">
+<input class="input-whimsical pl-12" id="tags" placeholder="例如：#时光机 #棉花糖云" type="text"/>
+<div class="absolute left-4 top-1/2 -translate-y-1/2 text-coral-400">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"></path><path d="M7 7h.01"></path></svg>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-coral-400 hover:bg-coral-500 text-white font-bold text-xl py-4 rounded-2xl shadow-lg shadow-coral-400/30 transform transition-all hover:-translate-y-1 hover:shadow-coral-400/40 active:translate-y-0 flex items-center justify-center gap-3" type="button">
+<span>编织梦想</span>
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"><path d="m19 2 2 2-2 2-2-2 2-2Z"></path><path d="m5 17 2 2-2 2-2-2 2-2Z"></path><path d="m15 4-9 9 3 3 9-9-3-3Z"></path></svg>
+</button>
+</div>
+</form>
+<div class="absolute bottom-4 right-4 opacity-50">
+<svg class="w-16 h-16 text-lavender-200" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 100 100">
+<path d="M10 50 Q 25 25 50 50 T 90 50"></path>
+<path d="M10 60 Q 25 35 50 60 T 90 60"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="relative z-10 py-12 px-6">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-slate-400 text-sm gap-4">
+<p>© 2026 奇迹工坊 · 让奇思妙想自由呼吸</p>
+<div class="flex items-center gap-2">
+<span>用</span>
+<svg class="w-4 h-4 text-coral-400 fill-current" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path></svg>
+<span>与魔法驱动</span>
+</div>
+</div>
+</footer>
+
+</body></html>

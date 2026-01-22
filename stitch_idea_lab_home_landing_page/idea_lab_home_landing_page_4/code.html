@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>梦境管理员 - 奇迹工坊</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&amp;family=Quicksand:wght@300;400;500;600;700&amp;family=Ma+Shan+Zheng&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,typography,container-queries"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        lavender: {
+                            50: '#f5f3ff',
+                            100: '#ede9fe',
+                            200: '#ddd6fe',
+                            300: '#c4b5fd',
+                            400: '#a78bfa',
+                        },
+                        mint: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        },
+                        coral: {
+                            50: '#fff1f2',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Quicksand"', '"ZCOOL KuaiLe"', 'sans-serif'],
+                        script: ['"Ma Shan Zheng"', 'cursive'],
+                        display: ['"ZCOOL KuaiLe"', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-[#fdf8ff] text-slate-700 overflow-x-hidden;
+            }
+        }
+        .blob-shape {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+        }
+        .glass-panel {
+            @apply bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_0_rgba(196,181,253,0.15)];
+        }
+        .table-row-glass {
+            @apply transition-all duration-300 hover:bg-white/60 hover:shadow-sm hover:scale-[1.005];
+        }
+        .action-btn {
+            @apply flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-90 shadow-sm;
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen relative">
+<div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+<div class="absolute top-[-10%] left-[-5%] w-[60%] h-[60%] blob-shape bg-lavender-100/60 blur-3xl opacity-60 animate-pulse" style="animation-duration: 8s;"></div>
+<div class="absolute bottom-[-10%] right-[-5%] w-[50%] h-[60%] blob-shape bg-mint-100/60 blur-3xl opacity-60"></div>
+<div class="absolute top-[20%] right-[-10%] w-[40%] h-[40%] blob-shape bg-coral-400/10 blur-3xl opacity-40"></div>
+</div>
+<nav class="relative z-50 px-6 py-4">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-lavender-200 blob-shape flex items-center justify-center text-coral-400 shadow-inner">
+<span class="material-symbols-outlined text-2xl">auto_fix_high</span>
+</div>
+<span class="font-script text-2xl text-slate-800">奇迹工坊</span>
+</div>
+<div class="hidden md:flex items-center bg-white/40 backdrop-blur-md rounded-full px-2 py-1.5 gap-2 border border-white/50 shadow-sm">
+<a class="px-5 py-2 rounded-full text-slate-600 hover:text-coral-400 font-medium transition-colors text-sm" href="#">控制台</a>
+<a class="px-5 py-2 rounded-full bg-white text-coral-500 shadow-sm font-bold text-sm" href="#">
+<span class="material-symbols-outlined align-middle text-lg mr-1">admin_panel_settings</span>
+                    梦境管理
+                </a>
+<a class="px-5 py-2 rounded-full text-slate-600 hover:text-coral-400 font-medium transition-colors text-sm" href="#">设置</a>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 pr-4 border-r border-slate-200">
+<span class="material-symbols-outlined text-lavender-400">notifications</span>
+</div>
+<div class="flex items-center gap-2">
+<img alt="Admin" class="w-9 h-9 rounded-full border-2 border-white shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATbfSJ3NeOi9kj-B-hieEf0Ripo7vGuLhvb5dtfIbEWVz8VZAHbQzLsLqan6y93vIEPOp-kVVUo8hIiywr7BtEQnpQukFRG0VaAYTr34VvvlH-hZIpHIxV_R3bqw6FCTqO8lOfVzNDDTNHDIrqbhHJ4gRUMD4AjLy9RGSFLOrF5Qk8v44nLeGtfu8voWhxGSz0Gliq0j8PVVfcaFP_hhdT6z1J-klrU-WoW89NLWaW8l4XIMw0WWGeisO2e_B3Q1lvpE70HM-Dgqo"/>
+<span class="hidden sm:block font-display text-slate-700">猫头鹰管理员</span>
+</div>
+</div>
+</div>
+</nav>
+<main class="relative z-10 max-w-7xl mx-auto px-6 py-8">
+<div class="flex flex-col md:flex-row justify-between items-end mb-10 gap-6">
+<div>
+<h1 class="text-5xl md:text-6xl font-script text-slate-800 mb-2 relative inline-block">
+                    梦境管理员
+                    <span class="absolute -top-4 -right-8 text-2xl animate-bounce">✨</span>
+</h1>
+<p class="text-slate-500 font-medium pl-2">审核来自世界各地的奇思妙想，编织新的现实。</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 bg-white/60 hover:bg-white px-5 py-2.5 rounded-2xl text-slate-600 font-bold transition-all shadow-sm border border-white/60">
+<span class="material-symbols-outlined text-lavender-400">filter_list</span>
+                    筛选梦境
+                </button>
+<button class="flex items-center gap-2 bg-coral-400 hover:bg-coral-500 px-6 py-2.5 rounded-2xl text-white font-bold transition-all shadow-lg shadow-coral-400/20">
+<span class="material-symbols-outlined">add</span>
+                    新增灵感
+                </button>
+</div>
+</div>
+<div class="glass-panel rounded-[2.5rem] p-1 overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-lavender-200/50 text-slate-500">
+<th class="py-6 px-8 font-display text-lg font-normal tracking-wide w-1/3">奇思妙想 (Idea Title)</th>
+<th class="py-6 px-6 font-display text-lg font-normal tracking-wide">造梦者 (Dreamer)</th>
+<th class="py-6 px-6 font-display text-lg font-normal tracking-wide">状态 (Status)</th>
+<th class="py-6 px-6 font-display text-lg font-normal tracking-wide">提交时间 (Time)</th>
+<th class="py-6 px-8 font-display text-lg font-normal tracking-wide text-right">魔法操作 (Magic Actions)</th>
+</tr>
+</thead>
+<tbody class="text-slate-600">
+<tr class="table-row-glass group border-b border-dashed border-lavender-100">
+<td class="py-5 px-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-400 shrink-0">
+<span class="material-symbols-outlined">cloud_circle</span>
+</div>
+<div>
+<div class="font-bold text-lg text-slate-800 group-hover:text-indigo-500 transition-colors">自动云朵生成器</div>
+<div class="text-sm text-slate-400 mt-0.5">用于制造形状各异的午后云朵，带草莓味。</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center gap-3">
+<img alt="avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYIJUkX51hnxM4LSmQLx-ZFnew6tKSs_5in5r-3ql-u8M6CmBcpy7EXY_tbsABLwU1h4PTOaI4DKLFzoj8gBKN0KAy4T76G0FI1vuGZTJPymeZ9F2HoFIcul10ONyBfmGPb3hkOwWxucCZGsAq8b4WXXOgv-AJ79qRfCC_1QYcHoMI8j4uCsl1OwE5-uvPnTCiEIFelr0d3wEWU3fJS0EjlxYjCGStxFK-YWhWKQoqpI9DpsfTcJ6PimTR1uBh0mhB8pBNTlRQSbM"/>
+<span class="font-medium">Sky Walker</span>
+</div>
+</td>
+<td class="py-5 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-500 border border-amber-100">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                    孵化中
+                                </span>
+</td>
+<td class="py-5 px-6 font-sans text-slate-400 text-sm">
+                                刚刚
+                            </td>
+<td class="py-5 px-8">
+<div class="flex items-center justify-end gap-3">
+<button class="action-btn bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50" title="批准 (Approve)">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</button>
+<button class="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50" title="驳回 (Reject)">
+<span class="material-symbols-outlined">cloud_off</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-glass group border-b border-dashed border-lavender-100">
+<td class="py-5 px-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-mint-50 flex items-center justify-center text-mint-500 shrink-0">
+<span class="material-symbols-outlined">potted_plant</span>
+</div>
+<div>
+<div class="font-bold text-lg text-slate-800 group-hover:text-mint-600 transition-colors">会唱歌的向日葵</div>
+<div class="text-sm text-slate-400 mt-0.5">清晨会唱美声，傍晚会唱爵士乐。</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center gap-3">
+<img alt="avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBnQ0xkmSkMkqhMmV-Sj3HttYw3IVwmHnzL6Fx0V3F9hjuxTRgq6cfJOF6q4YNOp25R2dVciaxOffNNaBVZ7OrrXq7lxBwvzcxx-9GJz9faa_vBuCN2UNECw7XO4mIexlYJfcZofR9OazQhT3gM-6AP4ghahjB25D7f6aPkEaBdgkoTyuG9V8NiIIwZFYgInkx3Eiu8t-kqUXymaWuBuXIcqGl75Ym9iiEaO1-wltnodxmZgb_htsJQFukboMI4M5OtuivEi6nPz3M"/>
+<span class="font-medium">Melody Maker</span>
+</div>
+</td>
+<td class="py-5 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-mint-50 text-mint-600 border border-mint-100">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                                    已实现
+                                </span>
+</td>
+<td class="py-5 px-6 font-sans text-slate-400 text-sm">
+                                2小时前
+                            </td>
+<td class="py-5 px-8">
+<div class="flex items-center justify-end gap-3 opacity-40 hover:opacity-100 transition-opacity">
+<button class="action-btn bg-lavender-100 text-lavender-400" disabled="">
+<span class="material-symbols-outlined">edit</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-glass group border-b border-dashed border-lavender-100">
+<td class="py-5 px-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-coral-50 flex items-center justify-center text-coral-400 shrink-0">
+<span class="material-symbols-outlined">rocket_launch</span>
+</div>
+<div>
+<div class="font-bold text-lg text-slate-800 group-hover:text-coral-500 transition-colors">月球滑梯</div>
+<div class="text-sm text-slate-400 mt-0.5">连接自家后院与月球表面的超长滑梯。</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center gap-3">
+<img alt="avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCszaq5frR2Q3fN2ZNc3RgRtpjhCN80ld0C3VnSWywQzUSZGe5D0jvUt6BjB6o9POMhhFT8KCZ2ajd22DuQKbPebTpI15SOWeZKwiZcU53LJRIQmIIbJWWZ9G-gfwWdEwlczicBDIAVICYUjYSd-43YZlPoAMyo88736kihUkhsA-LbE6dR0HYgzdOnhevKbhARUEiSB5W7Ul1-03ETSJh5JAxM_ZL6oTbosG5VcS_nlwYZAJH_L4QMYUIQstAFBmadfYrhj14lwPI"/>
+<span class="font-medium">Cosmo Kid</span>
+</div>
+</td>
+<td class="py-5 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-coral-50 text-coral-500 border border-coral-100">
+<span class="material-symbols-outlined text-[14px]">cancel</span>
+                                    已驳回
+                                </span>
+</td>
+<td class="py-5 px-6 font-sans text-slate-400 text-sm">
+                                昨天
+                            </td>
+<td class="py-5 px-8">
+<div class="flex items-center justify-end gap-3">
+<span class="text-xs text-coral-300 italic">物理法则不兼容</span>
+</div>
+</td>
+</tr>
+<tr class="table-row-glass group border-b border-dashed border-lavender-100">
+<td class="py-5 px-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-400 shrink-0">
+<span class="material-symbols-outlined">pets</span>
+</div>
+<div>
+<div class="font-bold text-lg text-slate-800 group-hover:text-purple-500 transition-colors">隐形猫咪喷雾</div>
+<div class="text-sm text-slate-400 mt-0.5">只能看到猫咪的微笑，就像柴郡猫一样。</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center gap-3">
+<img alt="avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBvwIYi91_QdBC3HpYP586g13cS6T6oB-m-qpR6MdB3CpOLMEzcW9sC5v6FNKbJ-TN1EoOsY3d3II8JBJKuScsivJk4XGeqXETiBT8IMzhmLgnyY2esbur7QbmsLfLub-xJvwuP3GUacLVr06Xhzr2xA0riUqguxev5D5yrliLacDVQVAssxDmf9RkKp1OYvKNhMOfNIV8Gm7aOh50WTeW4KBiIclvBPOJ9y0kYanIXbceBuRHUs6Kgucw9Avpx9KIeD32o1dDa9Ew"/>
+<span class="font-medium">Alice W.</span>
+</div>
+</td>
+<td class="py-5 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-500 border border-amber-100">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                    孵化中
+                                </span>
+</td>
+<td class="py-5 px-6 font-sans text-slate-400 text-sm">
+                                2天前
+                            </td>
+<td class="py-5 px-8">
+<div class="flex items-center justify-end gap-3">
+<button class="action-btn bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50" title="批准 (Approve)">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</button>
+<button class="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50" title="驳回 (Reject)">
+<span class="material-symbols-outlined">cloud_off</span>
+</button>
+</div>
+</td>
+</tr>
+<tr class="table-row-glass group">
+<td class="py-5 px-8">
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-400 shrink-0">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<div>
+<div class="font-bold text-lg text-slate-800 group-hover:text-blue-500 transition-colors">便携式海浪</div>
+<div class="text-sm text-slate-400 mt-0.5">装在瓶子里的微型海洋，适合想看海的人。</div>
+</div>
+</div>
+</td>
+<td class="py-5 px-6">
+<div class="flex items-center gap-3">
+<img alt="avatar" class="w-8 h-8 rounded-full" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSLB2nyoW6G9Wh5-2ex0YJ7MO44gdaV8s3FbY-ybzYj9KR3hDP2a-3NTvuxUzSRY7aYcrmlwSSXsVsoqxF2DBHnJROupO2FWXy9M-7neVG6QtDTkjN7KUo2U8uo_9MhHYgymjGRprsIM8oHxBLOpLE3lkiA3KwFrKyF4BubG6EVQFzAOZe4y6MViv_Etfjyp_1ILu-GDx1AElSOEoRA5cxfgjwb5ZHmDrbDEWZJ2v6pmOyawoDEdC2ZtV3H23zK0PLPnus0OSuw2s"/>
+<span class="font-medium">Ocean Boy</span>
+</div>
+</td>
+<td class="py-5 px-6">
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-500 border border-amber-100">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse"></span>
+                                    孵化中
+                                </span>
+</td>
+<td class="py-5 px-6 font-sans text-slate-400 text-sm">
+                                3天前
+                            </td>
+<td class="py-5 px-8">
+<div class="flex items-center justify-end gap-3">
+<button class="action-btn bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50" title="批准 (Approve)">
+<span class="material-symbols-outlined">auto_fix_high</span>
+</button>
+<button class="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50" title="驳回 (Reject)">
+<span class="material-symbols-outlined">cloud_off</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-8 py-6 border-t border-lavender-200/50 flex justify-between items-center bg-white/20">
+<span class="text-slate-500 text-sm font-medium">显示 1 至 5 项，共 42 个奇思妙想</span>
+<div class="flex gap-2">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-slate-600 hover:shadow-sm transition-all disabled:opacity-50">
+<span class="material-symbols-outlined text-sm">arrow_back_ios_new</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-coral-400 text-white shadow-md shadow-coral-400/30">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-600 hover:bg-lavender-50 hover:text-lavender-500 transition-all">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-600 hover:bg-lavender-50 hover:text-lavender-500 transition-all">3</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-slate-600 hover:shadow-sm transition-all">
+<span class="material-symbols-outlined text-sm">arrow_forward_ios</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="text-center py-8 relative z-10 text-slate-400 text-sm">
+<p>© 2026 奇迹工坊 · 管理员专属通道</p>
+</footer>
+
+</body></html>
