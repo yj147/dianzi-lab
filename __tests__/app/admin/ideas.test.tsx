@@ -1,37 +1,53 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import type { IdeaStatus } from '@prisma/client'
 
-const pushMock = jest.fn()
-const refreshMock = jest.fn()
-let searchParams = new URLSearchParams()
+import AdminIdeasPage from '@/app/admin/ideas/page'
+import IdeasTable from '@/app/admin/ideas/_components/IdeasTable'
+import { prisma } from '@/lib/db'
+import { moveToTrash, updateIdeaStatus } from '@/app/admin/ideas/actions'
 
-const updateIdeaStatusMock = jest.fn()
-const moveToTrashMock = jest.fn()
+const refreshMock = jest.fn()
 
 jest.mock('next/navigation', () => ({
-  useRouter: () => ({ push: pushMock, refresh: refreshMock }),
-  useSearchParams: () => searchParams,
+  useRouter: () => ({ refresh: refreshMock }),
 }))
 
 jest.mock('@/lib/db', () => ({
   prisma: {
     idea: {
       findMany: jest.fn(),
-      update: jest.fn(),
     },
   },
 }))
 
 jest.mock('@/app/admin/ideas/actions', () => ({
-  updateIdeaStatus: (...args: any[]) => updateIdeaStatusMock(...args),
-  moveToTrash: (...args: any[]) => moveToTrashMock(...args),
+  moveToTrash: jest.fn(),
+  updateIdeaStatus: jest.fn(),
 }))
 
-function getIdeaFindManyMock(): jest.Mock {
-  return jest.requireMock('@/lib/db').prisma.idea.findMany as jest.Mock
-}
+// Mock Radix-based dialogs to keep tests focused on our behavior.
+jest.mock('@/components/ui/alert-dialog', () => ({
+  AlertDialog: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogTrigger: ({ children }: { children: any }) => <>{children}</>,
+  AlertDialogContent: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogDescription: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogFooter: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogHeader: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogTitle: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogCancel: ({ children }: { children: any }) => <button type="button">{children}</button>,
+  AlertDialogAction: ({
+    children,
+    onClick,
+  }: {
+    children: any
+    onClick?: () => void
+  }) => (
+    <button type="button" onClick={onClick}>
+      {children}
+    </button>
+  ),
+}))
 
-// Helper to create complete mock idea data
 function createMockIdea(overrides: {
   id: string
   title: string
@@ -56,11 +72,10 @@ function createMockIdea(overrides: {
 describe('Admin Ideas Page + Table', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    searchParams = new URLSearchParams()
   })
 
   it('renders ideas list from prisma (isDeleted=false)', async () => {
-    const ideas = [
+    ;(prisma.idea.findMany as jest.Mock).mockResolvedValue([
       createMockIdea({
         id: 'idea_1',
         title: 'Idea 1',
@@ -75,55 +90,34 @@ describe('Admin Ideas Page + Table', () => {
         createdAt: new Date('2026-01-02T00:00:00Z'),
         email: 'u2@example.com',
       }),
-    ]
-    getIdeaFindManyMock().mockResolvedValue(ideas)
+    ])
 
-    const AdminIdeasPage = (await import('@/app/admin/ideas/page')).default
-    const page = await AdminIdeasPage({ searchParams: {} })
-    render(page)
+    render(await AdminIdeasPage({ searchParams: {} }))
 
-    expect(screen.getByText('点子管理')).toBeInTheDocument()
-    // Data appears in both desktop and mobile views
-    expect(screen.getAllByText('Idea 1').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('u1@example.com').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('待审核').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('Idea 2').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('u2@example.com').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('已采纳').length).toBeGreaterThan(0)
+    expect(screen.getByText('梦境管理员')).toBeInTheDocument()
+    expect(screen.getAllByText('Idea 1')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('u1@example.com')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('u2@example.com')[0]).toBeInTheDocument()
+
+    // Non-completed statuses share the incubating pill in this table.
+    expect(screen.getAllByText('孵化中').length).toBeGreaterThan(0)
   })
 
   it('applies status filter from URL searchParams', async () => {
-    getIdeaFindManyMock().mockResolvedValue([])
-
-    const AdminIdeasPage = (await import('@/app/admin/ideas/page')).default
+    ;(prisma.idea.findMany as jest.Mock).mockResolvedValue([])
     await AdminIdeasPage({ searchParams: { status: 'PENDING' } })
 
-    expect(getIdeaFindManyMock()).toHaveBeenCalledWith({
+    expect(prisma.idea.findMany).toHaveBeenCalledWith({
       where: { isDeleted: false, status: 'PENDING' },
       include: { user: { select: { email: true } } },
       orderBy: { createdAt: 'desc' },
     })
   })
 
-  it('status filter dropdown reads URL param and updates URL + refresh', async () => {
-    searchParams = new URLSearchParams('status=PENDING')
-
-    const { default: IdeasTable } = await import('@/app/admin/ideas/_components/IdeasTable')
-    render(<IdeasTable ideas={[]} />)
-
-    const filterSelect = screen.getByLabelText('状态筛选') as HTMLSelectElement
-    expect(filterSelect.value).toBe('PENDING')
-
-    fireEvent.change(filterSelect, { target: { value: 'APPROVED' } })
-
-    await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/admin/ideas?status=APPROVED')
-      expect(refreshMock).toHaveBeenCalled()
-    })
-  })
-
-  it('row status change dropdown calls updateIdeaStatus + refresh', async () => {
-    const { default: IdeasTable } = await import('@/app/admin/ideas/_components/IdeasTable')
+  it('supports approve and reject actions', async () => {
+    ;(updateIdeaStatus as jest.Mock).mockResolvedValue(undefined)
+    ;(moveToTrash as jest.Mock).mockResolvedValue(undefined)
     render(
       <IdeasTable
         ideas={[
@@ -135,48 +129,19 @@ describe('Admin Ideas Page + Table', () => {
             email: 'u1@example.com',
           }),
         ]}
-      />,
+      />
     )
 
-    // Get all status change selects (desktop + mobile), pick the first one
-    const statusSelects = screen.getAllByLabelText('状态变更') as HTMLSelectElement[]
-    fireEvent.change(statusSelects[0], { target: { value: 'APPROVED' } })
+    const row = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
+    expect(row).toBeTruthy()
 
-    await waitFor(() => {
-      expect(updateIdeaStatusMock).toHaveBeenCalledWith('idea_1', 'APPROVED')
-      expect(refreshMock).toHaveBeenCalled()
-    })
-  })
+    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '批准' }))
+    await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_1', 'APPROVED'))
+    await waitFor(() => expect(refreshMock).toHaveBeenCalled())
 
-  it('moveToTrash button shows confirmation dialog and calls moveToTrash + refresh', async () => {
-    const { default: IdeasTable } = await import('@/app/admin/ideas/_components/IdeasTable')
-    render(
-      <IdeasTable
-        ideas={[
-          createMockIdea({
-            id: 'idea_1',
-            title: 'Idea 1',
-            status: 'PENDING' as IdeaStatus,
-            createdAt: new Date('2026-01-01T00:00:00Z'),
-            email: 'u1@example.com',
-          }),
-        ]}
-      />,
-    )
-
-    // Click the delete button by aria-label
-    const trashButtons = screen.getAllByRole('button', { name: '移至垃圾箱' })
-    fireEvent.click(trashButtons[0])
-
-    await waitFor(() => {
-      expect(screen.getByText('确认移至垃圾箱？')).toBeInTheDocument()
-    })
-
-    fireEvent.click(screen.getByRole('button', { name: '确认移除' }))
-
-    await waitFor(() => {
-      expect(moveToTrashMock).toHaveBeenCalledWith('idea_1')
-      expect(refreshMock).toHaveBeenCalled()
-    })
+    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '确认驳回' }))
+    await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea_1'))
+    await waitFor(() => expect(refreshMock).toHaveBeenCalled())
   })
 })
+

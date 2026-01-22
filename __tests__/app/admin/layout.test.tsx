@@ -84,6 +84,13 @@ jest.mock('@/components/ui/alert-dialog', () => ({
   ),
 }))
 
+jest.mock('@/components/ui/tooltip', () => ({
+  TooltipProvider: ({ children }: { children: any }) => <div>{children}</div>,
+  Tooltip: ({ children }: { children: any }) => <div>{children}</div>,
+  TooltipTrigger: ({ children }: { children: any }) => <>{children}</>,
+  TooltipContent: ({ children }: { children: any }) => <div>{children}</div>,
+}))
+
 describe('Admin Layout', () => {
   const mockAdminSession = {
     sub: 'admin-1',
@@ -135,71 +142,38 @@ describe('Admin Layout', () => {
     expect(redirect).toHaveBeenCalledWith('/dashboard')
   })
 
-  it('renders desktop header + sidebar enhancements on /admin', async () => {
+  it('renders top navigation on /admin', async () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
     ;(usePathname as jest.Mock).mockReturnValue('/admin')
 
     const LayoutContent = await AdminLayout({ children: <div>Admin Content</div> })
     render(LayoutContent)
 
-    // Desktop header breadcrumb shows correct Chinese page name.
-    const desktopHeader = screen.getByText('后台管理').closest('header')
-    expect(desktopHeader).toBeTruthy()
-    expect(within(desktopHeader as HTMLElement).getByText('仪表板')).toBeInTheDocument()
+    expect(screen.getByText('奇迹工坊')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '仪表板' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '点子管理' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '用户管理' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '垃圾箱' })).toBeInTheDocument()
 
-    // Admin email is rendered in desktop header.
-    expect(within(desktopHeader as HTMLElement).getByText(mockAdminSession.email)).toBeInTheDocument()
+    // Admin email is rendered in top nav.
+    expect(screen.getByText(mockAdminSession.email)).toBeInTheDocument()
 
-    // Logout button exists and has correct aria-label.
-    const headerLogoutButton = within(desktopHeader as HTMLElement).getByRole('button', { name: '退出登录' })
-    expect(headerLogoutButton).toHaveAttribute('aria-label', '退出登录')
-    fireEvent.click(headerLogoutButton)
+    // Logout button exists and calls logout.
+    fireEvent.click(screen.getByRole('button', { name: '退出登录' }))
     expect(logout).toHaveBeenCalledTimes(1)
-
-    // Sidebar enhancements.
-    const desktopSidebar = screen
-      .getAllByRole('complementary')
-      .find((sidebar) => sidebar.className.includes('fixed'))
-    expect(desktopSidebar).toBeTruthy()
-
-    expect(within(desktopSidebar as HTMLElement).getByText('© 2026 点子 Lab')).toBeInTheDocument()
-
-    const accountSection = within(desktopSidebar as HTMLElement).getByText('登录账号').closest('div')?.parentElement
-    expect(accountSection).toHaveClass('md:hidden')
-
-    const sidebarLogoutButton = within(desktopSidebar as HTMLElement).getByRole('button', { name: '退出登录' })
-    fireEvent.click(sidebarLogoutButton)
-    expect(logout).toHaveBeenCalledTimes(2)
 
     expect(screen.getByText('Admin Content')).toBeInTheDocument()
   })
 
-  it('renders desktop breadcrumb for /admin/ideas', async () => {
+  it('highlights active nav item for /admin/ideas', async () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
     ;(usePathname as jest.Mock).mockReturnValue('/admin/ideas')
 
     const LayoutContent = await AdminLayout({ children: <div>Ideas Page</div> })
     render(LayoutContent)
 
-    const desktopHeader = screen.getByText('后台管理').closest('header')
-    expect(desktopHeader).toBeTruthy()
-    expect(within(desktopHeader as HTMLElement).getByText('点子管理')).toBeInTheDocument()
-  })
-
-  it('toggles mobile menu (covers overlay branch)', async () => {
-    ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
-
-    const LayoutContent = await AdminLayout({ children: <div>Admin Content</div> })
-    render(LayoutContent)
-
-    expect(screen.queryByTestId('sidebar-overlay')).not.toBeInTheDocument()
-
-    fireEvent.click(screen.getByLabelText('Open menu'))
-    expect(screen.getByText('管理菜单')).toBeInTheDocument()
-    expect(screen.getByTestId('sidebar-overlay')).toBeInTheDocument()
-
-    fireEvent.click(screen.getByLabelText('Close menu'))
-    expect(screen.queryByTestId('sidebar-overlay')).not.toBeInTheDocument()
+    const activeLink = screen.getByRole('link', { name: '点子管理' })
+    expect(activeLink).toHaveClass('bg-white')
   })
 
   describe('Admin Pages (coverage)', () => {
@@ -210,7 +184,7 @@ describe('Admin Layout', () => {
 
       render(await AdminDashboardPage())
       expect(screen.getByText('仪表板')).toBeInTheDocument()
-      expect(screen.getByText('欢迎回来')).toBeInTheDocument()
+      expect(screen.getByText(/欢迎回来/)).toBeInTheDocument()
     })
 
     it('renders ideas page without status filter when search param is invalid', async () => {
@@ -222,8 +196,8 @@ describe('Admin Layout', () => {
           where: { isDeleted: false },
         })
       )
-      expect(screen.getByText('点子管理')).toBeInTheDocument()
-      expect(screen.getByText('暂无点子')).toBeInTheDocument()
+      expect(screen.getByText('梦境管理员')).toBeInTheDocument()
+      expect(screen.getByText('暂无待审核的梦境')).toBeInTheDocument()
     })
 
     it('renders ideas page with status filter when search param is valid', async () => {
@@ -319,41 +293,24 @@ describe('Admin Layout', () => {
     it('shows empty state when there are no ideas', () => {
       ;(mockSearchParams.get as jest.Mock).mockReturnValue(null)
       render(<IdeasTable ideas={[]} />)
-      expect(screen.getByText('暂无点子')).toBeInTheDocument()
+      expect(screen.getByText('暂无待审核的梦境')).toBeInTheDocument()
     })
 
-    it('supports filtering and actions', async () => {
-      ;(mockSearchParams.get as jest.Mock).mockReturnValue('PENDING')
+    it('supports approve and reject actions', async () => {
+      ;(mockSearchParams.get as jest.Mock).mockReturnValue(null)
       render(<IdeasTable ideas={ideas as any} />)
 
-      // Filter select reads from search params.
-      const filterSelect = screen.getByRole('combobox', { name: '状态筛选' })
-      expect(filterSelect).toHaveValue('PENDING')
-
-      // Change filter (value branch).
-      fireEvent.change(filterSelect, { target: { value: 'APPROVED' } })
-      expect(mockRouter.push).toHaveBeenCalledWith('/admin/ideas?status=APPROVED')
-      expect(mockRouter.refresh).toHaveBeenCalledTimes(1)
-
-      // Change filter back to empty (else branch).
-      fireEvent.change(filterSelect, { target: { value: '' } })
-      expect(mockRouter.push).toHaveBeenCalledWith('/admin/ideas')
-      expect(mockRouter.refresh).toHaveBeenCalledTimes(2)
-
-      // Status change action.
       const ideaRow = screen
         .getAllByRole('row')
         .find((row) => within(row).queryByText('Idea A'))
       expect(ideaRow).toBeTruthy()
-      fireEvent.change(within(ideaRow as HTMLElement).getByRole('combobox', { name: '状态变更' }), {
-        target: { value: 'COMPLETED' },
-      })
+
+      fireEvent.click(within(ideaRow as HTMLElement).getByRole('button', { name: '批准' }))
       await waitFor(() =>
-        expect(updateIdeaStatus).toHaveBeenCalledWith('idea-1', 'COMPLETED')
+        expect(updateIdeaStatus).toHaveBeenCalledWith('idea-1', 'APPROVED')
       )
 
-      // Move to trash confirm action.
-      fireEvent.click(within(ideaRow as HTMLElement).getByRole('button', { name: '确认移除' }))
+      fireEvent.click(within(ideaRow as HTMLElement).getByRole('button', { name: '确认驳回' }))
       await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea-1'))
     })
 

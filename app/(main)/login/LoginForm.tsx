@@ -138,6 +138,7 @@ export default function LoginForm() {
           className="w-full text-base font-semibold shadow-lg"
           size="lg"
           disabled={isSubmitting}
+          aria-busy={isSubmitting}
         >
           {isSubmitting ? (
             <>

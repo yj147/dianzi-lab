@@ -32,17 +32,19 @@ function getTagColor(index: number) {
 }
 
 export default function IdeaCard({ idea }: IdeaCardProps) {
+  const truncatedDescription =
+    idea.description.length > 100 ? `${idea.description.slice(0, 100)}…` : idea.description;
 
   return (
-    <Card className="group h-full border-white/20 bg-white/5 backdrop-blur-xl shadow-sm transition-[transform,shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
+    <Card className="group h-full border-white/20 bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
       <CardHeader>
         <CardTitle className="text-xl leading-tight transition-colors group-hover:text-primary">
           {idea.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="text-base leading-relaxed text-muted-foreground line-clamp-3">
-          {idea.description}
+        <CardDescription className="text-base leading-relaxed text-muted-foreground">
+          {truncatedDescription}
         </CardDescription>
       </CardContent>
       <CardFooter className="pt-2">

@@ -26,28 +26,31 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
   const pathname = usePathname();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY > 50;
-      if (scrolled !== isScrolled) {
-        setIsScrolled(scrolled);
-      }
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isScrolled]);
+  }, []);
 
   const handleLogout = async () => {
+    setIsOpen(false);
     await logout();
   };
 
   const navLinks = [
-    { name: '幻象大厅', href: '/' },
-    { name: '造梦工具', href: '/submit' },
+    { name: '首页', href: '/' },
+    { name: '提交点子', href: '/submit' },
   ];
 
+  const mobileMenuId = 'mobile-menu';
+
   return (
-    <nav className="relative z-50 px-8 py-6">
+    <nav
+      className={cn(
+        'relative z-50 px-8 py-6 transition-colors',
+        isScrolled ? 'bg-white/60 backdrop-blur-lg shadow-sm' : ''
+      )}
+    >
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -66,9 +69,10 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'font-medium transition-colors hover:text-coral-400',
-                  isActive ? 'text-coral-400' : 'text-slate-700'
+                  'font-medium transition-colors hover:text-blue-600',
+                  isActive ? 'text-blue-600' : 'text-slate-700'
                 )}
+                aria-current={isActive ? 'page' : undefined}
               >
                 {link.name}
               </Link>
@@ -79,13 +83,20 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
         {/* Auth Buttons */}
         <div className="hidden md:flex items-center gap-4">
           {isLoggedIn ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center justify-center h-10 w-10 rounded-full bg-lavender-100 text-lavender-300 transition-all hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400">
-                  <User className="h-5 w-5" />
-                  <span className="sr-only">用户菜单</span>
-                </button>
-              </DropdownMenuTrigger>
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-medium text-slate-600 truncate max-w-[240px]">
+                {userEmail}
+              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label="用户菜单"
+                    className="flex items-center justify-center h-10 w-10 rounded-full bg-lavender-100 text-lavender-300 transition-all hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400"
+                  >
+                    <User className="h-5 w-5" />
+                  </button>
+                </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
@@ -114,14 +125,15 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
                   <span>退出</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+              </DropdownMenu>
+            </div>
           ) : (
             <>
               <Link
                 href="/login"
                 className="text-slate-600 hover:text-coral-400 font-semibold px-4 transition-colors"
               >
-                潜入
+                登录
               </Link>
               <Link
                 href="/register"
@@ -136,9 +148,12 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
         {/* Mobile menu button */}
         <div className="md:hidden">
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
             className="inline-flex items-center justify-center rounded-full p-2 text-slate-600 hover:bg-white/50 focus:outline-none"
-            aria-label={isOpen ? '关闭菜单' : '打开菜单'}
+            aria-label={isOpen ? '关闭主菜单' : '打开主菜单'}
+            aria-controls={mobileMenuId}
+            aria-expanded={isOpen}
           >
             {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -146,71 +161,65 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden mt-4 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-lg overflow-hidden">
-          <div className="space-y-1 px-4 py-4">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    'block rounded-2xl px-4 py-3 text-base font-medium transition-colors',
-                    isActive
-                      ? 'bg-lavender-50 text-coral-400'
-                      : 'text-slate-700 hover:bg-lavender-50/50'
-                  )}
-                  onClick={() => setIsOpen(false)}
-                >
-                  {link.name}
-                </Link>
-              );
-            })}
+      <div
+        id={mobileMenuId}
+        hidden={!isOpen}
+        className="md:hidden mt-4 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-lg overflow-hidden"
+      >
+        <div className="space-y-1 px-4 py-4">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(
+                  'block rounded-2xl px-4 py-3 text-base font-medium transition-colors',
+                  isActive
+                    ? 'bg-lavender-50 text-blue-600'
+                    : 'text-slate-700 hover:bg-lavender-50/50'
+                )}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
 
-            <div className="border-t border-lavender-100 my-3" />
+          <div className="border-t border-lavender-100 my-3" />
 
-            {/* Mobile Auth */}
-            {isLoggedIn ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="block rounded-2xl px-4 py-3 text-base font-medium text-slate-700 hover:bg-lavender-50/50"
-                  onClick={() => setIsOpen(false)}
-                >
-                  仪表板
-                </Link>
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    handleLogout();
-                  }}
-                  className="block w-full text-left rounded-2xl px-4 py-3 text-base font-medium text-coral-400 hover:bg-coral-50"
-                >
-                  退出
-                </button>
-              </>
-            ) : (
-              <div className="flex flex-col gap-3 pt-2">
-                <Link
-                  href="/login"
-                  className="block text-center rounded-full px-4 py-3 text-base font-semibold text-slate-600 border-2 border-dashed border-lavender-200 hover:border-lavender-300"
-                  onClick={() => setIsOpen(false)}
-                >
-                  潜入
-                </Link>
-                <Link
-                  href="/register"
-                  className="block text-center rounded-full px-4 py-3 text-base font-bold text-white bg-coral-400 hover:bg-coral-500 shadow-lg shadow-coral-400/20"
-                  onClick={() => setIsOpen(false)}
-                >
-                  开启梦境
-                </Link>
-              </div>
-            )}
-          </div>
+          {isLoggedIn ? (
+            <>
+              <div className="px-4 py-2 text-sm text-slate-600 truncate">{userEmail}</div>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="block w-full text-left rounded-2xl px-4 py-3 text-base font-medium text-coral-400 hover:bg-coral-50"
+              >
+                退出
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col gap-3 pt-2">
+              <Link
+                href="/login"
+                className="block text-center rounded-full px-4 py-3 text-base font-semibold text-slate-600 border-2 border-dashed border-lavender-200 hover:border-lavender-300"
+                onClick={() => setIsOpen(false)}
+              >
+                登录
+              </Link>
+              <Link
+                href="/register"
+                className="block text-center rounded-full px-4 py-3 text-base font-bold text-white bg-coral-400 hover:bg-coral-500 shadow-lg shadow-coral-400/20"
+                onClick={() => setIsOpen(false)}
+              >
+                开启梦境
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
 }

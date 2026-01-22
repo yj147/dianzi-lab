@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 // import { Inter } from "next/font/google"; // Removed as per style guide (system-ui)
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import Footer from "@/components/Footer";
 
 // const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -34,7 +33,6 @@ export default function RootLayout({
         <div id="main-content" tabIndex={-1}>
           {children}
         </div>
-        <Footer />
         <Toaster />
       </body>
     </html>

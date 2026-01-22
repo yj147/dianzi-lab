@@ -39,10 +39,10 @@ describe('Hero', () => {
     render(<Hero />)
     const heading = screen.getByRole('heading', { level: 1, name: '点子实验室' })
     const section = heading.closest('section')
-    expect(section).toHaveClass('bg-gradient-to-br')
-    expect(section).toHaveClass('from-blue-600')
-    expect(section).toHaveClass('via-cyan-500')
-    expect(section).toHaveClass('to-blue-400')
+    expect(section).toHaveClass('bg-gradient-to-b')
+    expect(section).toHaveClass('from-blue-50/80')
+    expect(section).toHaveClass('via-white')
+    expect(section).toHaveClass('to-white')
   })
 
   it('显示下滑引导箭头', () => {

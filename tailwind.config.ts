@@ -7,89 +7,79 @@ const config: Config = {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    colors: {
-      background: "var(--background)",
-      foreground: "var(--foreground)",
-      surface: "var(--surface)",
-      muted: "var(--muted)",
-      border: "var(--border)",
-      primary: "var(--primary)",
-      cta: "var(--cta)",
-      danger: "var(--danger)",
-      // Base colors
-      white: '#ffffff',
-      black: '#000000',
-      transparent: 'transparent',
-      // Slate palette
-      slate: {
-        50: '#f8fafc',
-        100: '#f1f5f9',
-        200: '#e2e8f0',
-        300: '#cbd5e1',
-        400: '#94a3b8',
-        500: '#64748b',
-        600: '#475569',
-        700: '#334155',
-        800: '#1e293b',
-        900: '#0f172a',
+    extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        surface: "var(--surface)",
+        muted: "var(--muted)",
+        "muted-foreground": "var(--muted-foreground)",
+        border: "var(--border)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        primary: "var(--primary)",
+        "primary-foreground": "var(--primary-foreground)",
+        secondary: "var(--secondary)",
+        "secondary-foreground": "var(--secondary-foreground)",
+        accent: "var(--accent)",
+        "accent-foreground": "var(--accent-foreground)",
+        destructive: "var(--destructive)",
+        "destructive-foreground": "var(--destructive-foreground)",
+        cta: "var(--cta)",
+        danger: "var(--danger)",
+        lavender: {
+          50: "#f5f3ff",
+          100: "#ede9fe",
+          200: "#ddd6fe",
+          300: "#c4b5fd",
+          400: "#a78bfa",
+          500: "#8b5cf6",
+          600: "#7c3aed",
+        },
+        mint: {
+          50: "#f0fdf4",
+          100: "#dcfce7",
+          200: "#bbf7d0",
+          300: "#86efac",
+          500: "#22c55e",
+          600: "#16a34a",
+          700: "#15803d",
+        },
+        coral: {
+          50: "#fff1f2",
+          100: "#ffe4e6",
+          200: "#fecdd3",
+          300: "#fda4af",
+          400: "#fb7185",
+          500: "#f43f5e",
+          600: "#e11d48",
+        },
       },
-      // Emerald for mint accents
-      emerald: {
-        200: '#a7f3d0',
-        600: '#059669',
-        800: '#065f46',
+      fontFamily: {
+        sans: ['"Quicksand"', '"ZCOOL KuaiLe"', "sans-serif"],
+        script: ['"Ma Shan Zheng"', "cursive"],
+        display: ['"ZCOOL KuaiLe"', "sans-serif"],
       },
-      // Miracle Workshop Theme
-      lavender: {
-        50: '#f5f3ff',
-        100: '#ede9fe',
-        200: '#ddd6fe',
-        300: '#c4b5fd',
-        400: '#a78bfa',
+      boxShadow: {
+        glass: "0 20px 50px rgba(180, 160, 255, 0.15)",
+        coral: "0 10px 25px rgba(251, 113, 133, 0.30)",
+        lavender: "0 10px 25px rgba(196, 181, 253, 0.40)",
+        hover: "0 20px 40px rgba(180, 160, 255, 0.20)",
       },
-      mint: {
-        50: '#f0fdf4',
-        100: '#dcfce7',
-        200: '#bbf7d0',
-        300: '#86efac',
+      animation: {
+        "float-slow": "float 6s ease-in-out infinite",
+        "float-slower": "float 8s ease-in-out infinite",
+        "pulse-slow": "pulse-glow 4s ease-in-out infinite",
       },
-      coral: {
-        50: '#fff1f2',
-        100: '#ffe4e6',
-        200: '#fecdd3',
-        400: '#fb7185',
-        500: '#f43f5e',
-      }
-    },
-    fontFamily: {
-      sans: ['"Quicksand"', '"ZCOOL KuaiLe"', 'sans-serif'],
-      script: ['"Ma Shan Zheng"', 'cursive'],
-    },
-    borderRadius: {
-      DEFAULT: "12px",
-      lg: "24px",
-      full: "9999px",
-      '3xl': "1.5rem", // Added for large cards
-      '4xl': "2.5rem", // Added for floating card
-    },
-    boxShadow: {
-      sm: "0 1px 2px rgba(0,0,0,0.05)",
-      md: "0 12px 30px rgba(15,23,42,0.18)",
-      lg: "0 20px 50px rgba(15,23,42,0.12)",
-    },
-    animation: {
-      "float-slow": "float 6s ease-in-out infinite",
-      "float-slower": "float 8s ease-in-out infinite",
-      "pulse-slow": "pulse-glow 4s ease-in-out infinite",
-    },
-    keyframes: {
-      float: {
-        "0%, 100%": { transform: "translateY(0)" },
-        "50%": { transform: "translateY(-20px)" },
-      },
-      "pulse-glow": {
-        "0%, 100%": { opacity: "0.4" },
-        "50%": { opacity: "0.7" },
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-20px)" },
+        },
+        "pulse-glow": {
+          "0%, 100%": { opacity: "0.4" },
+          "50%": { opacity: "0.7" },
+        },
       },
     },
   },
