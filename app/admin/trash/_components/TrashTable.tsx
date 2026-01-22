@@ -46,7 +46,7 @@ function TrashCard({ idea, onRestore, onPermanentDelete }: {
       <div className="flex items-center gap-2">
         <button
           type="button"
-          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
+          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
           onClick={() => onRestore(idea.id)}
         >
           <RotateCcw className="h-4 w-4" />
@@ -57,7 +57,7 @@ function TrashCard({ idea, onRestore, onPermanentDelete }: {
           <AlertDialogTrigger asChild>
             <button
               type="button"
-              className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+              className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
               aria-label="永久删除"
             >
               <Trash2 className="h-4 w-4" />
@@ -156,7 +156,7 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
                         <TooltipTrigger asChild>
                           <button
                             type="button"
-                            className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-2 text-emerald-600 transition-colors hover:bg-emerald-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
+                            className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-2 text-emerald-600 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
                             onClick={() => handleRestore(idea.id)}
                             aria-label="恢复"
                           >
@@ -172,7 +172,7 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
                             <AlertDialogTrigger asChild>
                               <button
                                 type="button"
-                                className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+                                className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
                                 aria-label="永久删除"
                               >
                                 <Trash2 className="h-4 w-4" />

@@ -57,7 +57,11 @@ describe('AdminSidebar', () => {
     render(<AdminSidebar userEmail={mockUserEmail} />);
     
     const logoutButton = screen.getByText('退出登录').closest('button');
-    expect(logoutButton).toHaveClass('focus:ring-2', 'focus:ring-blue-500', 'focus:outline-none');
+    expect(logoutButton).toHaveClass(
+      'focus-visible:ring-2',
+      'focus-visible:ring-blue-500',
+      'focus-visible:outline-none',
+    );
   });
 
   it('calls logout when logout button is clicked', async () => {

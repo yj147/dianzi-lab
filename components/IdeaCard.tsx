@@ -1,3 +1,13 @@
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { cn } from "@/lib/utils";
+
 type IdeaCardProps = {
   idea: {
     id: string;
@@ -9,12 +19,12 @@ type IdeaCardProps = {
 
 // Color palette for tags - cycles through these colors
 const tagColors = [
-  { bg: 'bg-blue-100', text: 'text-blue-700' },
-  { bg: 'bg-emerald-100', text: 'text-emerald-700' },
-  { bg: 'bg-amber-100', text: 'text-amber-700' },
-  { bg: 'bg-purple-100', text: 'text-purple-700' },
-  { bg: 'bg-rose-100', text: 'text-rose-700' },
-  { bg: 'bg-cyan-100', text: 'text-cyan-700' },
+  { bg: 'bg-blue-100', text: 'text-blue-800' },
+  { bg: 'bg-emerald-100', text: 'text-emerald-800' },
+  { bg: 'bg-amber-100', text: 'text-amber-800' },
+  { bg: 'bg-purple-100', text: 'text-purple-800' },
+  { bg: 'bg-rose-100', text: 'text-rose-800' },
+  { bg: 'bg-cyan-100', text: 'text-cyan-800' },
 ];
 
 function getTagColor(index: number) {
@@ -22,30 +32,34 @@ function getTagColor(index: number) {
 }
 
 export default function IdeaCard({ idea }: IdeaCardProps) {
-  const truncatedDesc =
-    idea.description.length > 100
-      ? idea.description.slice(0, 100) + '...'
-      : idea.description;
 
   return (
-    <div className="group cursor-pointer rounded-xl border border-slate-200/60 bg-white/80 p-6 shadow-md backdrop-blur-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl motion-reduce:transform-none motion-reduce:transition-colors">
-      <h3 className="mb-2 text-lg font-semibold text-slate-900 transition-colors group-hover:text-blue-600">
-        {idea.title}
-      </h3>
-      <p className="mb-4 text-slate-600">{truncatedDesc}</p>
-      <div className="flex flex-wrap gap-2">
-        {idea.tags.map((tag, index) => {
-          const color = getTagColor(index);
-          return (
-            <span
-              key={tag}
-              className={`rounded-full px-3 py-1 text-sm font-medium ${color.bg} ${color.text}`}
-            >
-              {tag}
-            </span>
-          );
-        })}
-      </div>
-    </div>
+    <Card className="group h-full border-white/20 bg-white/5 backdrop-blur-xl shadow-sm transition-[transform,shadow] duration-300 ease-out hover:-translate-y-1 hover:shadow-lg">
+      <CardHeader>
+        <CardTitle className="text-xl leading-tight transition-colors group-hover:text-primary">
+          {idea.title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <CardDescription className="text-base leading-relaxed text-muted-foreground line-clamp-3">
+          {idea.description}
+        </CardDescription>
+      </CardContent>
+      <CardFooter className="pt-2">
+        <div className="flex flex-wrap gap-2">
+          {idea.tags.map((tag, index) => {
+            const color = getTagColor(index);
+            return (
+              <span
+                key={tag}
+                className={cn(`rounded-full px-3 py-1 text-xs font-medium bg-opacity-50 border border-opacity-20`, color.bg, color.text)}
+              >
+                {tag}
+              </span>
+            );
+          })}
+        </div>
+      </CardFooter>
+    </Card>
   );
 }

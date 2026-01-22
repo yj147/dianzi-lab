@@ -191,7 +191,7 @@ describe('Submit Page', () => {
     await waitFor(() => {
       expect(submitButton).toBeDisabled()
       expect(submitButton).toHaveAttribute('aria-busy', 'true')
-      expect(submitButton).toHaveTextContent('提交中...')
+      expect(submitButton).toHaveTextContent('提交中…')
       expect(submitButton.querySelector('svg.animate-spin')).toBeInTheDocument()
     })
 

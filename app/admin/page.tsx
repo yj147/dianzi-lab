@@ -83,42 +83,40 @@ export default async function AdminDashboardPage() {
   ]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+          <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
             仪表板
           </h1>
-          <p className="mt-1 text-gray-500 dark:text-gray-400">
+          <p className="mt-2 text-lg text-muted-foreground">
             系统数据概览与快捷操作
           </p>
         </div>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {STAT_CARDS.map(({ key, label, gradient, shadowColor, icon: Icon }) => (
           <div
             key={key}
-            className="group relative rounded-2xl border border-gray-200/60 bg-white p-6
-                       shadow-sm transition-[transform,box-shadow,border-color] duration-300 ease-out
-                       hover:scale-[1.02] hover:shadow-lg hover:border-gray-300/60
-                       motion-reduce:transition-none motion-reduce:hover:scale-100
-                       dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-700"
+            className="group relative rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl p-6
+                       shadow-sm transition-all duration-300 ease-out
+                       hover:-translate-y-1 hover:shadow-lg hover:border-white/60 hover:bg-white/60"
           >
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                <p className="text-sm font-medium text-muted-foreground">
                   {label}
                 </p>
-                <p className="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-50">
+                <p className="text-4xl font-bold tracking-tight text-foreground">
                   {stats[key]}
                 </p>
               </div>
               <div
-                className={`rounded-xl bg-gradient-to-br ${gradient} p-3
-                           shadow-lg ${shadowColor} transition-transform duration-300
-                           group-hover:scale-110`}
+                className={`rounded-2xl bg-gradient-to-br ${gradient} p-3.5
+                           shadow-md ${shadowColor} transition-transform duration-300
+                           group-hover:scale-110 group-hover:rotate-3`}
               >
                 <Icon className="h-6 w-6 text-white" />
               </div>
@@ -128,58 +126,52 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Welcome Card with Quick Actions */}
-      <div className="rounded-2xl border border-gray-200/60 bg-white dark:border-gray-800 dark:bg-gray-900">
-        <div className="border-b border-gray-100 px-6 py-5 dark:border-gray-800">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full
-                          bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25">
-              <span className="text-sm font-bold text-white">
+      <div className="rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl shadow-sm transition-all hover:shadow-md">
+        <div className="border-b border-gray-100/50 px-8 py-6">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full
+                          bg-gradient-to-br from-blue-500 to-indigo-600 shadow-lg shadow-blue-500/25 ring-2 ring-white">
+              <span className="text-lg font-bold text-white">
                 {session?.email?.charAt(0).toUpperCase() || 'A'}
               </span>
             </div>
             <div className="min-w-0">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50">
+              <h2 className="text-xl font-semibold text-foreground">
                 欢迎回来
               </h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+              <p className="text-sm text-muted-foreground truncate">
                 {session?.email || '管理员'}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="p-6">
-          <h3 className="mb-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+        <div className="p-8">
+          <h3 className="mb-6 text-sm font-medium text-muted-foreground uppercase tracking-wider">
             快捷操作
           </h3>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <div className="grid gap-4 sm:grid-cols-3">
             {QUICK_ACTIONS.map(({ href, label, icon: Icon, description }) => (
               <Link
                 key={href}
                 href={href}
-                className="group flex items-start gap-4 rounded-xl border border-gray-200/60
-                         bg-gray-50/50 p-4 transition-[border-color,background-color] duration-200
-                         hover:border-blue-200 hover:bg-blue-50/50
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2
-                         motion-reduce:transition-none
-                         dark:border-gray-800 dark:bg-gray-800/50
-                         dark:hover:border-blue-800 dark:hover:bg-blue-900/20
-                         dark:focus-visible:ring-offset-gray-900"
+                className="group flex items-start gap-4 rounded-2xl border border-white/60
+                         bg-white/50 p-5 transition-all duration-200
+                         hover:border-primary/30 hover:bg-white/80 hover:shadow-md
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
-                <div className="rounded-lg bg-white p-2 shadow-sm ring-1 ring-gray-200/60
-                              dark:bg-gray-800 dark:ring-gray-700">
-                  <Icon className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                <div className="rounded-xl bg-white p-2.5 shadow-sm ring-1 ring-gray-100 transition-colors group-hover:bg-blue-50 group-hover:text-primary">
+                  <Icon className="h-5 w-5 text-gray-500 transition-colors group-hover:text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1">
-                    <span className="font-medium text-gray-900 dark:text-gray-50">
+                    <span className="font-semibold text-foreground">
                       {label}
                     </span>
-                    <ArrowRight className="h-4 w-4 text-gray-400 transition-transform
-                                         group-hover:translate-x-0.5 group-hover:text-blue-500
-                                         dark:text-gray-500 dark:group-hover:text-blue-400" />
+                    <ArrowRight className="h-4 w-4 text-gray-400 transition-all
+                                         group-hover:translate-x-1 group-hover:text-primary" />
                   </div>
-                  <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400 truncate">
+                  <p className="mt-1 text-xs text-muted-foreground truncate leading-relaxed">
                     {description}
                   </p>
                 </div>

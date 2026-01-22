@@ -13,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { User, Menu, X, LayoutDashboard, LogOut } from 'lucide-react';
+import { User, Menu, X, LayoutDashboard, LogOut, Sparkles } from 'lucide-react';
 
 interface NavbarClientProps {
   isLoggedIn: boolean;
@@ -42,129 +42,23 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
   };
 
   const navLinks = [
-    { name: '首页', href: '/' },
-    { name: '提交点子', href: '/submit' },
+    { name: '幻象大厅', href: '/' },
+    { name: '造梦工具', href: '/submit' },
   ];
 
   return (
-    <nav
-      className={cn(
-        'fixed top-0 z-50 w-full transition-all duration-200 ease-out',
-        isScrolled
-          ? 'bg-white/80 backdrop-blur-lg dark:bg-black/80 border-b border-gray-200/50 dark:border-gray-800/50'
-          : 'bg-transparent'
-      )}
-    >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="text-xl font-bold text-blue-600 dark:text-blue-400">
-              点子实验室
-            </Link>
+    <nav className="relative z-50 px-8 py-6">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-12 h-12 bg-lavender-200 blob-shape flex items-center justify-center text-coral-400 shadow-inner transition-transform group-hover:scale-105">
+            <Sparkles className="w-6 h-6" />
           </div>
+          <span className="font-script text-3xl text-slate-800">点子 Lab</span>
+        </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-center space-x-4">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    aria-current={isActive ? 'page' : undefined}
-                    className={cn(
-                      'relative px-3 py-2 text-sm font-medium transition-all duration-200 rounded-lg',
-                      isActive
-                        ? 'text-blue-600 dark:text-blue-400 font-semibold'
-                        : 'text-gray-700 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400',
-                      // Hover underline effect
-                      'after:absolute after:bottom-1 after:left-3 after:right-3 after:h-0.5 after:bg-blue-600 dark:after:bg-blue-400 after:scale-x-0 after:transition-transform after:duration-200 hover:after:scale-x-100',
-                      isActive && 'after:scale-x-100'
-                    )}
-                  >
-                    {link.name}
-                  </Link>
-                );
-              })}
-
-              {isLoggedIn ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <button className="ml-4 flex items-center space-x-2 rounded-full bg-gray-100/50 p-1 transition-colors hover:bg-gray-200/50 dark:bg-gray-800/50 dark:hover:bg-gray-700/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-                      <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center dark:bg-blue-900">
-                        <User className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                      </div>
-                      <span className="sr-only">用户菜单</span>
-                    </button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56">
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">我的账户</p>
-                        <p className="text-xs leading-none text-gray-500 dark:text-gray-400">
-                          {userEmail}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link href="/dashboard" className="flex w-full items-center cursor-pointer">
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        <span>仪表板</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem
-                      className="text-red-600 focus:text-red-600 dark:text-red-400 dark:focus:text-red-400 cursor-pointer"
-                      onSelect={(e) => {
-                        e.preventDefault();
-                        handleLogout();
-                      }}
-                    >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>退出</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <Link
-                  href="/login"
-                  className="ml-4 rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md active:scale-95"
-                >
-                  登录
-                </Link>
-              )}
-            </div>
-          </div>
-
-          {/* Mobile menu button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              type="button"
-              className="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:text-gray-300 dark:hover:bg-gray-800 transition-colors"
-              aria-expanded={isOpen}
-              aria-controls="mobile-menu"
-            >
-              <span className="sr-only">打开主菜单</span>
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        id="mobile-menu"
-        hidden={!isOpen}
-        className={cn(
-          'md:hidden bg-white dark:bg-black border-t dark:border-gray-800 transition-all duration-200 ease-in-out',
-          isOpen ? 'block' : 'hidden'
-        )}
-      >
-        <div className="space-y-1 px-2 pb-3 pt-2 sm:px-3">
+        {/* Desktop Navigation Pills */}
+        <div className="hidden md:flex items-center bg-white/50 backdrop-blur-md rounded-full px-8 py-3 gap-10 border border-white/50">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (
@@ -172,59 +66,151 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  'block rounded-md px-3 py-2 text-base font-medium transition-colors',
-                  isActive
-                    ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800'
+                  'font-medium transition-colors hover:text-coral-400',
+                  isActive ? 'text-coral-400' : 'text-slate-700'
                 )}
-                onClick={() => setIsOpen(false)}
               >
                 {link.name}
               </Link>
             );
           })}
+        </div>
 
+        {/* Auth Buttons */}
+        <div className="hidden md:flex items-center gap-4">
           {isLoggedIn ? (
-            <div className="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2">
-              <div className="px-3 py-2">
-                <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                  我的账户
-                </p>
-                <div className="text-sm text-gray-900 dark:text-gray-100 mb-4 truncate">{userEmail}</div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center justify-center h-10 w-10 rounded-full bg-lavender-100 text-lavender-300 transition-all hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">用户菜单</span>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">我的账户</p>
+                    <p className="text-xs leading-none text-slate-500">
+                      {userEmail}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="cursor-pointer w-full flex items-center">
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>仪表板</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="text-coral-400 focus:text-coral-500 cursor-pointer"
+                  onSelect={(e) => {
+                    e.preventDefault();
+                    handleLogout();
+                  }}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>退出</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className="text-slate-600 hover:text-coral-400 font-semibold px-4 transition-colors"
+              >
+                潜入
+              </Link>
+              <Link
+                href="/register"
+                className="bg-coral-400 text-white font-bold px-7 py-3 rounded-full hover:bg-coral-500 transition-all shadow-lg shadow-coral-400/20 transform hover:scale-105 active:scale-95"
+              >
+                开启梦境
+              </Link>
+            </>
+          )}
+        </div>
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="inline-flex items-center justify-center rounded-full p-2 text-slate-600 hover:bg-white/50 focus:outline-none"
+            aria-label={isOpen ? '关闭菜单' : '打开菜单'}
+          >
+            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="md:hidden mt-4 bg-white/80 backdrop-blur-xl rounded-3xl border border-white/50 shadow-lg overflow-hidden">
+          <div className="space-y-1 px-4 py-4">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    'block rounded-2xl px-4 py-3 text-base font-medium transition-colors',
+                    isActive
+                      ? 'bg-lavender-50 text-coral-400'
+                      : 'text-slate-700 hover:bg-lavender-50/50'
+                  )}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+
+            <div className="border-t border-lavender-100 my-3" />
+
+            {/* Mobile Auth */}
+            {isLoggedIn ? (
+              <>
                 <Link
                   href="/dashboard"
-                  className="block rounded-md px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 mb-1"
+                  className="block rounded-2xl px-4 py-3 text-base font-medium text-slate-700 hover:bg-lavender-50/50"
                   onClick={() => setIsOpen(false)}
                 >
                   仪表板
                 </Link>
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
+                <button
+                  onClick={() => {
                     setIsOpen(false);
                     handleLogout();
                   }}
+                  className="block w-full text-left rounded-2xl px-4 py-3 text-base font-medium text-coral-400 hover:bg-coral-50"
                 >
-                  <button
-                    type="submit"
-                    className="w-full text-left block rounded-md px-3 py-2 text-base font-medium text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 transition-colors"
-                  >
-                    退出
-                  </button>
-                </form>
+                  退出
+                </button>
+              </>
+            ) : (
+              <div className="flex flex-col gap-3 pt-2">
+                <Link
+                  href="/login"
+                  className="block text-center rounded-full px-4 py-3 text-base font-semibold text-slate-600 border-2 border-dashed border-lavender-200 hover:border-lavender-300"
+                  onClick={() => setIsOpen(false)}
+                >
+                  潜入
+                </Link>
+                <Link
+                  href="/register"
+                  className="block text-center rounded-full px-4 py-3 text-base font-bold text-white bg-coral-400 hover:bg-coral-500 shadow-lg shadow-coral-400/20"
+                  onClick={() => setIsOpen(false)}
+                >
+                  开启梦境
+                </Link>
               </div>
-            </div>
-          ) : (
-            <Link
-              href="/login"
-              className="block rounded-md bg-blue-600 px-3 py-2 text-base font-medium text-white hover:bg-blue-700 transition-colors text-center mt-4"
-              onClick={() => setIsOpen(false)}
-            >
-              登录
-            </Link>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }

@@ -6,25 +6,118 @@ html {
   scroll-behavior: smooth;
 }
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
+:root {
+  /* Design Tokens from docs/ui-style-guide.md */
+  --background: #ffffff;
+  --foreground: #111827;
+  /* slate-900 */
+
+  /* Glass Surface - Thin & Subtle */
+  --surface: rgba(255, 255, 255, 0.10);
+  /* Base glass opacity */
+
+  --muted: #4b5563;
+  /* slate-600 */
+  --muted-foreground: #64748b;
+  /* slate-500 */
+
+  --border: #e5e7eb;
+  /* gray-200 */
+  --input: #e5e7eb;
+  --ring: #0066ff;
+
+  --primary: #0066ff;
+  /* Interaction Blue */
+  --primary-foreground: #ffffff;
+
+  --secondary: #f1f5f9;
+  /* slate-100 */
+  --secondary-foreground: #0f172a;
+
+  --accent: #f8fafc;
+  /* slate-50 */
+  --accent-foreground: #0f172a;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --cta: #ffd700;
+  /* Attention Yellow */
+  --danger: #dc2626;
+
+  --radius: 0.75rem;
+  /* 12px default */
+}
+
+/* Dark mode overrides (optional fallback if system switches, but style guide emphasizes light mode/glass) */
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
+    /* Adjust specific tokens for dark mode if needed later */
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+  font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Miracle Workshop Theme Custom Styles */
+.dream-gradient {
+  background: linear-gradient(135deg, #ede9fe 0%, #dcfce7 50%, #fee2e2 100%);
+}
+
+.blob-shape {
+  border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.floating-card {
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(24px);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 50px rgba(180, 160, 255, 0.15);
+  border-radius: 2.5rem;
+}
+
+.organic-overlap {
+  margin-top: -3rem;
+  position: relative;
+  z-index: 20;
+}
+
+.hand-drawn-border {
+  border-style: solid;
+  border-width: 3px;
+  border-color: #c4b5fd;
+  border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+}
+
+.script-title {
+  font-family: "Ma Shan Zheng", cursive;
+  color: #fb7185;
+  line-height: normal;
+}
+
+.sparkle-dot {
+  position: absolute;
+  border-radius: 9999px;
+  background-color: white;
+  opacity: 0.6;
+  box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.8);
 }

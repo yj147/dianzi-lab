@@ -29,7 +29,7 @@ describe('IdeaCard Component', () => {
     const longDesc = 'a'.repeat(150);
     const ideaWithLongDesc = { ...mockIdea, description: longDesc };
     render(<IdeaCard idea={ideaWithLongDesc} />);
-    expect(screen.getByText('a'.repeat(100) + '...')).toBeInTheDocument();
+    expect(screen.getByText('a'.repeat(100) + '…')).toBeInTheDocument();
   });
 
   it('does not truncate short description', () => {

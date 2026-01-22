@@ -38,7 +38,7 @@ export default function AdminHeader({ userEmail }: AdminHeaderProps) {
           <span className="text-sm text-gray-600 dark:text-gray-400">{userEmail}</span>
           <button
             onClick={() => logout()}
-            className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-300 dark:hover:bg-gray-800"
+            className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:text-gray-300 dark:hover:bg-gray-800"
             aria-label="退出登录"
           >
             <LogOut className="h-4 w-4" />
@@ -63,9 +63,11 @@ export default function AdminHeader({ userEmail }: AdminHeaderProps) {
 
       {/* Mobile Sidebar Overlay */}
       {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden" 
+        <button
+          type="button"
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
           onClick={() => setIsMobileMenuOpen(false)}
+          aria-label="关闭侧边栏"
           data-testid="sidebar-overlay"
         />
       )}

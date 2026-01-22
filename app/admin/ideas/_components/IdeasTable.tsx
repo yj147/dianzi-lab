@@ -55,12 +55,12 @@ function IdeaCard({ idea, onStatusChange, onMoveToTrash }: {
         <p>{formatDate(idea.createdAt)}</p>
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <select
-          aria-label="状态变更"
-          className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm transition-colors hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
-          value={idea.status}
-          onChange={(e) => onStatusChange(idea.id, e.target.value as IdeaStatus)}
-        >
+          <select
+            aria-label="状态变更"
+            className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm transition-colors hover:border-gray-300 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+            value={idea.status}
+            onChange={(e) => onStatusChange(idea.id, e.target.value as IdeaStatus)}
+          >
           {IDEA_STATUSES.map((status) => (
             <option key={status} value={status}>
               {STATUS_CONFIG[status].label}
@@ -72,7 +72,7 @@ function IdeaCard({ idea, onStatusChange, onMoveToTrash }: {
           <AlertDialogTrigger asChild>
             <button
               type="button"
-              className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+              className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
               aria-label="移至垃圾箱"
             >
               <Trash2 className="h-4 w-4" />
@@ -136,7 +136,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
             <span className="text-sm font-medium text-gray-600 dark:text-gray-400">状态筛选</span>
             <select
               aria-label="状态筛选"
-              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm transition-colors hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm transition-colors hover:border-gray-300 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
               value={filterValue}
               onChange={(e) => handleFilterChange(e.target.value)}
             >
@@ -196,7 +196,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                         <div className="flex items-center gap-2">
                           <select
                             aria-label="状态变更"
-                            className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm transition-colors hover:border-gray-300 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
+                            className="rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm transition-colors hover:border-gray-300 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-600"
                             value={idea.status}
                             onChange={(e) =>
                               handleStatusChange(idea.id, e.target.value as IdeaStatus)
@@ -215,7 +215,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                                 <AlertDialogTrigger asChild>
                                   <button
                                     type="button"
-                                    className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
+                                    className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
                                     aria-label="移至垃圾箱"
                                   >
                                     <Trash2 className="h-4 w-4" />

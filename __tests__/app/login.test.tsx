@@ -36,8 +36,8 @@ describe('Login Page', () => {
     render(<LoginPage />)
 
     expect(screen.getAllByRole('heading', { name: /登录/i }).length).toBeGreaterThan(0)
-    expect(screen.getByPlaceholderText(/邮箱地址/i)).toBeInTheDocument()
-    expect(screen.getByPlaceholderText(/密码/i)).toBeInTheDocument()
+    expect(screen.getByLabelText('邮箱')).toBeInTheDocument()
+    expect(screen.getByLabelText('密码')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /登录/i })).toBeInTheDocument()
     const registerLinks = screen.getAllByRole('link', { name: /立即注册/i })
     expect(registerLinks.length).toBeGreaterThan(0)
@@ -61,10 +61,10 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: false, error: '邮箱或密码错误' })
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+    fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+    fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
     fireEvent.click(screen.getByRole('button', { name: /登录/i }))
@@ -78,10 +78,10 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: true })
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+    fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+    fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
     fireEvent.click(screen.getByRole('button', { name: /登录/i }))
@@ -95,10 +95,10 @@ describe('Login Page', () => {
     loginUserMock.mockRejectedValue(new Error('Unknown error'))
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+    fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+    fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
     fireEvent.click(screen.getByRole('button', { name: /登录/i }))
@@ -117,10 +117,10 @@ describe('Login Page', () => {
     )
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+    fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+    fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
 
@@ -129,7 +129,7 @@ describe('Login Page', () => {
 
     await waitFor(() => {
       expect(submitButton).toHaveAttribute('aria-busy', 'true')
-      expect(screen.getByText(/登录中.../i)).toBeInTheDocument()
+      expect(screen.getByText(/登录中…/i)).toBeInTheDocument()
       expect(submitButton).toBeDisabled()
     })
 
@@ -145,10 +145,10 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: true })
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByPlaceholderText(/邮箱地址/i), {
+    fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByPlaceholderText(/密码/i), {
+    fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
     fireEvent.click(screen.getByRole('button', { name: /登录/i }))
