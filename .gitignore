@@ -35,3 +35,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# agent / automation artifacts
+.agent/
+.playwright-mcp/
+.shared/
+dashboard-current.png
+dashboard-final.png

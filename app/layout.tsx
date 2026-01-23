@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-page-custom-font -- App Router 在 layout.tsx 内注入字体链接 */
 import type { Metadata } from "next";
 // import { Inter } from "next/font/google"; // Removed as per style guide (system-ui)
 import "./globals.css";
@@ -6,8 +7,8 @@ import { Toaster } from "@/components/ui/toaster";
 // const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "点子 Lab",
-  description: "创意点子发现平台",
+  title: "奇迹工坊",
+  description: "点亮你的奇思妙想",
 };
 
 export default function RootLayout({
@@ -26,7 +27,7 @@ export default function RootLayout({
       <body className={`antialiased bg-[#fdf8ff] text-slate-700 overflow-x-hidden font-sans`}>
         <a
           href="#main-content"
-          className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-[1000] focus-visible:rounded-xl focus-visible:bg-white focus-visible:px-4 focus-visible:py-3 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-gray-900 focus-visible:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+          className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-xl focus-visible:bg-white focus-visible:px-4 focus-visible:py-3 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-gray-900 focus-visible:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
         >
           跳转到主要内容
         </a>

@@ -2,8 +2,8 @@
  * @jest-environment node
  */
 
-import { submitIdea } from '@/app/(main)/submit/actions'
-import { submitIdeaSchema } from '@/app/(main)/submit/schema'
+import { submitIdea } from '@/app/(submit)/submit/actions'
+import { submitIdeaSchema } from '@/app/(submit)/submit/schema'
 
 jest.mock('next/navigation', () => ({
   redirect: jest.fn(),

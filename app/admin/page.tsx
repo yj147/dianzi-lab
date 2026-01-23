@@ -71,7 +71,7 @@ const STAT_CARDS = [
 ] as const;
 
 const QUICK_ACTIONS = [
-  { href: '/admin/ideas', label: '点子管理', icon: Lightbulb, description: '审核和管理用户提交的点子' },
+  { href: '/admin/ideas', label: '梦境管理', icon: Lightbulb, description: '审核和管理用户提交的奇思妙想' },
   { href: '/admin/users', label: '用户管理', icon: Users, description: '查看和管理平台用户' },
   { href: '/admin/trash', label: '回收站', icon: Trash2, description: '查看已删除的内容' },
 ];

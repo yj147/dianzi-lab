@@ -1,9 +1,9 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 import { getSession } from '@/lib/auth'
-import SubmitPage from '@/app/(main)/submit/page'
-import { submitIdea } from '@/app/(main)/submit/actions'
-import { TAGS } from '@/app/(main)/submit/schema'
+import SubmitPage from '@/app/(submit)/submit/page'
+import { submitIdea } from '@/app/(submit)/submit/actions'
+import { TAGS } from '@/app/(submit)/submit/schema'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -13,7 +13,7 @@ jest.mock('@/lib/auth', () => ({
   getSession: jest.fn(),
 }))
 
-jest.mock('@/app/(main)/submit/actions', () => ({
+jest.mock('@/app/(submit)/submit/actions', () => ({
   submitIdea: jest.fn(),
 }))
 
@@ -69,7 +69,7 @@ describe('Submit Page', () => {
     expect(
       screen.getByRole('heading', { level: 2, name: '登录后即可提交点子' }),
     ).toBeInTheDocument()
-    expect(screen.getByText('分享你的创意，让大家一起完善它')).toBeInTheDocument()
+    expect(screen.getByText('分享你的创意，让大家一起完善它。')).toBeInTheDocument()
 
     const loginLink = screen.getByRole('link', { name: '立即登录' })
     expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
@@ -83,16 +83,15 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    expect(screen.getByRole('heading', { level: 1, name: '提交新点子' })).toBeInTheDocument()
-    expect(screen.getByText('分享你的创意，让大家一起完善它')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '记录你的奇遇' })).toBeInTheDocument()
 
-    expect(screen.getByText('标题')).toBeInTheDocument()
-    expect(screen.getByText('描述')).toBeInTheDocument()
-    expect(screen.getByText('标签')).toBeInTheDocument()
+    expect(screen.getByText('点子名称')).toBeInTheDocument()
+    expect(screen.getByText('梦境描述')).toBeInTheDocument()
+    expect(screen.getByText('奇思标签')).toBeInTheDocument()
 
-    const titleInput = screen.getByPlaceholderText('为你的点子起个吸引人的标题')
+    const titleInput = screen.getByPlaceholderText('给你的梦起个名字...')
     const descriptionInput = screen.getByPlaceholderText(
-      '详细描述你的点子，包括它解决什么问题、如何实现等',
+      '哪怕是最荒诞的细节，也请告诉我们...',
     )
 
     expect(titleInput).toHaveAttribute('aria-describedby', 'title-helper')
@@ -101,7 +100,7 @@ describe('Submit Page', () => {
       'description-helper',
     )
 
-    const tagsFieldset = screen.getByText('标签').closest('fieldset')
+    const tagsFieldset = screen.getByText('奇思标签').closest('fieldset')
     expect(tagsFieldset).toHaveAttribute('aria-describedby', 'tags-helper')
 
     expect(screen.getByText(/简洁明了/)).toBeInTheDocument()
@@ -122,18 +121,18 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
 
     const tagButton = screen.getByRole('button', { name: '工具' })
-    const submitButton = screen.getByRole('button', { name: '发布点子' })
+    const submitButton = screen.getByRole('button', { name: '编织梦想' })
 
     // 第一次点击：选中
     await click(tagButton)
@@ -155,7 +154,7 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    await click(screen.getByRole('button', { name: '发布点子' }))
+    await click(screen.getByRole('button', { name: '编织梦想' }))
 
     await waitFor(() => {
       expect(screen.getByText('标题不能为空')).toBeInTheDocument()
@@ -172,17 +171,17 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
 
-    const submitButton = screen.getByRole('button', { name: '发布点子' })
+    const submitButton = screen.getByRole('button', { name: '编织梦想' })
     expect(submitButton).not.toBeDisabled()
     expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
 
@@ -200,7 +199,7 @@ describe('Submit Page', () => {
     await waitFor(() => {
       expect(submitButton).not.toBeDisabled()
       expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
-      expect(submitButton).toHaveTextContent('发布点子')
+      expect(submitButton).toHaveTextContent('编织梦想')
       expect(
         submitButton.querySelector('svg.animate-spin'),
       ).not.toBeInTheDocument()
@@ -213,17 +212,17 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
     await click(screen.getByRole('button', { name: '工具' }))
-    await click(screen.getByRole('button', { name: '发布点子' }))
+    await click(screen.getByRole('button', { name: '编织梦想' }))
 
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith('/dashboard')
@@ -253,16 +252,16 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
-    await click(screen.getByRole('button', { name: '发布点子' }))
+    await click(screen.getByRole('button', { name: '编织梦想' }))
 
     await waitFor(() => {
       expect(screen.getByText('标题不能为空')).toBeInTheDocument()
@@ -277,16 +276,16 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
-    await click(screen.getByRole('button', { name: '发布点子' }))
+    await click(screen.getByRole('button', { name: '编织梦想' }))
 
     await waitFor(() => {
       expect(getToastMock()).toHaveBeenCalledWith({
@@ -305,16 +304,16 @@ describe('Submit Page', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('为你的点子起个吸引人的标题'), {
+    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
       target: { value: 't' },
     })
     fireEvent.change(
-      screen.getByPlaceholderText('详细描述你的点子，包括它解决什么问题、如何实现等'),
+      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
         target: { value: 'd' },
       },
     )
-    await click(screen.getByRole('button', { name: '发布点子' }))
+    await click(screen.getByRole('button', { name: '编织梦想' }))
 
     await waitFor(() => {
       expect(getToastMock()).toHaveBeenCalledWith({

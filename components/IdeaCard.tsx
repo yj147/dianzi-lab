@@ -19,12 +19,10 @@ type IdeaCardProps = {
 
 // Color palette for tags - cycles through these colors
 const tagColors = [
-  { bg: 'bg-blue-100', text: 'text-blue-800' },
-  { bg: 'bg-emerald-100', text: 'text-emerald-800' },
+  { bg: 'bg-lavender-100', text: 'text-lavender-600' },
+  { bg: 'bg-mint-100', text: 'text-mint-700' },
+  { bg: 'bg-coral-100', text: 'text-coral-600' },
   { bg: 'bg-amber-100', text: 'text-amber-800' },
-  { bg: 'bg-purple-100', text: 'text-purple-800' },
-  { bg: 'bg-rose-100', text: 'text-rose-800' },
-  { bg: 'bg-cyan-100', text: 'text-cyan-800' },
 ];
 
 function getTagColor(index: number) {
@@ -36,14 +34,14 @@ export default function IdeaCard({ idea }: IdeaCardProps) {
     idea.description.length > 100 ? `${idea.description.slice(0, 100)}…` : idea.description;
 
   return (
-    <Card className="group h-full border-white/20 bg-white/80 backdrop-blur-sm shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-xl">
+    <Card className="group h-full border-white/40 bg-white/50 backdrop-blur-xl shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-hover">
       <CardHeader>
-        <CardTitle className="text-xl leading-tight transition-colors group-hover:text-primary">
+        <CardTitle className="text-xl leading-tight transition-colors group-hover:text-coral-400">
           {idea.title}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <CardDescription className="text-base leading-relaxed text-muted-foreground">
+        <CardDescription className="text-pretty text-base leading-relaxed text-slate-500">
           {truncatedDescription}
         </CardDescription>
       </CardContent>
@@ -54,7 +52,7 @@ export default function IdeaCard({ idea }: IdeaCardProps) {
             return (
               <span
                 key={tag}
-                className={cn(`rounded-full px-3 py-1 text-xs font-medium bg-opacity-50 border border-opacity-20`, color.bg, color.text)}
+                className={cn('rounded-full px-3 py-1 text-xs font-medium border border-white/60', color.bg, color.text)}
               >
                 {tag}
               </span>

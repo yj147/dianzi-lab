@@ -55,7 +55,7 @@ describe('Admin: Dashboard + Users', () => {
     expect(screen.getByText('admin@example.com')).toBeInTheDocument()
 
     // Verify quick actions
-    expect(screen.getByText('点子管理')).toBeInTheDocument()
+    expect(screen.getByText('梦境管理')).toBeInTheDocument()
     expect(screen.getByText('用户管理')).toBeInTheDocument()
     expect(screen.getByText('回收站')).toBeInTheDocument()
 

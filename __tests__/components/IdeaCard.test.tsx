@@ -50,14 +50,14 @@ describe('IdeaCard Component', () => {
   it('card has glassmorphism effect classes', () => {
     const { container } = render(<IdeaCard idea={mockIdea} />);
     const card = container.firstChild;
-    expect(card).toHaveClass('backdrop-blur-sm');
-    expect(card).toHaveClass('bg-white/80');
+    expect(card).toHaveClass('backdrop-blur-xl');
+    expect(card).toHaveClass('bg-white/50');
   });
 
   it('card has hover effect classes', () => {
     const { container } = render(<IdeaCard idea={mockIdea} />);
     const card = container.firstChild;
     expect(card).toHaveClass('hover:-translate-y-1');
-    expect(card).toHaveClass('hover:shadow-xl');
+    expect(card).toHaveClass('hover:shadow-hover');
   });
 });

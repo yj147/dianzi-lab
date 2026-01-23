@@ -1,0 +1,136 @@
+import { Metadata } from 'next'
+
+import LoginForm from './LoginForm'
+import Link from 'next/link'
+
+export const metadata: Metadata = {
+  title: '登录 | 奇迹工坊',
+}
+
+type LoginPageProps = {
+  searchParams?: {
+    callbackUrl?: string
+  }
+}
+
+export default function LoginPage({ searchParams }: LoginPageProps) {
+  const callbackUrl = typeof searchParams?.callbackUrl === 'string' ? searchParams.callbackUrl : undefined
+
+  return (
+    <div className="relative w-full max-w-5xl">
+      <div className="glass-panel w-full overflow-hidden rounded-[3rem] flex flex-col md:flex-row min-h-[650px]">
+        <div className="relative w-full md:w-5/12 bg-gradient-to-b from-lavender-100/50 via-white/20 to-mint-100/50 overflow-hidden p-8 flex flex-col justify-center items-center">
+          <div className="absolute inset-0 pointer-events-none">
+            <div className="absolute left-1/2 top-1/2 size-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/30 blur-2xl" />
+            <div className="absolute bottom-10 left-0 w-full text-center px-6">
+              <p className="mb-2 font-script text-2xl text-coral-400 drop-shadow-sm">编织梦想</p>
+              <p className="text-pretty text-sm font-medium text-slate-500">
+                在奇迹工坊，每一个微小的想法
+                <br />
+                都值得被点亮。
+              </p>
+            </div>
+          </div>
+
+          <div className="relative z-10 h-full w-full flex items-center justify-center">
+            <div className="relative animate-float-slow">
+              <div className="size-24 rounded-full bg-coral-100 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center">
+                <span className="material-symbols-outlined text-6xl text-coral-400/80 mt-2" aria-hidden="true">
+                  face_4
+                </span>
+              </div>
+              <div className="h-20 w-32 rounded-t-[4rem] bg-lavender-200 -mt-2 mx-auto relative z-[-1] flex justify-center">
+                <div className="h-full w-24 rounded-t-[4rem] bg-lavender-300 opacity-50" />
+              </div>
+
+              <div className="absolute -right-12 top-0 animate-bounce animation-delay-500">
+                <div className="bg-white p-2 rounded-xl shadow-md rotate-12">
+                  <span className="material-symbols-outlined text-3xl text-mint-300" aria-hidden="true">
+                    brush
+                  </span>
+                </div>
+              </div>
+
+              <div className="absolute -left-10 top-10 animate-bounce animation-delay-1000">
+                <div className="bg-white p-2 rounded-full shadow-md -rotate-12">
+                  <span className="material-symbols-outlined text-3xl text-lavender-400" aria-hidden="true">
+                    palette
+                  </span>
+                </div>
+              </div>
+
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-white/60 animate-spin-slow">
+                <span
+                  className="material-symbols-outlined absolute -top-3 left-1/2 -translate-x-1/2 text-xl text-yellow-300"
+                  aria-hidden="true"
+                >
+                  star
+                </span>
+                <span
+                  className="material-symbols-outlined absolute bottom-1/4 -right-2 text-lg text-lavender-300"
+                  aria-hidden="true"
+                >
+                  auto_awesome
+                </span>
+                <span
+                  className="material-symbols-outlined absolute top-1/4 -left-2 text-lg text-mint-300"
+                  aria-hidden="true"
+                >
+                  bubble_chart
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <span className="material-symbols-outlined sparkle pointer-events-none text-2xl top-10 left-10" aria-hidden="true">
+            star
+          </span>
+          <span
+            className="material-symbols-outlined sparkle pointer-events-none text-xl top-20 right-10 animation-delay-500"
+            aria-hidden="true"
+          >
+            spark
+          </span>
+          <span
+            className="material-symbols-outlined sparkle pointer-events-none text-lg bottom-32 left-8 animation-delay-1000"
+            aria-hidden="true"
+          >
+            flare
+          </span>
+        </div>
+
+        <div className="w-full md:w-7/12 bg-white/30 backdrop-blur-sm p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+          <div className="flex items-center gap-1 bg-slate-100/50 p-1.5 rounded-full w-max mb-8 shadow-inner border border-white/50">
+            <Link href="/login" className="px-6 py-2 rounded-full bg-white text-coral-500 shadow-sm font-bold text-sm">
+              登录
+            </Link>
+            <Link
+              href="/register"
+              className="px-6 py-2 rounded-full text-slate-500 hover:text-slate-700 font-bold text-sm transition-colors hover:bg-white/50"
+            >
+              注册
+            </Link>
+          </div>
+
+          <div className="mb-8">
+            <h1 className="text-balance text-4xl lg:text-5xl font-script text-slate-800 mb-3 relative inline-block">
+              欢迎回来
+              <span className="absolute -top-2 -right-6 text-yellow-400 animate-pulse motion-reduce:animate-none" aria-hidden="true">
+                ✨
+              </span>
+            </h1>
+            <p className="text-pretty text-slate-500 font-medium">继续你的奇思妙想之旅。</p>
+          </div>
+
+          <LoginForm callbackUrl={callbackUrl} />
+        </div>
+      </div>
+
+      <div className="absolute right-0 bottom-0 pointer-events-none opacity-20 hidden lg:block translate-x-1/4 translate-y-1/4">
+        <span className="material-symbols-outlined text-[300px] text-mint-200" aria-hidden="true">
+          toys
+        </span>
+      </div>
+    </div>
+  )
+}

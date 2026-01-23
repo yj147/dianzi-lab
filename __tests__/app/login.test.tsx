@@ -1,14 +1,13 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import LoginPage from '@/app/(main)/login/page'
-import { loginUser } from '@/app/(main)/login/actions'
+import { useRouter } from 'next/navigation'
+import LoginPage from '@/app/(auth)/login/page'
+import { loginUser } from '@/app/(auth)/login/actions'
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-  useSearchParams: jest.fn(),
 }))
 
-jest.mock('@/app/(main)/login/actions', () => ({
+jest.mock('@/app/(auth)/login/actions', () => ({
   loginUser: jest.fn(),
 }))
 
@@ -20,36 +19,28 @@ jest.mock('next/link', () => {
 
 describe('Login Page', () => {
   const useRouterMock = useRouter as jest.Mock
-  const useSearchParamsMock = useSearchParams as jest.Mock
   const loginUserMock = loginUser as jest.Mock
   const pushMock = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
     useRouterMock.mockReturnValue({ push: pushMock })
-    useSearchParamsMock.mockReturnValue({
-      get: jest.fn().mockReturnValue(null),
-    })
   })
 
   it('renders login form correctly', () => {
     render(<LoginPage />)
 
-    expect(screen.getAllByRole('heading', { name: /登录/i }).length).toBeGreaterThan(0)
+    expect(screen.getByRole('heading', { level: 1, name: '欢迎回来' })).toBeInTheDocument()
     expect(screen.getByLabelText('邮箱')).toBeInTheDocument()
     expect(screen.getByLabelText('密码')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /登录/i })).toBeInTheDocument()
-    const registerLinks = screen.getAllByRole('link', { name: /立即注册/i })
-    expect(registerLinks.length).toBeGreaterThan(0)
-    for (const link of registerLinks) {
-      expect(link).toHaveAttribute('href', '/register')
-    }
+    expect(screen.getByRole('button', { name: '开启梦境' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '注册' })).toHaveAttribute('href', '/register')
   })
 
   it('shows validation errors for invalid input', async () => {
     render(<LoginPage />)
     
-    const submitButton = screen.getByRole('button', { name: /登录/i })
+    const submitButton = screen.getByRole('button', { name: '开启梦境' })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -67,7 +58,7 @@ describe('Login Page', () => {
     fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
 
     await waitFor(() => {
       expect(screen.getByText(/邮箱或密码错误/i)).toBeInTheDocument()
@@ -84,7 +75,7 @@ describe('Login Page', () => {
     fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
 
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith('/dashboard')
@@ -101,7 +92,7 @@ describe('Login Page', () => {
     fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
 
     await waitFor(() => {
       expect(screen.getByText(/发生未知错误，请稍后再试/i)).toBeInTheDocument()
@@ -124,7 +115,7 @@ describe('Login Page', () => {
       target: { value: 'password123' },
     })
 
-    const submitButton = screen.getByRole('button', { name: /登录/i })
+    const submitButton = screen.getByRole('button', { name: '开启梦境' })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -139,11 +130,8 @@ describe('Login Page', () => {
   })
 
   it('redirects to callbackUrl on successful login', async () => {
-    useSearchParamsMock.mockReturnValue({
-      get: jest.fn().mockReturnValue('/submit'),
-    })
     loginUserMock.mockResolvedValue({ success: true })
-    render(<LoginPage />)
+    render(<LoginPage searchParams={{ callbackUrl: '/submit' }} />)
 
     fireEvent.change(screen.getByLabelText('邮箱'), {
       target: { value: 'test@example.com' },
@@ -151,7 +139,7 @@ describe('Login Page', () => {
     fireEvent.change(screen.getByLabelText('密码'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: /登录/i }))
+    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
 
     await waitFor(() => {
       expect(pushMock).toHaveBeenCalledWith('/submit')

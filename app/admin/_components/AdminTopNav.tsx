@@ -7,8 +7,8 @@ import { logout } from '@/lib/auth-actions'
 import { cn } from '@/lib/utils'
 
 const NAV_ITEMS = [
-  { href: '/admin', label: '仪表板', exact: true, activeIcon: 'space_dashboard' },
-  { href: '/admin/ideas', label: '点子管理', exact: false, activeIcon: 'admin_panel_settings' },
+  { href: '/admin', label: '控制台', exact: true, activeIcon: 'space_dashboard' },
+  { href: '/admin/ideas', label: '梦境管理', exact: false, activeIcon: 'admin_panel_settings' },
   { href: '/admin/users', label: '用户管理', exact: false, activeIcon: 'group' },
   { href: '/admin/trash', label: '垃圾箱', exact: false, activeIcon: 'delete' },
 ] as const

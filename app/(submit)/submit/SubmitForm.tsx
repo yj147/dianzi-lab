@@ -88,46 +88,58 @@ export default function SubmitForm() {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-white/40 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 ring-1 ring-white/60 md:p-12">
-      <div className="mb-10 text-center">
-        <h1 className="text-3xl font-bold bg-gradient-to-br from-gray-900 to-gray-700 bg-clip-text text-transparent sm:text-4xl">
-          提交新点子
-        </h1>
-        <p className="text-muted-foreground mt-4 text-lg">
-          分享你的创意，让大家一起完善它
-        </p>
+    <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[3rem] border border-white/80 bg-white/60 p-8 shadow-[0_20px_60px_-15px_rgba(167,139,250,0.25)] backdrop-blur-2xl md:p-12">
+      <div
+        className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-lavender-300 via-coral-300 to-mint-300"
+        aria-hidden="true"
+      />
+
+      <div className="mb-8 flex items-center justify-between gap-6 pt-4">
+        <div>
+          <h1 className="mb-1 text-4xl font-script text-slate-800">记录你的奇遇</h1>
+          <p className="text-sm font-bold text-slate-500 tabular-nums">Idea Lab #2026-SUB</p>
+        </div>
+        <span className="material-symbols-outlined text-5xl text-yellow-400 rotate-12" aria-hidden="true">
+          emoji_objects
+        </span>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         <div>
           <label
             htmlFor="title"
-            className="block text-sm font-semibold text-gray-700 mb-2 ml-1"
+            className="ml-2 mb-2 block text-lg font-bold text-slate-500"
           >
-            标题
+            点子名称
           </label>
           <div className="relative">
+            <span
+              className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-lavender-400"
+              aria-hidden="true"
+            >
+              star
+            </span>
             <input
               {...register("title")}
               id="title"
               autoComplete="off"
-              placeholder="为你的点子起个吸引人的标题"
+              placeholder="给你的梦起个名字..."
               aria-invalid={!!errors.title}
               aria-describedby={cn(
                 "title-helper",
                 errors.title && "title-error"
               )}
-              className="w-full h-14 px-5 rounded-2xl bg-white/50 border border-gray-200 text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 hover:bg-white/80"
+              className="h-14 w-full rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80"
             />
-            <span className="absolute right-4 bottom-4 text-xs font-medium text-gray-400">
+            <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
               {title.length}/50
             </span>
           </div>
-          <p id="title-helper" className="text-sm text-gray-500 mt-2 ml-1">
-            简洁明了，让大家一眼就知道你的点子
+          <p id="title-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
+            简洁明了，让大家一眼就知道你的点子。
           </p>
           {errors.title && (
-            <p id="title-error" className="mt-1 text-sm text-red-500 ml-1">
+            <p id="title-error" className="ml-2 mt-1 text-sm font-medium text-danger">
               {errors.title.message}
             </p>
           )}
@@ -136,41 +148,44 @@ export default function SubmitForm() {
         <div>
           <label
             htmlFor="description"
-            className="block text-sm font-semibold text-gray-700 mb-2 ml-1"
+            className="ml-2 mb-2 block text-lg font-bold text-slate-500"
           >
-            描述
+            梦境描述
           </label>
           <div className="relative">
+            <span className="material-symbols-outlined absolute left-4 top-5 text-mint-400" aria-hidden="true">
+              edit_note
+            </span>
             <textarea
               {...register("description")}
               id="description"
               rows={6}
               autoComplete="off"
-              placeholder="详细描述你的点子，包括它解决什么问题、如何实现等"
+              placeholder="哪怕是最荒诞的细节，也请告诉我们..."
               aria-invalid={!!errors.description}
               aria-describedby={cn(
                 "description-helper",
                 errors.description && "description-error"
               )}
-              className="w-full px-5 py-4 rounded-2xl bg-white/50 border border-gray-200 text-gray-900 placeholder:text-gray-400 outline-none resize-none transition-all focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 hover:bg-white/80"
+              className="min-h-[140px] w-full resize-none rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 py-4 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80"
             />
-            <span className="absolute right-4 bottom-4 text-xs font-medium text-gray-400">
+            <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
               {description.length}/1000
             </span>
           </div>
-          <p id="description-helper" className="text-sm text-gray-500 mt-2 ml-1">
-            详细描述你的想法、解决的问题、实现思路等
+          <p id="description-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
+            详细描述你的想法、解决的问题、实现思路等。
           </p>
           {errors.description && (
-            <p id="description-error" className="mt-1 text-sm text-red-500 ml-1">
+            <p id="description-error" className="ml-2 mt-1 text-sm font-medium text-danger">
               {errors.description.message}
             </p>
           )}
         </div>
 
         <fieldset aria-describedby="tags-helper">
-          <legend className="block text-sm font-semibold text-gray-700 mb-3 ml-1">
-            标签
+          <legend className="ml-2 mb-3 block text-lg font-bold text-slate-500">
+            奇思标签
           </legend>
           <div className="flex flex-wrap gap-2.5" role="group" aria-label="选择标签">
             {TAGS.map((tag) => (
@@ -180,21 +195,21 @@ export default function SubmitForm() {
                 onClick={() => toggleTag(tag)}
                 aria-pressed={selectedTags.includes(tag)}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium border transition-all duration-200 shadow-sm hover:-translate-y-0.5 active:translate-y-0 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                  "rounded-full border-2 px-5 py-2 text-sm font-bold transition-transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]",
                   selectedTags.includes(tag)
-                    ? "bg-primary border-primary text-white shadow-primary/25 shadow-lg"
-                    : "bg-white border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                    ? "bg-lavender-300 border-lavender-300 text-white shadow-lavender"
+                    : "bg-white/60 border-lavender-200 text-slate-600 hover:border-lavender-300 hover:bg-white"
                 )}
               >
                 {tag}
               </button>
             ))}
           </div>
-          <p id="tags-helper" className="text-sm text-gray-500 mt-2 ml-1">
-            选择相关标签，帮助大家发现你的点子（可选）
+          <p id="tags-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
+            选择相关标签，帮助大家发现你的点子（可选）。
           </p>
           {errors.tags && (
-            <p className="mt-1 text-sm text-red-500 ml-1">{errors.tags.message}</p>
+            <p className="ml-2 mt-1 text-sm font-medium text-danger">{errors.tags.message}</p>
           )}
         </fieldset>
 
@@ -202,7 +217,7 @@ export default function SubmitForm() {
           type="submit"
           disabled={isSubmitting}
           aria-busy={isSubmitting}
-          className="w-full flex items-center justify-center rounded-full bg-[var(--cta)] h-14 text-lg font-bold text-gray-900 shadow-lg shadow-yellow-500/20 transition-all hover:shadow-xl hover:shadow-yellow-500/30 hover:-translate-y-1 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--cta)] focus-visible:ring-offset-2"
+          className="group flex h-14 w-full items-center justify-center rounded-full bg-coral-400 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-transform hover:-translate-y-1 hover:bg-coral-500 active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:shadow-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
         >
           {isSubmitting ? (
             <>
@@ -210,10 +225,22 @@ export default function SubmitForm() {
               提交中…
             </>
           ) : (
-            "发布点子"
+            <>
+              编织梦想
+              <span className="material-symbols-outlined ml-2 transition-transform group-hover:rotate-12" aria-hidden="true">
+                auto_awesome
+              </span>
+            </>
           )}
         </button>
       </form>
+
+      <div className="pointer-events-none absolute bottom-4 right-4 opacity-50" aria-hidden="true">
+        <svg className="h-16 w-16 text-lavender-200" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 100 100">
+          <path d="M10 50 Q 25 25 50 50 T 90 50" />
+          <path d="M10 60 Q 25 35 50 60 T 90 60" />
+        </svg>
+      </div>
     </div>
   );
 }

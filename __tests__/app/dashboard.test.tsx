@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
-import DashboardPage from '@/app/(main)/dashboard/page'
+import DashboardPage from '@/app/(dashboard)/dashboard/page'
 
 jest.mock('next/navigation', () => ({
   redirect: jest.fn().mockImplementation((url: string) => {
@@ -33,7 +33,7 @@ describe('Dashboard Page', () => {
     ;(getSession as jest.Mock).mockResolvedValue(null)
 
     try {
-      await DashboardPage()
+      await DashboardPage({})
     } catch (e: any) {
       expect(e.message).toBe('NEXT_REDIRECT')
     }
@@ -50,13 +50,13 @@ describe('Dashboard Page', () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue([])
 
-    const PageContent = await DashboardPage()
+    const PageContent = await DashboardPage({})
     render(PageContent)
 
-    expect(screen.getByText('test@example.com')).toBeInTheDocument()
-    expect(screen.getByText('我的点子')).toBeInTheDocument()
-    expect(screen.getByText('还没有提交过点子')).toBeInTheDocument()
-    expect(screen.getByText('提交第一个点子')).toBeInTheDocument()
+    expect(screen.getByText('造梦者·test')).toBeInTheDocument()
+    expect(screen.getByText('我的梦境记录')).toBeInTheDocument()
+    expect(screen.getByText('梦境还在孵化中...')).toBeInTheDocument()
+    expect(screen.getByText('播撒第一颗种子')).toBeInTheDocument()
     expect(screen.getByText('退出登录')).toBeInTheDocument()
   })
 
@@ -78,12 +78,12 @@ describe('Dashboard Page', () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
 
-    const PageContent = await DashboardPage()
+    const PageContent = await DashboardPage({})
     render(PageContent)
 
     expect(screen.getByText('测试点子')).toBeInTheDocument()
     expect(screen.getByText('这是一个测试点子的描述')).toBeInTheDocument()
-    expect(screen.getByText('待审核')).toBeInTheDocument()
+    expect(screen.getByText('等待星光')).toBeInTheDocument()
   })
 
   it('truncates long descriptions', async () => {
@@ -105,10 +105,10 @@ describe('Dashboard Page', () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
 
-    const PageContent = await DashboardPage()
+    const PageContent = await DashboardPage({})
     render(PageContent)
 
-    const truncatedText = 'A'.repeat(150) + '…'
+    const truncatedText = 'A'.repeat(80) + '…'
     expect(screen.getByText(truncatedText)).toBeInTheDocument()
   })
 })

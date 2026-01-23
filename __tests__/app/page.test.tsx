@@ -26,18 +26,18 @@ describe('Home Page', () => {
   it('渲染 Hero 和 tools 区域', async () => {
     findManyMock.mockResolvedValue([])
 
-    const element = await Home()
+    const element = await Home({})
     const { container } = render(element)
 
     expect(
-      screen.getByRole('heading', { level: 1, name: '点子实验室' }),
+      screen.getByRole('heading', { level: 1, name: /点亮你的.*奇思妙想/ }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { level: 2, name: '已完成的工具' }),
+      screen.getByRole('heading', { level: 2, name: '梦境仓库' }),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText('暂无已完成的工具，敬请期待！'),
+      screen.getByText('梦境还在孵化中...'),
     ).toBeInTheDocument()
 
     expect(screen.queryByText('Test')).not.toBeInTheDocument()
@@ -50,26 +50,24 @@ describe('Home Page', () => {
       { id: '1', title: 'Test', description: 'Desc', tags: ['tag'] },
     ])
 
-    const element = await Home()
+    const element = await Home({})
     render(element)
 
     expect(screen.getByText('Test')).toBeInTheDocument()
     expect(screen.getByText('Desc')).toBeInTheDocument()
-    expect(screen.getByText('tag')).toBeInTheDocument()
+    expect(screen.getByText('tag', { selector: 'span' })).toBeInTheDocument()
     expect(
-      screen.queryByText('暂无已完成的工具，敬请期待！'),
+      screen.queryByText('梦境还在孵化中...'),
     ).not.toBeInTheDocument()
   })
 
-  it('工具区域有正确的背景渐变类', async () => {
+  it('工具区域应用 organic-overlap 布局类', async () => {
     findManyMock.mockResolvedValue([])
 
-    const element = await Home()
+    const element = await Home({})
     const { container } = render(element)
 
     const toolsSection = container.querySelector('#tools')
-    expect(toolsSection).toHaveClass('bg-gradient-to-b')
-    expect(toolsSection).toHaveClass('from-slate-50')
-    expect(toolsSection).toHaveClass('to-white')
+    expect(toolsSection).toHaveClass('organic-overlap')
   })
 })

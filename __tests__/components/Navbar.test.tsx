@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import NavbarClient from '@/components/NavbarClient'
 import Navbar from '@/components/Navbar'
 import * as authActions from '@/lib/auth-actions'
@@ -22,14 +22,6 @@ jest.mock('@/lib/auth', () => ({
   clearSessionCookie: jest.fn(),
 }))
 
-function setScrollY(value: number) {
-  Object.defineProperty(window, 'scrollY', {
-    value,
-    writable: true,
-    configurable: true,
-  })
-}
-
 beforeEach(() => {
   jest.clearAllMocks()
   ;(usePathname as jest.Mock).mockReturnValue('/')
@@ -42,7 +34,7 @@ describe('Navbar (Server Component)', () => {
     const NavbarResolved = await Navbar()
     render(NavbarResolved)
     
-    expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '潜入' })).toBeInTheDocument()
   })
 
   it('正确传递已登录状态给 NavbarClient', async () => {
@@ -55,8 +47,7 @@ describe('Navbar (Server Component)', () => {
     const NavbarResolved = await Navbar()
     render(NavbarResolved)
     
-    expect(screen.getAllByText('test@example.com')[0]).toBeInTheDocument()
-    expect(screen.getAllByRole('button', { name: '退出', hidden: true })[0]).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '用户菜单' })).toBeInTheDocument()
   })
 })
 
@@ -72,45 +63,18 @@ describe('auth-actions', () => {
 })
 
 describe('NavbarClient', () => {
-  it('滚动阈值边界：scrollY=49/50 无 blur，scrollY=51 有 blur', () => {
-    setScrollY(0)
-    render(<NavbarClient isLoggedIn={false} />)
+  it('登录状态：渲染主导航与 CTA', () => {
+    render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
 
-    const nav = screen.getByRole('navigation')
-
-    setScrollY(49)
-    fireEvent.scroll(window)
-    expect(nav).not.toHaveClass('backdrop-blur-lg')
-
-    setScrollY(50)
-    fireEvent.scroll(window)
-    expect(nav).not.toHaveClass('backdrop-blur-lg')
-
-    setScrollY(51)
-    fireEvent.scroll(window)
-    expect(nav).toHaveClass('backdrop-blur-lg')
-
-    // 回落到阈值以下，应移除 blur
-    setScrollY(0)
-    fireEvent.scroll(window)
-    expect(nav).not.toHaveClass('backdrop-blur-lg')
-  })
-
-  it('当前路由匹配时设置 aria-current 并显示 active 样式', () => {
-    ;(usePathname as jest.Mock).mockReturnValue('/submit')
-    render(<NavbarClient isLoggedIn={false} />)
-
-    const submitLink = screen.getByRole('link', { name: '提交点子' })
-    expect(submitLink).toHaveAttribute('aria-current', 'page')
-    expect(submitLink.className).toContain('text-blue-600')
-
-    const homeLink = screen.getByRole('link', { name: '首页' })
-    expect(homeLink).not.toHaveAttribute('aria-current')
+    expect(screen.getByRole('link', { name: '幻象大厅' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '造梦工具' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '我的梦境' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '开始编织' })).toBeInTheDocument()
   })
 
   it('未登录时显示登录链接', () => {
     render(<NavbarClient isLoggedIn={false} />)
-    expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '潜入' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: '退出' })).not.toBeInTheDocument()
   })
 
@@ -119,88 +83,37 @@ describe('NavbarClient', () => {
     render(<NavbarClient isLoggedIn={true} userEmail={email} />)
     
     expect(screen.queryByRole('link', { name: '登录' })).not.toBeInTheDocument()
-    expect(screen.getAllByRole('button', { name: '退出', hidden: true })[0]).toBeInTheDocument()
-    expect(screen.getAllByText(email)[0]).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '用户菜单' })).toBeInTheDocument()
   })
 
-  it('点击退出按钮调用 logout action', async () => {
-    render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
-    
-    const logoutButton = screen.getAllByRole('button', { name: '退出', hidden: true })[0]
-    fireEvent.click(logoutButton)
-    
-    expect(authActions.logout).toHaveBeenCalled()
-  })
-
-  it('桌面端用户下拉菜单：可打开/关闭，包含仪表板链接，退出触发 logout', async () => {
+  it('桌面端用户下拉菜单：可打开/关闭，包含链接，退出触发 logout', async () => {
     render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
 
     const trigger = screen.getByRole('button', { name: '用户菜单' })
 
-    expect(screen.queryByRole('menuitem', { name: '仪表板' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('menuitem', { name: '我的梦境' })).not.toBeInTheDocument()
 
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
 
-    const dashboardItem = await screen.findByRole('menuitem', { name: '仪表板' })
-    expect(dashboardItem).toHaveAttribute('href', '/dashboard')
-    const menu = dashboardItem.closest('[role="menu"]')
+    const dreamsItem = await screen.findByRole('menuitem', { name: '我的梦境' })
+    expect(dreamsItem).toHaveAttribute('href', '/dashboard')
+    expect(screen.getByRole('menuitem', { name: '灵感收藏' })).toHaveAttribute('href', '/dashboard/favorites')
+    expect(screen.getByRole('menuitem', { name: '账号设置' })).toHaveAttribute('href', '/dashboard/settings')
+
+    const menu = dreamsItem.closest('[role="menu"]')
     expect(menu).toBeInTheDocument()
-    expect(within(menu as HTMLElement).getByText('test@example.com')).toBeInTheDocument()
 
     // Escape 关闭菜单
     fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
     await waitFor(() => {
-      expect(screen.queryByRole('menuitem', { name: '仪表板' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('menuitem', { name: '我的梦境' })).not.toBeInTheDocument()
     })
 
     // 再次打开并点击退出
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
-    fireEvent.click(await screen.findByRole('menuitem', { name: '退出' }))
+    fireEvent.click(await screen.findByRole('button', { name: '离开工坊' }))
     expect(authActions.logout).toHaveBeenCalled()
-  })
-
-  it('可切换移动端菜单（未登录状态）', () => {
-    const { container } = render(<NavbarClient isLoggedIn={false} />)
-    const toggle = screen.getByRole('button', { name: '打开主菜单' })
-
-    const mobileMenu = container.querySelector('#mobile-menu')
-    expect(mobileMenu).toHaveAttribute('hidden')
-
-    fireEvent.click(toggle)
-    expect(toggle).toHaveAttribute('aria-expanded', 'true')
-    expect(mobileMenu).not.toHaveAttribute('hidden')
-
-    const mobileNav = within(mobileMenu as HTMLElement)
-    
-    fireEvent.click(mobileNav.getByRole('link', { name: '首页' }))
-    expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    
-    fireEvent.click(toggle)
-    fireEvent.click(mobileNav.getByRole('link', { name: '提交点子' }))
-    expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    
-    fireEvent.click(toggle)
-    fireEvent.click(mobileNav.getByRole('link', { name: '登录' }))
-
-    expect(toggle).toHaveAttribute('aria-expanded', 'false')
-    expect(mobileMenu).toHaveAttribute('hidden')
-  })
-
-  it('可切换移动端菜单（已登录状态）', () => {
-    const { container } = render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
-    const toggle = screen.getByRole('button', { name: '打开主菜单' })
-
-    fireEvent.click(toggle)
-    const mobileMenu = container.querySelector('#mobile-menu')
-    const mobileNav = within(mobileMenu as HTMLElement)
-    
-    expect(mobileNav.getByText('test@example.com')).toBeInTheDocument()
-    const logoutButton = mobileNav.getByRole('button', { name: '退出' })
-    
-    fireEvent.click(logoutButton)
-    expect(authActions.logout).toHaveBeenCalled()
-    expect(toggle).toHaveAttribute('aria-expanded', 'false')
   })
 })

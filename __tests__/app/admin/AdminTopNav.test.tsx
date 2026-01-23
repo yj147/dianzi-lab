@@ -24,8 +24,8 @@ describe('AdminTopNav', () => {
     render(<AdminTopNav userEmail={userEmail} />)
 
     expect(screen.getByText('奇迹工坊')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '仪表板' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '点子管理' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '控制台' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '梦境管理' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '用户管理' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '垃圾箱' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '通知' })).toBeInTheDocument()
@@ -35,7 +35,7 @@ describe('AdminTopNav', () => {
   it('highlights active nav item', () => {
     render(<AdminTopNav userEmail={userEmail} />)
 
-    const activeLink = screen.getByRole('link', { name: '点子管理' })
+    const activeLink = screen.getByRole('link', { name: '梦境管理' })
     expect(activeLink).toHaveClass('bg-white')
   })
 
@@ -46,4 +46,3 @@ describe('AdminTopNav', () => {
     expect(logout).toHaveBeenCalledTimes(1)
   })
 })
-
