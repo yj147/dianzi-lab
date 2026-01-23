@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { STATUS_CONFIG } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { moveToTrash, updateIdeaStatus } from '../actions'
 
@@ -66,19 +67,39 @@ function StatusPill({ status, isDeleted }: { status: IdeaStatus; isDeleted: bool
     )
   }
 
-  if (status === 'COMPLETED') {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-mint-50 text-mint-600 border border-mint-100">
-        <span className="material-symbols-outlined text-[14px]">check_circle</span>
-        已实现
-      </span>
-    )
-  }
+  const label = STATUS_CONFIG[status].label
+
+  const { icon, className } = (() => {
+    switch (status) {
+      case 'PENDING':
+        return {
+          icon: 'hourglass_top',
+          className: 'bg-gray-100 text-gray-700 border border-gray-200',
+        }
+      case 'APPROVED':
+        return {
+          icon: 'thumb_up',
+          className: 'bg-blue-100 text-blue-700 border border-blue-200',
+        }
+      case 'IN_PROGRESS':
+        return {
+          icon: 'build',
+          className: 'bg-orange-100 text-orange-700 border border-orange-200',
+        }
+      case 'COMPLETED':
+        return {
+          icon: 'check_circle',
+          className: 'bg-green-100 text-green-700 border border-green-200',
+        }
+    }
+  })()
 
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-amber-50 text-amber-500 border border-amber-100">
-      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-      孵化中
+    <span className={cn('inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold', className)}>
+      <span className="material-symbols-outlined text-[14px]" aria-hidden="true">
+        {icon}
+      </span>
+      {label}
     </span>
   )
 }
@@ -87,6 +108,44 @@ function getAvatarText(email: string): string {
   const trimmed = email.trim()
   if (!trimmed) return '?'
   return trimmed[0]?.toUpperCase() ?? '?'
+}
+
+function getPrimaryAction(status: IdeaStatus): {
+  nextStatus: IdeaStatus
+  label: string
+  icon: string
+  className: string
+} {
+  switch (status) {
+    case 'PENDING':
+      return {
+        nextStatus: 'APPROVED',
+        label: '批准',
+        icon: 'auto_fix_high',
+        className: 'bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50',
+      }
+    case 'APPROVED':
+      return {
+        nextStatus: 'IN_PROGRESS',
+        label: '开始开发',
+        icon: 'rocket_launch',
+        className: 'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:shadow-blue-200/50',
+      }
+    case 'IN_PROGRESS':
+      return {
+        nextStatus: 'COMPLETED',
+        label: '标记完成',
+        icon: 'check_circle',
+        className: 'bg-orange-100 text-orange-700 hover:bg-orange-200 hover:shadow-orange-200/50',
+      }
+    case 'COMPLETED':
+      return {
+        nextStatus: 'IN_PROGRESS',
+        label: '回退开发中',
+        icon: 'undo',
+        className: 'bg-lavender-100 text-lavender-500 hover:bg-lavender-200 hover:shadow-lavender-200/50',
+      }
+  }
 }
 
 export default function IdeasTable({
@@ -145,13 +204,14 @@ export default function IdeasTable({
             {ideas.length === 0 ? (
               <tr className="table-row-glass group">
                 <td colSpan={5} className="py-16 px-8 text-center text-sm font-medium text-slate-400">
-                  暂无待审核的梦境
+                  暂无符合筛选条件的梦境
                 </td>
               </tr>
             ) : (
               ideas.map((idea, index) => {
                 const preset = IDEA_ICON_PRESETS[index % IDEA_ICON_PRESETS.length]
                 const isBusy = busyIdeaId === idea.id
+                const primaryAction = getPrimaryAction(idea.status)
 
                 return (
                   <tr
@@ -209,73 +269,62 @@ export default function IdeasTable({
                     </td>
 
                     <td className="py-5 px-8">
-                      {idea.status === 'COMPLETED' ? (
-                        <div className="flex items-center justify-end gap-3 opacity-40 transition-opacity hover:opacity-100">
-                          <button
-                            type="button"
-                            className="action-btn bg-lavender-100 text-lavender-400"
-                            disabled
-                            aria-label="已实现（不可操作）"
-                            title="已实现"
-                          >
-                            <span className="material-symbols-outlined" aria-hidden="true">
-                              edit
-                            </span>
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center justify-end gap-3">
-                          <button
-                            type="button"
-                            className="action-btn bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50 disabled:cursor-not-allowed disabled:opacity-50"
-                            title="批准 (Approve)"
-                            aria-label="批准"
-                            disabled={isBusy}
-                            onClick={() =>
-                              runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'APPROVED'))
-                            }
-                          >
-                            <span className="material-symbols-outlined" aria-hidden="true">
-                              auto_fix_high
-                            </span>
-                          </button>
+                      <div className="flex items-center justify-end gap-3">
+                        <button
+                          type="button"
+                          className={cn(
+                            'action-btn disabled:cursor-not-allowed disabled:opacity-50',
+                            primaryAction.className,
+                          )}
+                          title={primaryAction.label}
+                          aria-label={primaryAction.label}
+                          disabled={isBusy}
+                          onClick={() =>
+                            runRowAction(idea.id, () =>
+                              updateIdeaStatus(idea.id, primaryAction.nextStatus),
+                            )
+                          }
+                        >
+                          <span className="material-symbols-outlined" aria-hidden="true">
+                            {primaryAction.icon}
+                          </span>
+                        </button>
 
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <button
-                                type="button"
-                                className="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50 disabled:cursor-not-allowed disabled:opacity-50"
-                                title="驳回 (Reject)"
-                                aria-label="驳回"
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <button
+                              type="button"
+                              className="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50 disabled:cursor-not-allowed disabled:opacity-50"
+                              title="驳回 (Reject)"
+                              aria-label="驳回"
+                              disabled={isBusy}
+                            >
+                              <span className="material-symbols-outlined" aria-hidden="true">
+                                cloud_off
+                              </span>
+                            </button>
+                          </AlertDialogTrigger>
+
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>确认驳回？</AlertDialogTitle>
+                              <AlertDialogDescription>
+                                驳回会将梦境移入垃圾箱，您可以在垃圾箱中恢复或永久删除。
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel disabled={isBusy}>取消</AlertDialogCancel>
+                              <AlertDialogAction
                                 disabled={isBusy}
+                                className="bg-coral-500 hover:bg-coral-600"
+                                onClick={() => runRowAction(idea.id, () => moveToTrash(idea.id))}
                               >
-                                <span className="material-symbols-outlined" aria-hidden="true">
-                                  cloud_off
-                                </span>
-                              </button>
-                            </AlertDialogTrigger>
-
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>确认驳回？</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  驳回会将梦境移入垃圾箱，您可以在垃圾箱中恢复或永久删除。
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel disabled={isBusy}>取消</AlertDialogCancel>
-                                <AlertDialogAction
-                                  disabled={isBusy}
-                                  className="bg-coral-500 hover:bg-coral-600"
-                                  onClick={() => runRowAction(idea.id, () => moveToTrash(idea.id))}
-                                >
-                                  确认驳回
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        </div>
-                      )}
+                                确认驳回
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
 
                       {rowError?.ideaId === idea.id ? (
                         <p className="mt-2 text-right text-xs font-medium text-coral-500">

@@ -86,7 +86,7 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByText('测试点子')).toBeInTheDocument()
     expect(screen.getByText('这是一个测试点子的描述')).toBeInTheDocument()
-    expect(screen.getByText('等待星光')).toBeInTheDocument()
+    expect(screen.getByText('待审核')).toBeInTheDocument()
   })
 
   it('truncates long descriptions', async () => {

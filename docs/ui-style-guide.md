@@ -83,15 +83,27 @@ coral (珊瑚粉) - 强调色，代表活力与行动
 #### 字体家族
 
 ```css
---font-sans: "Quicksand", "ZCOOL KuaiLe", system-ui, sans-serif;
---font-script: "Ma Shan Zheng", cursive;
+--font-sans: var(--font-quicksand), var(--font-zcool), system-ui, sans-serif;
+--font-script: var(--font-ma-shan-zheng), cursive;
+--font-display: var(--font-zcool), system-ui, sans-serif;
 ```
 
-#### 字体加载（Google Fonts）
+#### 字体加载（Self-host，避免阻塞链路）
 
-```html
-<link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Quicksand:wght@300;400;500;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+```ts
+// app/layout.tsx：文字字体使用 next/font/google（构建时拉取并 self-host）
+import { Ma_Shan_Zheng, Quicksand, ZCOOL_KuaiLe } from "next/font/google";
+```
+
+```css
+/* app/globals.css：图标字体使用本地 woff2（避免外链阻塞） */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  src: url("/fonts/material-symbols-outlined.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
 ```
 
 #### 字号系统
@@ -380,7 +392,7 @@ animation: {
 
 #### 图标库
 
-使用 **Material Symbols Outlined**（Google Fonts CDN）
+使用 **Material Symbols Outlined**（本地 woff2 + `@font-face`）
 
 ```jsx
 <span className="material-symbols-outlined">auto_fix_high</span>
@@ -717,7 +729,7 @@ export default config;
 | `docs/ui-style-guide.md` | 本规范（SSOT） |
 | `app/globals.css` | 全局 CSS 变量与自定义类 |
 | `tailwind.config.ts` | 主题色与 animation 扩展 |
-| `app/layout.tsx` | 字体加载（Google Fonts） |
+| `app/layout.tsx` | 字体加载（next/font + local icons） |
 | `components/ui/*` | shadcn/ui 组件定制 |
 
 ---

@@ -1,10 +1,28 @@
-/* eslint-disable @next/next/no-page-custom-font -- App Router 在 layout.tsx 内注入字体链接 */
 import type { Metadata } from "next";
-// import { Inter } from "next/font/google"; // Removed as per style guide (system-ui)
+import { Ma_Shan_Zheng, Quicksand, ZCOOL_KuaiLe } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-// const inter = Inter({ subsets: ["latin"], display: "swap" });
+const quicksand = Quicksand({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-quicksand",
+});
+
+const zcoolKuaiLe = ZCOOL_KuaiLe({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-zcool",
+});
+
+const maShanZheng = Ma_Shan_Zheng({
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+  variable: "--font-ma-shan-zheng",
+});
 
 export const metadata: Metadata = {
   title: "奇迹工坊",
@@ -17,14 +35,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-CN">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Quicksand:wght@300;400;500;600;700&family=Ma+Shan+Zheng&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-      </head>
-      <body className={`antialiased bg-[#fdf8ff] text-slate-700 overflow-x-hidden font-sans`}>
+    <html
+      lang="zh-CN"
+      className={`${quicksand.variable} ${zcoolKuaiLe.variable} ${maShanZheng.variable}`}
+    >
+      <body className="antialiased bg-[#fdf8ff] text-slate-700 overflow-x-hidden font-sans">
         <a
           href="#main-content"
           className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-xl focus-visible:bg-white focus-visible:px-4 focus-visible:py-3 focus-visible:text-sm focus-visible:font-semibold focus-visible:text-gray-900 focus-visible:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0066FF] focus-visible:ring-offset-2 focus-visible:ring-offset-white"

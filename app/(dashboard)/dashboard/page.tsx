@@ -304,38 +304,42 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                 const description = idea.description.length > 80 ? `${idea.description.slice(0, 80)}…` : idea.description
                 const previewIcon = ['cloud_circle', 'potted_plant', 'rocket_launch'][index % 3]
 
-                const statusConfig =
-                  idea.status === 'COMPLETED'
-                    ? {
-                        label: '梦境已成',
-                        badge: 'bg-coral-100 text-coral-500 border-coral-200',
-                        preview: 'bg-coral-50',
-                        titleHover: 'group-hover:text-coral-500',
+                const statusConfig = (() => {
+                  switch (idea.status) {
+                    case 'PENDING':
+                      return {
+                        label: '待审核',
+                        badge: 'bg-gray-100 text-gray-700 border-gray-200',
+                        preview: 'bg-gray-50',
+                        titleHover: 'group-hover:text-gray-700',
+                        action: 'arrow' as const,
+                      }
+                    case 'APPROVED':
+                      return {
+                        label: '已采纳',
+                        badge: 'bg-blue-100 text-blue-700 border-blue-200',
+                        preview: 'bg-blue-50',
+                        titleHover: 'group-hover:text-blue-700',
+                        action: 'edit' as const,
+                      }
+                    case 'IN_PROGRESS':
+                      return {
+                        label: '开发中',
+                        badge: 'bg-orange-100 text-orange-700 border-orange-200',
+                        preview: 'bg-orange-50',
+                        titleHover: 'group-hover:text-orange-700',
+                        action: 'edit' as const,
+                      }
+                    case 'COMPLETED':
+                      return {
+                        label: '已完成',
+                        badge: 'bg-green-100 text-green-700 border-green-200',
+                        preview: 'bg-green-50',
+                        titleHover: 'group-hover:text-green-700',
                         action: 'stars' as const,
                       }
-                    : idea.status === 'IN_PROGRESS'
-                      ? {
-                          label: '孵化中',
-                          badge: 'bg-mint-100 text-mint-600 border-mint-200',
-                          preview: 'bg-mint-50',
-                          titleHover: 'group-hover:text-mint-600',
-                          action: 'edit' as const,
-                        }
-                      : idea.status === 'APPROVED'
-                        ? {
-                            label: '孵化中',
-                            badge: 'bg-mint-100 text-mint-600 border-mint-200',
-                            preview: 'bg-mint-50',
-                            titleHover: 'group-hover:text-mint-600',
-                            action: 'edit' as const,
-                          }
-                        : {
-                            label: '等待星光',
-                            badge: 'bg-lavender-100 text-lavender-500 border-lavender-200',
-                            preview: 'bg-lavender-50',
-                            titleHover: 'group-hover:text-lavender-500',
-                            action: 'arrow' as const,
-                          }
+                  }
+                })()
 
                 return (
                   <div key={idea.id} className="glass-panel group relative overflow-hidden rounded-[2.5rem] p-6 transition-transform duration-200 hover:-translate-y-2">

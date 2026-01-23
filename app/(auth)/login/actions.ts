@@ -38,6 +38,21 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
     return { success: false, error: '邮箱或密码错误' }
   }
 
+  const isHardenedDeployment =
+    process.env.VERCEL_ENV === 'production' ||
+    process.env.VERCEL_ENV === 'preview' ||
+    (!process.env.VERCEL_ENV && process.env.NODE_ENV === 'production')
+
+  // Harden hosted deployments: block the known seed default password for admin accounts.
+  // This prevents the "default admin password" backdoor from remaining usable.
+  if (
+    isHardenedDeployment &&
+    user.role === 'ADMIN' &&
+    parsed.data.password === 'admin123'
+  ) {
+    return { success: false, error: '邮箱或密码错误' }
+  }
+
   const passwordMatch = await bcrypt.compare(
     parsed.data.password,
     user.passwordHash,
@@ -61,5 +76,11 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
     callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\')
       ? callbackUrl
       : '/dashboard'
+
+  // PRD: admins should land in /admin by default after login.
+  if (user.role === 'ADMIN' && safeCallbackUrl === '/dashboard') {
+    redirect('/admin')
+  }
+
   redirect(safeCallbackUrl)
 }

@@ -135,4 +135,49 @@ describe('loginUser action', () => {
     expect(setSessionCookieMock).toHaveBeenCalledWith('fake-jwt-token')
     expect(redirectMock).toHaveBeenCalledWith('/dashboard')
   })
+
+  it('redirects admin to /admin by default after login', async () => {
+    getUserByEmailMock.mockResolvedValue({
+      id: 'admin-1',
+      email: 'admin@example.com',
+      passwordHash: 'hashed-password',
+      role: 'ADMIN',
+    })
+    bcryptCompareMock.mockResolvedValue(true)
+    signJWTMock.mockResolvedValue('fake-jwt-token')
+
+    await expect(
+      loginUser(makeFormData({ email: 'admin@example.com', password: 'password123' })),
+    ).rejects.toThrow('NEXT_REDIRECT')
+
+    expect(signJWTMock).toHaveBeenCalledWith({
+      sub: 'admin-1',
+      email: 'admin@example.com',
+      role: 'ADMIN',
+    })
+    expect(setSessionCookieMock).toHaveBeenCalledWith('fake-jwt-token')
+    expect(redirectMock).toHaveBeenCalledWith('/admin')
+  })
+
+  it('blocks the seed default admin password in production', async () => {
+    const originalNodeEnv = process.env.NODE_ENV
+    process.env.NODE_ENV = 'production'
+
+    getUserByEmailMock.mockResolvedValue({
+      id: 'admin-1',
+      email: 'admin@example.com',
+      passwordHash: 'hashed-password',
+      role: 'ADMIN',
+    })
+
+    const result = await loginUser(makeFormData({ email: 'admin@example.com', password: 'admin123' }))
+
+    expect(result).toEqual({ success: false, error: '邮箱或密码错误' })
+    expect(bcryptCompareMock).not.toHaveBeenCalled()
+    expect(signJWTMock).not.toHaveBeenCalled()
+    expect(setSessionCookieMock).not.toHaveBeenCalled()
+    expect(redirectMock).not.toHaveBeenCalled()
+
+    process.env.NODE_ENV = originalNodeEnv
+  })
 })

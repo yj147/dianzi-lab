@@ -2,6 +2,7 @@ import { SignJWT, jwtVerify, type JWTPayload } from 'jose'
 import { cookies } from 'next/headers'
 
 const SESSION_COOKIE_NAME = 'session'
+const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7
 
 export type SessionPayload = JWTPayload & {
   sub: string
@@ -83,6 +84,7 @@ export function setSessionCookie(token: string): void {
     sameSite: 'lax',
     secure: process.env.NODE_ENV === 'production',
     path: '/',
+    maxAge: SESSION_MAX_AGE_SECONDS,
   })
 }
 

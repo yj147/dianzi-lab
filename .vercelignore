@@ -1,0 +1,20 @@
+.env
+.env.*
+!.env.example
+
+.git
+node_modules
+
+# Local build / test artifacts (can be huge)
+.next
+coverage
+__tests__
+tests
+
+# Agent/browser artifacts
+.agent
+.playwright-mcp
+
+# Design references / screenshots
+stitch_idea_lab_home_landing_page
+dashboard-*.png

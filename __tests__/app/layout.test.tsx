@@ -1,7 +1,9 @@
 import React from 'react'
 
 jest.mock('next/font/google', () => ({
-  Inter: () => ({ className: 'inter' }),
+  Ma_Shan_Zheng: () => ({ className: 'ma-shan-zheng', variable: '--font-ma-shan-zheng' }),
+  Quicksand: () => ({ className: 'quicksand', variable: '--font-quicksand' }),
+  ZCOOL_KuaiLe: () => ({ className: 'zcool-kuai-le', variable: '--font-zcool' }),
 }))
 
 describe('RootLayout', () => {
@@ -13,4 +15,3 @@ describe('RootLayout', () => {
     expect(tree.props.lang).toBe('zh-CN')
   })
 })
-

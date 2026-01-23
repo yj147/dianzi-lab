@@ -197,7 +197,7 @@ describe('Admin Layout', () => {
         })
       )
       expect(screen.getByText('梦境管理员')).toBeInTheDocument()
-      expect(screen.getByText('暂无待审核的梦境')).toBeInTheDocument()
+      expect(screen.getByText('暂无符合筛选条件的梦境')).toBeInTheDocument()
     })
 
     it('renders ideas page with status filter when search param is valid', async () => {
@@ -293,7 +293,7 @@ describe('Admin Layout', () => {
     it('shows empty state when there are no ideas', () => {
       ;(mockSearchParams.get as jest.Mock).mockReturnValue(null)
       render(<IdeasTable ideas={[]} />)
-      expect(screen.getByText('暂无待审核的梦境')).toBeInTheDocument()
+      expect(screen.getByText('暂无符合筛选条件的梦境')).toBeInTheDocument()
     })
 
     it('supports approve and reject actions', async () => {

@@ -114,6 +114,7 @@ describe('lib/auth', () => {
       sameSite: 'lax',
       secure: false,
       path: '/',
+      maxAge: 60 * 60 * 24 * 7,
     })
   })
 
@@ -128,7 +129,7 @@ describe('lib/auth', () => {
     setSessionCookie('token')
 
     expect(set).toHaveBeenCalledWith(
-      expect.objectContaining({ secure: true }),
+      expect.objectContaining({ secure: true, maxAge: 60 * 60 * 24 * 7 }),
     )
   })
 

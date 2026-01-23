@@ -56,9 +56,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['"Quicksand"', '"ZCOOL KuaiLe"', "sans-serif"],
-        script: ['"Ma Shan Zheng"', "cursive"],
-        display: ['"ZCOOL KuaiLe"', "sans-serif"],
+        sans: ["var(--font-sans)", "sans-serif"],
+        script: ["var(--font-script)", "cursive"],
+        display: ["var(--font-display)", "sans-serif"],
       },
       boxShadow: {
         glass: "0 20px 50px rgba(180, 160, 255, 0.15)",

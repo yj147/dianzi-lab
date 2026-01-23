@@ -100,8 +100,13 @@ describe('Admin Ideas Page + Table', () => {
     expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()
     expect(screen.getAllByText('u2@example.com')[0]).toBeInTheDocument()
 
-    // Non-completed statuses share the incubating pill in this table.
-    expect(screen.getAllByText('孵化中').length).toBeGreaterThan(0)
+    const row1 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
+    expect(row1).toBeTruthy()
+    expect(within(row1 as HTMLElement).getByText('待审核')).toBeInTheDocument()
+
+    const row2 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 2'))
+    expect(row2).toBeTruthy()
+    expect(within(row2 as HTMLElement).getByText('已采纳')).toBeInTheDocument()
   })
 
   it('applies status filter from URL searchParams', async () => {
@@ -150,5 +155,61 @@ describe('Admin Ideas Page + Table', () => {
     fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '确认驳回' }))
     await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea_1'))
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
+  })
+
+  it('renders an empty-state row when there are no ideas', () => {
+    render(<IdeasTable ideas={[]} />)
+    expect(screen.getByText('暂无符合筛选条件的梦境')).toBeInTheDocument()
+  })
+
+  it('supports status transitions beyond approval', async () => {
+    ;(updateIdeaStatus as jest.Mock).mockResolvedValue(undefined)
+
+    render(
+      <IdeasTable
+        ideas={[
+          createMockIdea({
+            id: 'idea_approved',
+            title: 'Idea Approved',
+            status: 'APPROVED' as IdeaStatus,
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+            email: 'u1@example.com',
+          }),
+          createMockIdea({
+            id: 'idea_in_progress',
+            title: 'Idea In Progress',
+            status: 'IN_PROGRESS' as IdeaStatus,
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+            email: 'u2@example.com',
+          }),
+          createMockIdea({
+            id: 'idea_completed',
+            title: 'Idea Completed',
+            status: 'COMPLETED' as IdeaStatus,
+            createdAt: new Date('2026-01-01T00:00:00Z'),
+            email: 'u3@example.com',
+          }),
+        ]}
+      />,
+    )
+
+    const approvedRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea Approved'))
+    expect(approvedRow).toBeTruthy()
+    fireEvent.click(within(approvedRow as HTMLElement).getByRole('button', { name: '开始开发' }))
+    await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_approved', 'IN_PROGRESS'))
+
+    const inProgressRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea In Progress'))
+    expect(inProgressRow).toBeTruthy()
+    fireEvent.click(within(inProgressRow as HTMLElement).getByRole('button', { name: '标记完成' }))
+    await waitFor(() =>
+      expect(updateIdeaStatus).toHaveBeenCalledWith('idea_in_progress', 'COMPLETED'),
+    )
+
+    const completedRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea Completed'))
+    expect(completedRow).toBeTruthy()
+    fireEvent.click(within(completedRow as HTMLElement).getByRole('button', { name: '回退开发中' }))
+    await waitFor(() =>
+      expect(updateIdeaStatus).toHaveBeenCalledWith('idea_completed', 'IN_PROGRESS'),
+    )
   })
 })
