@@ -1,6 +1,6 @@
 'use client'
 
-import type { Idea, IdeaStatus, User } from '@prisma/client'
+import type { IdeaStatus } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -18,7 +18,15 @@ import {
 import { cn } from '@/lib/utils'
 import { moveToTrash, updateIdeaStatus } from '../actions'
 
-type IdeaRow = Idea & { user: Pick<User, 'email'> }
+type IdeaRow = {
+  id: string
+  title: string
+  description: string
+  status: IdeaStatus
+  isDeleted: boolean
+  createdAt: Date | string
+  user: { email: string }
+}
 
 const IDEA_ICON_PRESETS = [
   { icon: 'cloud_circle', iconClassName: 'bg-indigo-50 text-indigo-400', titleHover: 'group-hover:text-indigo-500' },

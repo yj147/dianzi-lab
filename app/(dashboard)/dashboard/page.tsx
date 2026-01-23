@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
@@ -19,40 +20,42 @@ function normalizeQuery(value: unknown): string | undefined {
   return trimmed.slice(0, 100)
 }
 
-async function getMyIdeas(userId: string) {
-  return prisma.idea.findMany({
-    where: { userId, isDeleted: false },
-    orderBy: { createdAt: 'desc' },
-    select: { id: true, title: true, description: true, status: true, createdAt: true },
-  })
-}
-
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
   const session = await getSession()
 
   if (!session) {
-    redirect('/login')
+    redirect('/login?callbackUrl=/dashboard')
   }
 
-  const allIdeas = await getMyIdeas(session.sub)
   const q = normalizeQuery(searchParams?.q)
   const status = normalizeQuery(searchParams?.status)
 
-  const ideas = allIdeas.filter((idea) => {
-    if (q) {
-      const qLower = q.toLowerCase()
-      if (!idea.title.toLowerCase().includes(qLower) && !idea.description.toLowerCase().includes(qLower)) {
-        return false
-      }
-    }
+  const where: Prisma.IdeaWhereInput = {
+    userId: session.sub,
+    isDeleted: false,
+    ...(q
+      ? {
+          OR: [
+            { title: { contains: q, mode: 'insensitive' } },
+            { description: { contains: q, mode: 'insensitive' } },
+          ],
+        }
+      : {}),
+    ...(status === 'completed'
+      ? { status: 'COMPLETED' }
+      : status === 'incubating'
+        ? { status: { not: 'COMPLETED' } }
+        : {}),
+  }
 
-    if (!status || status === 'all') return true
-    if (status === 'completed') return idea.status === 'COMPLETED'
-    if (status === 'incubating') return idea.status !== 'COMPLETED'
-    return true
-  })
-
-  const completedCount = allIdeas.filter((idea) => idea.status === 'COMPLETED').length
+  const [ideas, completedCount] = await Promise.all([
+    prisma.idea.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      select: { id: true, title: true, description: true, status: true, createdAt: true },
+    }),
+    prisma.idea.count({ where: { userId: session.sub, isDeleted: false, status: 'COMPLETED' } }),
+  ])
   const userHandle = session.email.split('@')[0]?.trim()
   const displayName = `造梦者·${userHandle || '阿星'}`
   const level = Math.max(1, completedCount + 1)

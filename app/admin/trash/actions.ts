@@ -2,6 +2,7 @@
 
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
+import { revalidateTag } from 'next/cache'
 
 async function requireAdmin(): Promise<void> {
   const session = await getSession()
@@ -13,10 +14,11 @@ async function requireAdmin(): Promise<void> {
 export async function restoreIdea(ideaId: string) {
   await requireAdmin()
   await prisma.idea.update({ where: { id: ideaId }, data: { isDeleted: false } })
+  revalidateTag('completed-ideas')
 }
 
 export async function permanentDeleteIdea(ideaId: string) {
   await requireAdmin()
   await prisma.idea.delete({ where: { id: ideaId } })
+  revalidateTag('completed-ideas')
 }
-

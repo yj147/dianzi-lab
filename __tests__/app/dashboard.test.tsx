@@ -20,6 +20,7 @@ jest.mock('@/lib/db', () => ({
   prisma: {
     idea: {
       findMany: jest.fn(),
+      count: jest.fn(),
     },
   },
 }))
@@ -38,7 +39,7 @@ describe('Dashboard Page', () => {
       expect(e.message).toBe('NEXT_REDIRECT')
     }
 
-    expect(redirect).toHaveBeenCalledWith('/login')
+    expect(redirect).toHaveBeenCalledWith('/login?callbackUrl=/dashboard')
   })
 
   it('renders dashboard with empty state if no ideas', async () => {
@@ -49,6 +50,7 @@ describe('Dashboard Page', () => {
     }
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue([])
+    ;(prisma.idea.count as jest.Mock).mockResolvedValue(0)
 
     const PageContent = await DashboardPage({})
     render(PageContent)
@@ -77,6 +79,7 @@ describe('Dashboard Page', () => {
     ]
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
+    ;(prisma.idea.count as jest.Mock).mockResolvedValue(0)
 
     const PageContent = await DashboardPage({})
     render(PageContent)
@@ -104,6 +107,7 @@ describe('Dashboard Page', () => {
     ]
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
     ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
+    ;(prisma.idea.count as jest.Mock).mockResolvedValue(0)
 
     const PageContent = await DashboardPage({})
     render(PageContent)

@@ -4,7 +4,12 @@ import TrashTable from './_components/TrashTable'
 async function getTrashedIdeas() {
   return prisma.idea.findMany({
     where: { isDeleted: true },
-    include: { user: { select: { email: true } } },
+    select: {
+      id: true,
+      title: true,
+      updatedAt: true,
+      user: { select: { email: true } },
+    },
     orderBy: { updatedAt: 'desc' },
   })
 }

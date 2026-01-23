@@ -2,6 +2,7 @@ import Hero from '@/components/Hero'
 import IdeaCard from "@/components/IdeaCard";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import { unstable_cache } from 'next/cache'
 
 type HomePageProps = {
   searchParams?: {
@@ -37,10 +38,19 @@ async function getCompletedIdeas({ q, tag }: { q?: string; tag?: string }) {
   });
 }
 
+const getCompletedIdeasCached = unstable_cache(
+  async (q?: string, tag?: string) => getCompletedIdeas({ q, tag }),
+  ['completed-ideas'],
+  { revalidate: 60, tags: ['completed-ideas'] },
+)
+
 export default async function Home({ searchParams }: HomePageProps) {
   const q = normalizeQuery(searchParams?.q)
   const tag = normalizeQuery(searchParams?.tag)
-  const ideas = await getCompletedIdeas({ q, tag });
+  const ideas =
+    process.env.NODE_ENV === 'test'
+      ? await getCompletedIdeas({ q, tag })
+      : await getCompletedIdeasCached(q, tag);
 
   return (
     <div className="text-slate-700">

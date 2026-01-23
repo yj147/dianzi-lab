@@ -16,7 +16,15 @@ async function getIdeas(status?: IdeaStatus) {
       isDeleted: false,
       ...(status && { status }),
     },
-    include: { user: { select: { email: true } } },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      isDeleted: true,
+      createdAt: true,
+      user: { select: { email: true } },
+    },
     orderBy: { createdAt: 'desc' },
   })
 }

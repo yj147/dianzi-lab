@@ -1,6 +1,5 @@
 'use client'
 
-import type { Idea, User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { RotateCcw, Trash2, InboxIcon } from 'lucide-react'
 
@@ -23,7 +22,12 @@ import {
 } from '@/components/ui/tooltip'
 import { permanentDeleteIdea, restoreIdea } from '../actions'
 
-type IdeaRow = Idea & { user: Pick<User, 'email'> }
+type IdeaRow = {
+  id: string
+  title: string
+  updatedAt: Date | string
+  user: { email: string }
+}
 
 function formatDate(value: Date | string): string {
   const date = value instanceof Date ? value : new Date(value)

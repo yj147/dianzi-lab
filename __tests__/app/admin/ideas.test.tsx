@@ -110,7 +110,15 @@ describe('Admin Ideas Page + Table', () => {
 
     expect(prisma.idea.findMany).toHaveBeenCalledWith({
       where: { isDeleted: false, status: 'PENDING' },
-      include: { user: { select: { email: true } } },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        isDeleted: true,
+        createdAt: true,
+        user: { select: { email: true } },
+      },
       orderBy: { createdAt: 'desc' },
     })
   })
@@ -144,4 +152,3 @@ describe('Admin Ideas Page + Table', () => {
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
   })
 })
-

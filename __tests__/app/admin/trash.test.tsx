@@ -63,7 +63,12 @@ describe('Admin Trash Page + Table', () => {
 
     expect(getIdeaFindManyMock()).toHaveBeenCalledWith({
       where: { isDeleted: true },
-      include: { user: { select: { email: true } } },
+      select: {
+        id: true,
+        title: true,
+        updatedAt: true,
+        user: { select: { email: true } },
+      },
       orderBy: { updatedAt: 'desc' },
     })
   })

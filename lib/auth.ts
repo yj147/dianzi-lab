@@ -9,6 +9,13 @@ export type SessionPayload = JWTPayload & {
   role: string
 }
 
+const VERIFIED_SESSION_CACHE_MAX = 500
+const verifiedSessionCache = new Map<string, SessionPayload>()
+
+function nowInSeconds(): number {
+  return Math.floor(Date.now() / 1000)
+}
+
 function getJwtSecretKey(): Uint8Array {
   const secret = process.env.JWT_SECRET
   if (!secret) {
@@ -47,6 +54,27 @@ export async function verifyJWT(token: string): Promise<SessionPayload> {
   return payload as SessionPayload
 }
 
+async function verifyJWTWithCache(token: string): Promise<SessionPayload> {
+  const cached = verifiedSessionCache.get(token)
+  if (cached) {
+    if (typeof cached.exp === 'number' && cached.exp <= nowInSeconds()) {
+      verifiedSessionCache.delete(token)
+    } else {
+      return cached
+    }
+  }
+
+  const payload = await verifyJWT(token)
+
+  // Avoid unbounded growth. This is a tiny app; keep it simple.
+  if (verifiedSessionCache.size >= VERIFIED_SESSION_CACHE_MAX) {
+    verifiedSessionCache.clear()
+  }
+
+  verifiedSessionCache.set(token, payload)
+  return payload
+}
+
 export function setSessionCookie(token: string): void {
   cookies().set({
     name: SESSION_COOKIE_NAME,
@@ -77,7 +105,7 @@ export async function getSession(): Promise<SessionPayload | null> {
   }
 
   try {
-    return await verifyJWT(token)
+    return await verifyJWTWithCache(token)
   } catch {
     return null
   }
