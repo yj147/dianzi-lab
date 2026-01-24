@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 
 import { logout } from '@/lib/auth-actions'
 import { cn } from '@/lib/utils'
+import ThemeToggle from '@/components/ThemeToggle'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -65,7 +66,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
 
       <nav
         className={cn(
-          'z-50 px-8',
+          'z-50 px-4 sm:px-8',
           isLoggedIn
             ? 'sticky top-0 border-b border-white/20 bg-white/10 py-4 backdrop-blur-md'
             : 'relative py-6'
@@ -73,12 +74,14 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
       >
         <div className="mx-auto flex max-w-7xl items-center justify-between">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="blob-shape flex size-12 items-center justify-center bg-lavender-200 text-coral-400 shadow-inner transition-transform group-hover:scale-105">
+            <div className="blob-shape flex size-10 sm:size-12 items-center justify-center bg-lavender-200 text-coral-400 shadow-inner transition-transform group-hover:scale-105">
               <span className="material-symbols-outlined text-3xl" aria-hidden="true">
                 auto_fix_high
               </span>
             </div>
-            <span className="font-script text-3xl text-slate-800">奇迹工坊</span>
+            <span className="font-script text-2xl sm:text-3xl text-slate-800 dark:text-slate-100">
+              奇迹工坊
+            </span>
           </Link>
 
           <div
@@ -117,16 +120,17 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
             })}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <ThemeToggle />
             {isLoggedIn ? (
               <div className="flex items-center gap-5">
                 <button
                   type="button"
                   aria-label="通知"
-                  className="group relative rounded-full p-2 transition-colors hover:bg-lavender-100"
+                  className="group relative rounded-full p-2 transition-colors hover:bg-lavender-100 dark:hover:bg-white/10"
                 >
                   <span
-                    className="material-symbols-outlined text-2xl text-slate-600 transition-colors group-hover:text-coral-400"
+                    className="material-symbols-outlined text-2xl text-slate-600 transition-colors group-hover:text-coral-400 dark:text-slate-200"
                     aria-hidden="true"
                   >
                     notifications
@@ -308,7 +312,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
 
                 <Link
                   href="/submit"
-                  className="flex items-center gap-2 rounded-full bg-coral-400 px-6 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-all hover:scale-105 hover:bg-coral-500 hover:shadow-[0_10px_25px_rgba(251,113,133,0.45)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                  className="flex items-center gap-2 rounded-full bg-coral-400 px-5 sm:px-6 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-all hover:scale-105 hover:bg-coral-500 hover:shadow-[0_10px_25px_rgba(251,113,133,0.45)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">
                     palette
@@ -318,12 +322,15 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
               </div>
             ) : (
               <>
-                <Link href="/login" className="px-4 font-semibold text-slate-600 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:text-coral-400">
+                <Link
+                  href="/login"
+                  className="px-3 sm:px-4 font-semibold text-slate-600 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:text-coral-400 dark:text-slate-200"
+                >
                   潜入
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-full bg-coral-400 px-7 py-3 font-bold text-white shadow-lg shadow-coral-400/20 transition-transform hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2"
+                  className="rounded-full bg-coral-400 px-5 sm:px-7 py-3 font-bold text-white shadow-lg shadow-coral-400/20 transition-transform hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   开启梦境
                 </Link>

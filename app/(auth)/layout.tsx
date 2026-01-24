@@ -6,7 +6,7 @@ export default function AuthLayout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="relative flex min-h-dvh flex-col overflow-x-hidden bg-[#fdf8ff]">
+    <div className="relative flex min-h-dvh flex-col overflow-x-hidden bg-background text-foreground">
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-[10%] -left-[10%] size-[60%] blob-shape bg-lavender-200/40 blur-[80px]" />
         <div className="absolute -bottom-[10%] -right-[10%] size-[70%] blob-shape-avatar bg-mint-100/40 blur-[80px]" />
@@ -25,7 +25,7 @@ export default function AuthLayout({
 
         <Link
           href="/"
-          className="rounded-full px-3 py-2 text-sm font-bold text-slate-500 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+          className="rounded-full px-3 py-2 text-sm font-bold text-slate-500 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:text-slate-200"
         >
           返回首页{' '}
           <span className="material-symbols-outlined text-sm align-middle" aria-hidden="true">
