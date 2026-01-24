@@ -5,7 +5,7 @@ import ValidatorClient from "./ValidatorClient";
 export default async function ValidatorPage() {
   const session = await getSession();
   if (!session) {
-    redirect("/login?redirect=/validator");
+    redirect("/login?callbackUrl=/validator");
   }
   return <ValidatorClient />;
 }
