@@ -25,16 +25,17 @@ enum Role {
 }
 
 model Idea {
-  id          String     @id @default(cuid())
-  title       String     @db.VarChar(50)
-  description String     @db.VarChar(1000)
-  status      IdeaStatus @default(PENDING)
+  id          String      @id @default(cuid())
+  title       String      @db.VarChar(50)
+  description String      @db.VarChar(1000)
+  status      IdeaStatus  @default(PENDING)
   tags        String[]
   userId      String
-  user        User       @relation(fields: [userId], references: [id])
-  isDeleted   Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  user        User        @relation(fields: [userId], references: [id])
+  isDeleted   Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  assessment  Assessment?
 
   @@index([userId])
   @@index([status])
@@ -63,5 +64,7 @@ model Assessment {
   feedback      String[]
   createdAt     DateTime @default(now())
   user          User     @relation(fields: [userId], references: [id])
+  ideaId        String?  @unique
+  idea          Idea?    @relation(fields: [ideaId], references: [id])
   @@index([userId])
 }

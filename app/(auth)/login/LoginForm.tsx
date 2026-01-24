@@ -42,21 +42,28 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
     formData.append('callbackUrl', safeCallbackUrl)
 
     clearErrors('root')
-    const result: ActionResult = await loginUser(formData)
-    if (result.success) {
-      router.push(safeCallbackUrl)
-    } else {
-      if (result.field) {
-        setError(result.field as keyof LoginInput, {
-          type: 'manual',
-          message: result.error,
-        })
+    try {
+      const result: ActionResult = await loginUser(formData)
+      if (result.success) {
+        router.push(safeCallbackUrl)
       } else {
-        setError('root', {
-          type: 'manual',
-          message: result.error,
-        })
+        if (result.field) {
+          setError(result.field as keyof LoginInput, {
+            type: 'manual',
+            message: result.error,
+          })
+        } else {
+          setError('root', {
+            type: 'manual',
+            message: result.error,
+          })
+        }
       }
+    } catch {
+      setError('root', {
+        type: 'manual',
+        message: '发生未知错误，请稍后再试',
+      })
     }
   }
 
