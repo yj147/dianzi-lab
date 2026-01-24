@@ -24,6 +24,7 @@ async function getIdeas(status?: IdeaStatus) {
       isDeleted: true,
       createdAt: true,
       user: { select: { email: true } },
+      assessment: { select: { finalScore: true } },
     },
     orderBy: { createdAt: 'desc' },
   })

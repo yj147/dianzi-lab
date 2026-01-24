@@ -16,6 +16,7 @@ import {
 interface NavbarClientProps {
   isLoggedIn: boolean
   userEmail?: string
+  userRole?: string
 }
 
 function getDisplayName(userEmail?: string): string {
@@ -25,7 +26,7 @@ function getDisplayName(userEmail?: string): string {
   return `造梦者·${local}`
 }
 
-export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProps) {
+export default function NavbarClient({ isLoggedIn, userEmail, userRole }: NavbarClientProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
   const pathname = usePathname()
   const displayName = getDisplayName(userEmail)
@@ -258,6 +259,33 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
                           </span>
                         </Link>
                       </DropdownMenuItem>
+
+                      {userRole === 'ADMIN' && (
+                        <DropdownMenuItem asChild>
+                          <Link
+                            href="/admin/ideas"
+                            className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-all hover:bg-white/60 hover:shadow-sm"
+                          >
+                            <div className="flex size-9 items-center justify-center rounded-full bg-amber-50 transition-colors group-hover:bg-amber-100">
+                              <span
+                                className="material-symbols-outlined text-[20px] text-amber-400"
+                                aria-hidden="true"
+                              >
+                                admin_panel_settings
+                              </span>
+                            </div>
+                            <span className="font-medium text-slate-600 transition-colors group-hover:text-amber-500">
+                              管理后台
+                            </span>
+                            <span
+                              className="material-symbols-outlined ml-auto text-sm text-slate-300 transition-transform group-hover:translate-x-1"
+                              aria-hidden="true"
+                            >
+                              chevron_right
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                     </div>
 
                     <div className="mt-3 border-t border-slate-100/60 pt-3">
