@@ -36,7 +36,7 @@ export default function DashboardAvatar({ displayName }: DashboardAvatarProps) {
             </span>
           </div>
           <div
-            className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-white bg-mint-400"
+            className="absolute bottom-0 right-0 size-3 rounded-full border-2 border-white bg-mint-500"
             aria-hidden="true"
           />
         </button>

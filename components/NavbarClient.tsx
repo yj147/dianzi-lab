@@ -34,10 +34,10 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
     await logout()
   }
 
-  // 判断链接是否为当前页面
+  // 判断链接是否为当前页面（hash 链接不做高亮，只做页面级高亮）
   const isActiveLink = (href: string) => {
     if (href === '/') return pathname === '/'
-    if (href.startsWith('/#')) return pathname === '/'
+    if (href.startsWith('/#')) return false
     return pathname.startsWith(href)
   }
 
