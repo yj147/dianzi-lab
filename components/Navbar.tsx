@@ -3,11 +3,12 @@ import NavbarClient from './NavbarClient';
 
 export default async function Navbar() {
   const session = await getSession();
-  
+
   return (
-    <NavbarClient 
-      isLoggedIn={!!session} 
-      userEmail={session?.email} 
+    <NavbarClient
+      isLoggedIn={!!session}
+      userEmail={session?.email}
+      userRole={session?.role}
     />
   );
 }
