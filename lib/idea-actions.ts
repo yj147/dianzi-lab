@@ -64,6 +64,16 @@ export async function submitIdeaWithAssessment(
   const ruleFeedback = getRuleFeedback(assessmentParsed.data, finalScore)
   const feedback = ruleFeedback.map((r) => r.advice)
 
+  // 服务端强制分数阈值校验（防止绕过客户端直接调用 Server Action）
+  const MIN_SCORE_TO_SUBMIT = 50
+  if (finalScore < MIN_SCORE_TO_SUBMIT) {
+    return {
+      success: false,
+      error: `评分未达标（${finalScore}分），需达到 ${MIN_SCORE_TO_SUBMIT} 分才能提交`,
+      stage: 'assessment',
+    }
+  }
+
   // 事务：创建 Idea 和 Assessment
   const result = await prisma.$transaction(async (tx) => {
     const idea = await tx.idea.create({

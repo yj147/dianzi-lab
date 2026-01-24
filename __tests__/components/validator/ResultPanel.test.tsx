@@ -33,7 +33,7 @@ describe("ResultPanel Component", () => {
 
     expect(screen.getByText("72")).toBeInTheDocument();
     expect(screen.getByText("综合评分")).toBeInTheDocument();
-    expect(screen.getByText("满分 90")).toBeInTheDocument();
+    expect(screen.getByText("满分 100")).toBeInTheDocument();
   });
 
   it("renders success feedback with correct styling", () => {

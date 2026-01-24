@@ -2,8 +2,14 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import SubmitPage from '@/app/(submit)/submit/page'
-import { submitIdea } from '@/app/(submit)/submit/actions'
 import { TAGS } from '@/app/(submit)/submit/schema'
+
+// Mock ResizeObserver for RadarChart component
+global.ResizeObserver = class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
@@ -13,8 +19,8 @@ jest.mock('@/lib/auth', () => ({
   getSession: jest.fn(),
 }))
 
-jest.mock('@/app/(submit)/submit/actions', () => ({
-  submitIdea: jest.fn(),
+jest.mock('@/lib/idea-actions', () => ({
+  submitIdeaWithAssessment: jest.fn(),
 }))
 
 jest.mock('@/components/ui/use-toast', () => {
@@ -29,16 +35,6 @@ function getToastMock(): jest.Mock {
   return jest.requireMock('@/components/ui/use-toast').__toast as jest.Mock
 }
 
-function createDeferred<T>() {
-  let resolve!: (value: T) => void
-  let reject!: (reason?: unknown) => void
-  const promise = new Promise<T>((res, rej) => {
-    resolve = res
-    reject = rej
-  })
-  return { promise, resolve, reject }
-}
-
 async function click(element: HTMLElement) {
   await act(async () => {
     fireEvent.click(element)
@@ -47,7 +43,6 @@ async function click(element: HTMLElement) {
 
 describe('Submit Page', () => {
   const useRouterMock = useRouter as jest.Mock
-  const submitIdeaMock = submitIdea as jest.Mock
   const getSessionMock = getSession as jest.Mock
   const pushMock = jest.fn()
 
@@ -75,7 +70,7 @@ describe('Submit Page', () => {
     expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
 
     expect(
-      screen.queryByRole('heading', { level: 1, name: '提交新点子' }),
+      screen.queryByRole('heading', { level: 1, name: '记录你的奇遇' }),
     ).not.toBeInTheDocument()
   })
 
@@ -116,211 +111,94 @@ describe('Submit Page', () => {
     }
   })
 
-  it('点击标签可切换选中状态（提交时 tags 体现）', async () => {
-    submitIdeaMock.mockResolvedValue({ success: true, ideaId: 'idea_1' })
+  it('点击标签可切换选中状态', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
-    })
-    fireEvent.change(
-      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
-      {
-        target: { value: 'd' },
-      },
-    )
-
     const tagButton = screen.getByRole('button', { name: '工具' })
-    const submitButton = screen.getByRole('button', { name: '编织梦想' })
 
-    // 第一次点击：选中
-    await click(tagButton)
-    await click(submitButton)
-    await waitFor(() => expect(submitIdeaMock).toHaveBeenCalledTimes(1))
-    const formDataSelected = submitIdeaMock.mock.calls[0][0] as FormData
-    expect(formDataSelected.getAll('tags')).toEqual(['工具'])
+    // 初始未选中
+    expect(tagButton).toHaveAttribute('aria-pressed', 'false')
 
-    // 第二次点击：取消选中
-    submitIdeaMock.mockClear()
+    // 点击选中
     await click(tagButton)
-    await click(submitButton)
-    await waitFor(() => expect(submitIdeaMock).toHaveBeenCalledTimes(1))
-    const formDataUnselected = submitIdeaMock.mock.calls[0][0] as FormData
-    expect(formDataUnselected.getAll('tags')).toEqual([])
+    expect(tagButton).toHaveAttribute('aria-pressed', 'true')
+
+    // 再次点击取消选中
+    await click(tagButton)
+    expect(tagButton).toHaveAttribute('aria-pressed', 'false')
   })
 
   it('必填字段校验：标题/描述为空时显示错误', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    await click(screen.getByRole('button', { name: '编织梦想' }))
+    await click(screen.getByRole('button', { name: /下一步/ }))
 
     await waitFor(() => {
       expect(screen.getByText('标题不能为空')).toBeInTheDocument()
       expect(screen.getByText('描述不能为空')).toBeInTheDocument()
     })
-
-    expect(submitIdeaMock).not.toHaveBeenCalled()
   })
 
-  it('提交中显示 Loader2，并切换 aria-busy', async () => {
-    const deferred = createDeferred<{ success: true; ideaId: string }>()
-    submitIdeaMock.mockImplementation(() => deferred.promise)
-
+  it('填写完成后点击下一步进入评估阶段', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
     fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
+      target: { value: '测试点子' },
     })
     fireEvent.change(
       screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
-        target: { value: 'd' },
+        target: { value: '这是一个测试描述' },
       },
     )
 
-    const submitButton = screen.getByRole('button', { name: '编织梦想' })
-    expect(submitButton).not.toBeDisabled()
-    expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
+    await click(screen.getByRole('button', { name: /下一步/ }))
 
-    await click(submitButton)
-
+    // 应该进入评估阶段
     await waitFor(() => {
-      expect(submitButton).toBeDisabled()
-      expect(submitButton).toHaveAttribute('aria-busy', 'true')
-      expect(submitButton).toHaveTextContent('提交中…')
-      expect(submitButton.querySelector('svg.animate-spin')).toBeInTheDocument()
-    })
-
-    deferred.resolve({ success: true, ideaId: 'idea_1' })
-
-    await waitFor(() => {
-      expect(submitButton).not.toBeDisabled()
-      expect(submitButton).not.toHaveAttribute('aria-busy', 'true')
-      expect(submitButton).toHaveTextContent('编织梦想')
-      expect(
-        submitButton.querySelector('svg.animate-spin'),
-      ).not.toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: '评估你的创意' })).toBeInTheDocument()
     })
   })
 
-  it('提交成功：调用 action，显示成功 toast 并跳转', async () => {
-    submitIdeaMock.mockResolvedValue({ success: true, ideaId: 'idea_1' })
-
+  it('显示三阶段步骤指示器', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
-    })
-    fireEvent.change(
-      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
-      {
-        target: { value: 'd' },
-      },
-    )
-    await click(screen.getByRole('button', { name: '工具' }))
-    await click(screen.getByRole('button', { name: '编织梦想' }))
-
-    await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/dashboard')
-    })
-
-    expect(getToastMock()).toHaveBeenCalledWith({
-      variant: 'success',
-      title: '提交成功',
-      description: '您的点子已成功提交！',
-    })
-
-    expect(submitIdeaMock).toHaveBeenCalledTimes(1)
-    const formData = submitIdeaMock.mock.calls[0][0] as FormData
-    expect(formData).toBeInstanceOf(FormData)
-    expect(formData.get('title')).toBe('t')
-    expect(formData.get('description')).toBe('d')
-    expect(formData.getAll('tags')).toEqual(['工具'])
+    expect(screen.getByText('创建')).toBeInTheDocument()
+    expect(screen.getByText('评估')).toBeInTheDocument()
+    expect(screen.getByText('结果')).toBeInTheDocument()
   })
 
-  it('提交失败：返回 field 错误时在表单内显示错误', async () => {
-    submitIdeaMock.mockResolvedValue({
-      success: false,
-      error: '标题不能为空',
-      field: 'title',
-    })
-
+  it('评估阶段可以返回修改点子', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
+    // 填写表单进入评估阶段
     fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
+      target: { value: '测试点子' },
     })
     fireEvent.change(
       screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
       {
-        target: { value: 'd' },
+        target: { value: '这是一个测试描述' },
       },
     )
-    await click(screen.getByRole('button', { name: '编织梦想' }))
+    await click(screen.getByRole('button', { name: /下一步/ }))
 
+    // 等待进入评估阶段
     await waitFor(() => {
-      expect(screen.getByText('标题不能为空')).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: '评估你的创意' })).toBeInTheDocument()
     })
 
-    expect(pushMock).not.toHaveBeenCalled()
-  })
+    // 点击返回修改
+    await click(screen.getByRole('button', { name: '返回修改点子' }))
 
-  it('提交失败：无 field 时显示 destructive toast', async () => {
-    submitIdeaMock.mockResolvedValue({ success: false, error: '服务器错误' })
-
-    const PageContent = await SubmitPage()
-    render(PageContent)
-
-    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
-    })
-    fireEvent.change(
-      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
-      {
-        target: { value: 'd' },
-      },
-    )
-    await click(screen.getByRole('button', { name: '编织梦想' }))
-
+    // 应该回到创建阶段
     await waitFor(() => {
-      expect(getToastMock()).toHaveBeenCalledWith({
-        variant: 'destructive',
-        title: '提交失败',
-        description: '服务器错误',
-      })
-    })
-
-    expect(pushMock).not.toHaveBeenCalled()
-  })
-
-  it('提交异常：显示通用错误 toast', async () => {
-    submitIdeaMock.mockRejectedValue(new Error('boom'))
-
-    const PageContent = await SubmitPage()
-    render(PageContent)
-
-    fireEvent.change(screen.getByPlaceholderText('给你的梦起个名字...'), {
-      target: { value: 't' },
-    })
-    fireEvent.change(
-      screen.getByPlaceholderText('哪怕是最荒诞的细节，也请告诉我们...'),
-      {
-        target: { value: 'd' },
-      },
-    )
-    await click(screen.getByRole('button', { name: '编织梦想' }))
-
-    await waitFor(() => {
-      expect(getToastMock()).toHaveBeenCalledWith({
-        variant: 'destructive',
-        title: '出错了',
-        description: '发生未知错误，请稍后再试',
-      })
+      expect(screen.getByRole('heading', { level: 1, name: '记录你的奇遇' })).toBeInTheDocument()
     })
   })
 })
