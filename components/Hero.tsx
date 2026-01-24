@@ -21,7 +21,7 @@ export default function Hero() {
       <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
         <a
           href="/submit"
-          className="group flex items-center gap-3 rounded-full bg-lavender-300 px-10 py-5 text-xl font-bold text-white shadow-2xl shadow-lavender-300/40 transition-transform hover:-rotate-2 hover:scale-110 hover:bg-lavender-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+          className="group flex items-center gap-3 rounded-full bg-coral-400 px-10 py-5 text-xl font-bold text-white shadow-[0_10px_30px_rgba(251,113,133,0.4)] transition-all hover:-rotate-2 hover:scale-110 hover:bg-coral-500 hover:shadow-[0_15px_40px_rgba(251,113,133,0.5)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
         >
           <span className="material-symbols-outlined transition-transform group-hover:rotate-12" aria-hidden="true">
             temp_preferences_custom
@@ -31,9 +31,9 @@ export default function Hero() {
 
         <a
           href="/#tools"
-          className="flex items-center gap-3 rounded-full border-2 border-dashed border-mint-200 bg-white/80 px-10 py-5 text-xl font-bold text-slate-600 transition-colors hover:border-mint-300 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+          className="flex items-center gap-3 rounded-full border-2 border-dashed border-mint-300 bg-white/80 px-10 py-5 text-xl font-bold text-slate-600 transition-colors hover:border-mint-400 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
         >
-          <span className="material-symbols-outlined text-mint-200" aria-hidden="true">
+          <span className="material-symbols-outlined text-mint-500" aria-hidden="true">
             explore
           </span>
           探索奇迹工坊

@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import LogoutButton from '@/components/LogoutButton'
+import DashboardAvatar from '@/components/DashboardAvatar'
 
 type DashboardPageProps = {
   searchParams?: {
@@ -84,7 +85,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           <div className="flex items-center gap-6">
             <Link
               href="/submit"
-              className="flex items-center gap-2 rounded-full bg-slate-800 px-5 py-2 text-sm font-bold text-white shadow-lg transition-transform hover:-translate-y-0.5 hover:bg-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+              className="flex items-center gap-2 rounded-full bg-coral-400 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-coral-200 transition-transform hover:-translate-y-0.5 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
             >
               <span className="material-symbols-outlined text-sm" aria-hidden="true">
                 add
@@ -92,14 +93,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               新建梦境
             </Link>
 
-            <div className="relative">
-              <div className="flex size-10 items-center justify-center rounded-full border-2 border-white bg-white shadow-md text-slate-500">
-                <span className="material-symbols-outlined" aria-hidden="true">
-                  face
-                </span>
-              </div>
-              <div className="absolute bottom-0 right-0 size-3 rounded-full bg-mint-500 border-2 border-white" aria-hidden="true" />
-            </div>
+            <DashboardAvatar displayName={displayName} />
           </div>
         </div>
       </nav>
@@ -309,33 +303,33 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     case 'PENDING':
                       return {
                         label: '待审核',
-                        badge: 'bg-gray-100 text-gray-700 border-gray-200',
-                        preview: 'bg-gray-50',
-                        titleHover: 'group-hover:text-gray-700',
+                        badge: 'bg-lavender-50 text-lavender-500 border-lavender-100',
+                        preview: 'bg-lavender-50',
+                        titleHover: 'group-hover:text-lavender-500',
                         action: 'arrow' as const,
                       }
                     case 'APPROVED':
                       return {
                         label: '已采纳',
-                        badge: 'bg-blue-100 text-blue-700 border-blue-200',
-                        preview: 'bg-blue-50',
-                        titleHover: 'group-hover:text-blue-700',
+                        badge: 'bg-mint-50 text-emerald-600 border-mint-100',
+                        preview: 'bg-mint-50',
+                        titleHover: 'group-hover:text-emerald-600',
                         action: 'edit' as const,
                       }
                     case 'IN_PROGRESS':
                       return {
                         label: '开发中',
-                        badge: 'bg-orange-100 text-orange-700 border-orange-200',
-                        preview: 'bg-orange-50',
-                        titleHover: 'group-hover:text-orange-700',
+                        badge: 'bg-amber-50 text-amber-600 border-amber-100',
+                        preview: 'bg-amber-50',
+                        titleHover: 'group-hover:text-amber-600',
                         action: 'edit' as const,
                       }
                     case 'COMPLETED':
                       return {
                         label: '已完成',
-                        badge: 'bg-green-100 text-green-700 border-green-200',
-                        preview: 'bg-green-50',
-                        titleHover: 'group-hover:text-green-700',
+                        badge: 'bg-coral-50 text-coral-500 border-coral-100',
+                        preview: 'bg-coral-50',
+                        titleHover: 'group-hover:text-coral-500',
                         action: 'stars' as const,
                       }
                   }
@@ -449,23 +443,23 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             </div>
           )}
 
-          <div className="relative mt-12 overflow-hidden rounded-[3rem] bg-slate-900 p-10 text-center text-white">
+          <div className="glass-panel relative mt-12 overflow-hidden rounded-[3rem] bg-gradient-to-br from-lavender-50 via-white to-mint-50 p-10 text-center">
             <div className="absolute left-0 top-0 h-full w-full" aria-hidden="true">
-              <div className="absolute -left-[20%] -top-[50%] h-[500px] w-[500px] rounded-full bg-lavender-400/20 blur-3xl" />
-              <div className="absolute -bottom-[50%] -right-[20%] h-[500px] w-[500px] rounded-full bg-coral-400/20 blur-3xl" />
+              <div className="absolute -left-[20%] -top-[50%] h-[500px] w-[500px] rounded-full bg-lavender-200/30 blur-3xl" />
+              <div className="absolute -bottom-[50%] -right-[20%] h-[500px] w-[500px] rounded-full bg-coral-200/30 blur-3xl" />
             </div>
 
             <div className="relative z-10 flex flex-col items-center">
-              <span className="material-symbols-outlined mb-4 text-5xl text-mint-300" aria-hidden="true">
+              <span className="material-symbols-outlined mb-4 text-5xl text-lavender-300" aria-hidden="true">
                 explore
               </span>
-              <h2 className="mb-4 text-3xl font-bold">探索奇迹工坊</h2>
-              <p className="mb-8 max-w-lg text-slate-300">
+              <h2 className="mb-4 text-3xl font-bold text-slate-800">探索奇迹工坊</h2>
+              <p className="mb-8 max-w-lg font-medium text-slate-500">
                 这里还有成千上万个奇妙的梦境正在发生。去看看其他造梦者都在做什么吧！
               </p>
               <Link
                 href="/"
-                className="rounded-full bg-white px-8 py-3 font-bold text-slate-900 transition-colors hover:bg-mint-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                className="rounded-full bg-lavender-300 px-8 py-3 font-bold text-white shadow-lg shadow-lavender-200 transition-all hover:bg-lavender-400 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
               >
                 进入公共梦域
               </Link>
