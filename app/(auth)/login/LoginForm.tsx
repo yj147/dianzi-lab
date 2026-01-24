@@ -21,6 +21,30 @@ function getSafeCallbackUrl(callbackUrl: string | undefined): string {
   return callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\') ? callbackUrl : '/dashboard'
 }
 
+function getNextRedirectUrl(error: unknown): string | null {
+  if (typeof error !== 'object' || error === null) return null
+  const digest = (error as { digest?: unknown }).digest
+  const message = (error as { message?: unknown }).message
+  const value = typeof digest === 'string' ? digest : typeof message === 'string' ? message : ''
+  if (!value.startsWith('NEXT_REDIRECT')) return null
+  const parts = value.split(';')
+  const url = parts[2]
+  if (typeof url !== 'string') return null
+  return url.startsWith('/') && !url.startsWith('//') && !url.includes('\\') ? url : null
+}
+
+function isNextRedirectError(error: unknown): boolean {
+  if (typeof error !== 'object' || error === null) return false
+  const e = error as Record<string, unknown>
+  if (typeof e.digest === 'string' && e.digest.startsWith('NEXT_REDIRECT')) return true
+  if (typeof e.message === 'string' && e.message.startsWith('NEXT_REDIRECT')) return true
+  if (e.cause && isNextRedirectError(e.cause)) return true
+  try {
+    if (JSON.stringify(error).includes('NEXT_REDIRECT')) return true
+  } catch {}
+  return false
+}
+
 export default function LoginForm({ callbackUrl }: LoginFormProps) {
   const router = useRouter()
   const safeCallbackUrl = getSafeCallbackUrl(callbackUrl)
@@ -28,6 +52,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
     register,
     handleSubmit,
     setError,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -41,6 +66,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
     formData.append('callbackUrl', safeCallbackUrl)
 
     try {
+      clearErrors('root')
       const result: ActionResult = await loginUser(formData)
       if (result.success) {
         // Redirect handled by server action, but as a fallback
@@ -59,10 +85,14 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
         }
       }
     } catch (error) {
-      // In Next.js, redirect throws an error that should be caught by the framework.
-      // However, if we're catching all errors, we need to make sure we're not catching redirects.
-      if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
-        throw error
+      const redirectUrl = getNextRedirectUrl(error)
+      if (redirectUrl) {
+        router.push(redirectUrl)
+        return
+      }
+      if (isNextRedirectError(error)) {
+        router.push(safeCallbackUrl)
+        return
       }
       setError('root', {
         type: 'manual',
