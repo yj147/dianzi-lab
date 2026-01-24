@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
+import { isRedirectError } from 'next/dist/client/components/redirect'
 import { loginUser, ActionResult } from './actions'
 import { loginSchema } from './schema'
 import { z } from 'zod'
@@ -19,30 +20,6 @@ type LoginFormProps = {
 function getSafeCallbackUrl(callbackUrl: string | undefined): string {
   if (!callbackUrl) return '/dashboard'
   return callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\') ? callbackUrl : '/dashboard'
-}
-
-function getNextRedirectUrl(error: unknown): string | null {
-  if (typeof error !== 'object' || error === null) return null
-  const digest = (error as { digest?: unknown }).digest
-  const message = (error as { message?: unknown }).message
-  const value = typeof digest === 'string' ? digest : typeof message === 'string' ? message : ''
-  if (!value.startsWith('NEXT_REDIRECT')) return null
-  const parts = value.split(';')
-  const url = parts[2]
-  if (typeof url !== 'string') return null
-  return url.startsWith('/') && !url.startsWith('//') && !url.includes('\\') ? url : null
-}
-
-function isNextRedirectError(error: unknown): boolean {
-  if (typeof error !== 'object' || error === null) return false
-  const e = error as Record<string, unknown>
-  if (typeof e.digest === 'string' && e.digest.startsWith('NEXT_REDIRECT')) return true
-  if (typeof e.message === 'string' && e.message.startsWith('NEXT_REDIRECT')) return true
-  if (e.cause && isNextRedirectError(e.cause)) return true
-  try {
-    if (JSON.stringify(error).includes('NEXT_REDIRECT')) return true
-  } catch {}
-  return false
 }
 
 export default function LoginForm({ callbackUrl }: LoginFormProps) {
@@ -85,14 +62,8 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
         }
       }
     } catch (error) {
-      const redirectUrl = getNextRedirectUrl(error)
-      if (redirectUrl) {
-        router.push(redirectUrl)
-        return
-      }
-      if (isNextRedirectError(error)) {
-        router.push(safeCallbackUrl)
-        return
+      if (isRedirectError(error)) {
+        throw error
       }
       setError('root', {
         type: 'manual',
