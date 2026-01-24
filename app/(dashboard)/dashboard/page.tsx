@@ -53,7 +53,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     prisma.idea.findMany({
       where,
       orderBy: { createdAt: 'desc' },
-      select: { id: true, title: true, description: true, status: true, createdAt: true },
+      select: {
+        id: true,
+        title: true,
+        description: true,
+        status: true,
+        createdAt: true,
+        assessment: { select: { id: true } },
+      },
     }),
     prisma.idea.count({ where: { userId: session.sub, isDeleted: false, status: 'COMPLETED' } }),
   ])
@@ -370,39 +377,54 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                         {new Date(idea.createdAt).toLocaleDateString('zh-CN')}
                       </span>
 
-                      {statusConfig.action === 'stars' ? (
-                        <div className="flex gap-1" aria-label="评分">
-                          <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
-                            star
-                          </span>
-                          <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
-                            star
-                          </span>
-                          <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
-                            star
-                          </span>
-                        </div>
-                      ) : statusConfig.action === 'edit' ? (
-                        <Link
-                          href="/submit"
-                          className="flex size-8 items-center justify-center rounded-full bg-mint-100 text-mint-600 transition-colors hover:bg-mint-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
-                          aria-label="继续编织"
-                        >
-                          <span className="material-symbols-outlined text-lg" aria-hidden="true">
-                            edit
-                          </span>
-                        </Link>
-                      ) : (
-                        <Link
-                          href="/submit"
-                          className="flex size-8 items-center justify-center rounded-full bg-lavender-100 text-lavender-600 transition-colors hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
-                          aria-label="继续编织"
-                        >
-                          <span className="material-symbols-outlined text-lg" aria-hidden="true">
-                            arrow_forward
-                          </span>
-                        </Link>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {idea.assessment && (
+                          <Link
+                            href={`/idea/${idea.id}/result`}
+                            className="flex size-8 items-center justify-center rounded-full bg-lavender-100 text-lavender-600 transition-colors hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                            aria-label="查看评估"
+                            title="查看评估"
+                          >
+                            <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                              assessment
+                            </span>
+                          </Link>
+                        )}
+
+                        {statusConfig.action === 'stars' ? (
+                          <div className="flex gap-1" aria-label="评分">
+                            <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
+                              star
+                            </span>
+                            <span className="material-symbols-outlined text-sm text-yellow-400" aria-hidden="true">
+                              star
+                            </span>
+                          </div>
+                        ) : statusConfig.action === 'edit' ? (
+                          <Link
+                            href="/submit"
+                            className="flex size-8 items-center justify-center rounded-full bg-mint-100 text-mint-600 transition-colors hover:bg-mint-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                            aria-label="继续编织"
+                          >
+                            <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                              edit
+                            </span>
+                          </Link>
+                        ) : (
+                          <Link
+                            href="/submit"
+                            className="flex size-8 items-center justify-center rounded-full bg-lavender-100 text-lavender-600 transition-colors hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                            aria-label="继续编织"
+                          >
+                            <span className="material-symbols-outlined text-lg" aria-hidden="true">
+                              arrow_forward
+                            </span>
+                          </Link>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )

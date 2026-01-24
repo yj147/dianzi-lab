@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -25,6 +26,7 @@ function getAvatarText(email: string): string {
 }
 
 export default function AdminTopNav({ userEmail }: { userEmail: string }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
   return (
@@ -65,6 +67,19 @@ export default function AdminTopNav({ userEmail }: { userEmail: string }) {
         </div>
 
         <div className="flex items-center gap-3">
+          {/* 汉堡按钮（移动端） */}
+          <button
+            type="button"
+            className="flex size-10 items-center justify-center rounded-full bg-white/60 md:hidden"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? '关闭菜单' : '打开菜单'}
+            aria-expanded={mobileMenuOpen}
+          >
+            <span className="material-symbols-outlined text-slate-600" aria-hidden="true">
+              {mobileMenuOpen ? 'close' : 'menu'}
+            </span>
+          </button>
+
           <button
             type="button"
             className="flex items-center gap-2 pr-4 border-r border-slate-200"
@@ -95,6 +110,46 @@ export default function AdminTopNav({ userEmail }: { userEmail: string }) {
           </button>
         </div>
       </div>
+
+      {/* 移动端菜单面板 */}
+      {mobileMenuOpen && (
+        <div className="absolute left-0 right-0 top-full mx-4 mt-2 md:hidden">
+          <div className="glass-panel space-y-2 rounded-[1.5rem] p-4">
+            {NAV_ITEMS.map((item) => {
+              const isActive = isActivePath(pathname, item.href, item.exact)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'flex items-center gap-3 rounded-xl px-4 py-3 transition-colors',
+                    isActive ? 'bg-white font-bold text-coral-500' : 'text-slate-600 hover:bg-white/50'
+                  )}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  <span className="material-symbols-outlined" aria-hidden="true">
+                    {item.activeIcon}
+                  </span>
+                  {item.label}
+                </Link>
+              )
+            })}
+
+            <div className="border-t border-slate-100 pt-2">
+              <button
+                type="button"
+                onClick={() => void logout()}
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-slate-500 transition-colors hover:bg-coral-50 hover:text-coral-500"
+              >
+                <span className="material-symbols-outlined" aria-hidden="true">
+                  logout
+                </span>
+                退出登录
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   )
 }

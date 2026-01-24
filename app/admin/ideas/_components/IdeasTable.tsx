@@ -1,6 +1,7 @@
 'use client'
 
 import type { IdeaStatus } from '@prisma/client'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -27,6 +28,7 @@ type IdeaRow = {
   isDeleted: boolean
   createdAt: Date | string
   user: { email: string }
+  assessment?: { finalScore: number } | null
 }
 
 const IDEA_ICON_PRESETS = [
@@ -190,6 +192,9 @@ export default function IdeasTable({
                 状态 (Status)
               </th>
               <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
+                评分 (Score)
+              </th>
+              <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
                 提交时间 (Time)
               </th>
               <th
@@ -203,7 +208,7 @@ export default function IdeasTable({
           <tbody className="text-slate-600">
             {ideas.length === 0 ? (
               <tr className="table-row-glass group">
-                <td colSpan={5} className="py-16 px-8 text-center text-sm font-medium text-slate-400">
+                <td colSpan={6} className="py-16 px-8 text-center text-sm font-medium text-slate-400">
                   暂无符合筛选条件的梦境
                 </td>
               </tr>
@@ -264,12 +269,44 @@ export default function IdeasTable({
                       <StatusPill status={idea.status} isDeleted={idea.isDeleted} />
                     </td>
 
+                    <td className="py-5 px-6">
+                      {idea.assessment ? (
+                        <span
+                          className={cn(
+                            'inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-bold',
+                            idea.assessment.finalScore >= 70
+                              ? 'bg-mint-100 text-mint-600'
+                              : idea.assessment.finalScore >= 40
+                                ? 'bg-amber-100 text-amber-600'
+                                : 'bg-coral-100 text-coral-500'
+                          )}
+                        >
+                          {idea.assessment.finalScore}
+                        </span>
+                      ) : (
+                        <span className="text-sm text-slate-400">-</span>
+                      )}
+                    </td>
+
                     <td className="py-5 px-6 font-sans text-slate-400 text-sm">
                       {formatRelativeTime(idea.createdAt)}
                     </td>
 
                     <td className="py-5 px-8">
                       <div className="flex items-center justify-end gap-3">
+                        {idea.assessment && (
+                          <Link
+                            href={`/admin/ideas/${idea.id}`}
+                            className="action-btn bg-lavender-50 text-lavender-400 hover:bg-lavender-100 hover:shadow-lavender-200/50"
+                            title="查看详情"
+                            aria-label="查看详情"
+                          >
+                            <span className="material-symbols-outlined" aria-hidden="true">
+                              visibility
+                            </span>
+                          </Link>
+                        )}
+
                         <button
                           type="button"
                           className={cn(
