@@ -16,6 +16,7 @@ model User {
   role      Role     @default(USER)
   createdAt DateTime @default(now())
   ideas     Idea[]
+  assessments Assessment[]
 }
 
 enum Role {
@@ -44,4 +45,23 @@ enum IdeaStatus {
   APPROVED
   IN_PROGRESS
   COMPLETED
+}
+
+model Assessment {
+  id            String   @id @default(cuid())
+  userId        String
+  targetUser    Int      @db.SmallInt
+  channel       Int      @db.SmallInt
+  market        Int      @db.SmallInt
+  tech          Int      @db.SmallInt
+  budget        Int      @db.SmallInt
+  businessModel Int      @db.SmallInt
+  team          Int      @db.SmallInt
+  risk          Int      @db.SmallInt
+  traffic       Int      @db.SmallInt
+  finalScore    Int      @db.SmallInt
+  feedback      String[]
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
+  @@index([userId])
 }
