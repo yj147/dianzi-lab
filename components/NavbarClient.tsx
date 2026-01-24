@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 import { logout } from '@/lib/auth-actions'
 import { cn } from '@/lib/utils'
@@ -26,10 +27,18 @@ function getDisplayName(userEmail?: string): string {
 
 export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProps) {
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
+  const pathname = usePathname()
   const displayName = getDisplayName(userEmail)
 
   const handleLogout = async () => {
     await logout()
+  }
+
+  // 判断链接是否为当前页面（hash 链接不做高亮，只做页面级高亮）
+  const isActiveLink = (href: string) => {
+    if (href === '/') return pathname === '/'
+    if (href.startsWith('/#')) return false
+    return pathname.startsWith(href)
   }
 
   const navLinks = isLoggedIn
@@ -79,15 +88,18 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
           >
             {navLinks.map((link) => {
               const isEmphasized = 'emphasized' in link && link.emphasized
+              const isActive = isActiveLink(link.href)
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={
+                  className={cn(
+                    'font-medium transition-colors focus-visible:outline-none focus-visible:text-coral-400',
                     isEmphasized
-                      ? 'flex items-center gap-1 font-bold text-coral-400'
-                      : 'font-medium transition-colors hover:text-coral-400'
-                  }
+                      ? 'flex items-center gap-1 font-bold'
+                      : 'hover:text-coral-400',
+                    isActive ? 'text-coral-400' : isEmphasized ? 'text-lavender-400' : ''
+                  )}
                 >
                   {isEmphasized ? (
                     <>
@@ -268,7 +280,7 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
 
                 <Link
                   href="/submit"
-                  className="flex items-center gap-2 rounded-full bg-coral-400 px-6 py-2.5 text-sm font-bold text-white shadow-lg shadow-coral-400/20 transition-transform hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 motion-reduce:animate-none animate-pulse-slow"
+                  className="flex items-center gap-2 rounded-full bg-coral-400 px-6 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-all hover:scale-105 hover:bg-coral-500 hover:shadow-[0_10px_25px_rgba(251,113,133,0.45)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">
                     palette
@@ -278,12 +290,12 @@ export default function NavbarClient({ isLoggedIn, userEmail }: NavbarClientProp
               </div>
             ) : (
               <>
-                <Link href="/login" className="px-4 font-semibold text-slate-600 transition-colors hover:text-coral-400">
+                <Link href="/login" className="px-4 font-semibold text-slate-600 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:text-coral-400">
                   潜入
                 </Link>
                 <Link
                   href="/register"
-                  className="rounded-full bg-coral-400 px-7 py-3 font-bold text-white shadow-lg shadow-coral-400/20 transition-transform hover:scale-105 hover:bg-coral-500 active:scale-95"
+                  className="rounded-full bg-coral-400 px-7 py-3 font-bold text-white shadow-lg shadow-coral-400/20 transition-transform hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2"
                 >
                   开启梦境
                 </Link>

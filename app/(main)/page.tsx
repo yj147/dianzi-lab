@@ -70,7 +70,7 @@ export default async function Home({ searchParams }: HomePageProps) {
               <details className="relative">
                 <summary
                   aria-label="筛选"
-                  className="list-none [&::-webkit-details-marker]:hidden flex items-center justify-center rounded-full bg-coral-50 p-3 text-coral-400 transition-colors hover:bg-coral-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
+                  className="list-none [&::-webkit-details-marker]:hidden flex items-center justify-center rounded-full bg-coral-100 p-3 text-coral-500 transition-colors hover:bg-coral-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">
                     filter_vintage
@@ -100,7 +100,7 @@ export default async function Home({ searchParams }: HomePageProps) {
               <details className="relative">
                 <summary
                   aria-label="搜索"
-                  className="list-none [&::-webkit-details-marker]:hidden flex items-center justify-center rounded-full bg-lavender-50 p-3 text-lavender-300 transition-colors hover:bg-lavender-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
+                  className="list-none [&::-webkit-details-marker]:hidden flex items-center justify-center rounded-full bg-lavender-100 p-3 text-lavender-500 transition-colors hover:bg-lavender-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">
                     search
@@ -121,7 +121,7 @@ export default async function Home({ searchParams }: HomePageProps) {
                     />
                     <button
                       type="submit"
-                      className="flex size-12 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-all hover:scale-105 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                      className="flex size-12 items-center justify-center rounded-full bg-lavender-100 text-lavender-500 shadow-sm transition-all hover:scale-105 hover:bg-lavender-200 hover:text-lavender-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
                       aria-label="搜索"
                     >
                       <span className="material-symbols-outlined" aria-hidden="true">

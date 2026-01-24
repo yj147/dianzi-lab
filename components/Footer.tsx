@@ -98,7 +98,7 @@ export default async function Footer() {
                 <span className="material-symbols-outlined text-xs text-coral-400" aria-hidden="true">
                   favorite
                 </span>{' '}
-                StellarLink
+                Bambi lab
               </p>
             </div>
           </div>
@@ -248,7 +248,7 @@ export default async function Footer() {
               >
                 favorite
               </span>{' '}
-              StellarLink
+              Bambi lab
             </p>
           </div>
         </div>
