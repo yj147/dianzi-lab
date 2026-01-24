@@ -113,9 +113,9 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
           </div>
 
           <div className="mb-8">
-            <h1 className="text-balance text-4xl lg:text-5xl font-script text-slate-800 mb-3 relative inline-block">
-              欢迎回来
-              <span className="absolute -top-2 -right-6 text-yellow-400 animate-pulse motion-reduce:animate-none" aria-hidden="true">
+            <h1 className="text-balance text-4xl lg:text-5xl font-script text-slate-800 mb-3 inline-flex items-baseline gap-3">
+              <span>欢迎回来</span>
+              <span className="text-yellow-400 text-2xl animate-pulse motion-reduce:animate-none" aria-hidden="true">
                 ✨
               </span>
             </h1>
