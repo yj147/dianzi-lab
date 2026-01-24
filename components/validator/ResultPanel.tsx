@@ -80,7 +80,7 @@ export default function ResultPanel({
         <div className="text-6xl font-bold text-lavender-500">
           {result.overallScore}
         </div>
-        <p className="mt-1 text-sm text-slate-400">满分 90</p>
+        <p className="mt-1 text-sm text-slate-400">满分 100</p>
       </div>
 
       {/* 反馈列表 */}
