@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
-import { isRedirectError } from 'next/dist/client/components/redirect'
 import { loginUser, ActionResult } from './actions'
 import { loginSchema } from './schema'
 import { z } from 'zod'
@@ -42,33 +41,22 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
     formData.append('password', data.password)
     formData.append('callbackUrl', safeCallbackUrl)
 
-    try {
-      clearErrors('root')
-      const result: ActionResult = await loginUser(formData)
-      if (result.success) {
-        // Redirect handled by server action, but as a fallback
-        router.push(safeCallbackUrl)
+    clearErrors('root')
+    const result: ActionResult = await loginUser(formData)
+    if (result.success) {
+      router.push(safeCallbackUrl)
+    } else {
+      if (result.field) {
+        setError(result.field as keyof LoginInput, {
+          type: 'manual',
+          message: result.error,
+        })
       } else {
-        if (result.field) {
-          setError(result.field as keyof LoginInput, {
-            type: 'manual',
-            message: result.error,
-          })
-        } else {
-          setError('root', {
-            type: 'manual',
-            message: result.error,
-          })
-        }
+        setError('root', {
+          type: 'manual',
+          message: result.error,
+        })
       }
-    } catch (error) {
-      if (isRedirectError(error)) {
-        throw error
-      }
-      setError('root', {
-        type: 'manual',
-        message: '发生未知错误，请稍后再试',
-      })
     }
   }
 
