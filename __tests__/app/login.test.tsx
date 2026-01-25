@@ -1,11 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import { useRouter } from 'next/navigation'
 import LoginPage from '@/app/(auth)/login/page'
 import { loginUser } from '@/app/(auth)/login/actions'
-
-jest.mock('next/navigation', () => ({
-  useRouter: jest.fn(),
-}))
 
 jest.mock('@/app/(auth)/login/actions', () => ({
   loginUser: jest.fn(),
@@ -18,13 +13,10 @@ jest.mock('next/link', () => {
 })
 
 describe('Login Page', () => {
-  const useRouterMock = useRouter as jest.Mock
   const loginUserMock = loginUser as jest.Mock
-  const pushMock = jest.fn()
 
   beforeEach(() => {
     jest.clearAllMocks()
-    useRouterMock.mockReturnValue({ push: pushMock })
   })
 
   it('renders login form correctly', () => {
@@ -39,7 +31,7 @@ describe('Login Page', () => {
 
   it('shows validation errors for invalid input', async () => {
     render(<LoginPage />)
-    
+
     const submitButton = screen.getByRole('button', { name: '开启梦境' })
     fireEvent.click(submitButton)
 
@@ -65,23 +57,6 @@ describe('Login Page', () => {
     })
   })
 
-  it('redirects to dashboard on successful login', async () => {
-    loginUserMock.mockResolvedValue({ success: true })
-    render(<LoginPage />)
-
-    fireEvent.change(screen.getByLabelText('邮箱'), {
-      target: { value: 'test@example.com' },
-    })
-    fireEvent.change(screen.getByLabelText('密码'), {
-      target: { value: 'password123' },
-    })
-    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
-
-    await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/dashboard')
-    })
-  })
-
   it('shows generic error for unknown exceptions', async () => {
     loginUserMock.mockRejectedValue(new Error('Unknown error'))
     render(<LoginPage />)
@@ -103,7 +78,7 @@ describe('Login Page', () => {
     loginUserMock.mockImplementation(
       () =>
         new Promise((resolve) =>
-          setTimeout(() => resolve({ success: true }), 100)
+          setTimeout(() => resolve({ success: false, error: '邮箱或密码错误' }), 100)
         )
     )
     render(<LoginPage />)
@@ -125,12 +100,12 @@ describe('Login Page', () => {
     })
 
     await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/dashboard')
+      expect(screen.getByText(/邮箱或密码错误/i)).toBeInTheDocument()
     })
   })
 
-  it('redirects to callbackUrl on successful login', async () => {
-    loginUserMock.mockResolvedValue({ success: true })
+  it('passes callbackUrl to server action', async () => {
+    loginUserMock.mockResolvedValue({ success: false, error: '邮箱或密码错误' })
     render(<LoginPage searchParams={{ callbackUrl: '/submit' }} />)
 
     fireEvent.change(screen.getByLabelText('邮箱'), {
@@ -142,10 +117,27 @@ describe('Login Page', () => {
     fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
 
     await waitFor(() => {
-      expect(pushMock).toHaveBeenCalledWith('/submit')
+      expect(loginUserMock).toHaveBeenCalled()
     })
 
     const formData = loginUserMock.mock.calls[0][0] as FormData
     expect(formData.get('callbackUrl')).toBe('/submit')
+  })
+
+  it('shows field-specific error from server action', async () => {
+    loginUserMock.mockResolvedValue({ success: false, error: '邮箱格式不正确', field: 'email' })
+    render(<LoginPage />)
+
+    fireEvent.change(screen.getByLabelText('邮箱'), {
+      target: { value: 'test@example.com' },
+    })
+    fireEvent.change(screen.getByLabelText('密码'), {
+      target: { value: 'password123' },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
+
+    await waitFor(() => {
+      expect(screen.getByText(/邮箱格式不正确/i)).toBeInTheDocument()
+    })
   })
 })
