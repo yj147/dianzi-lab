@@ -12,6 +12,14 @@ import { Input } from '@/components/ui/input'
 
 type RegisterInput = z.infer<typeof registerSchema>
 
+function isNextRedirectError(error: unknown): boolean {
+  if (error instanceof Error && error.message === 'NEXT_REDIRECT') return true
+  if (typeof error !== 'object' || error === null) return false
+  if (!('digest' in error)) return false
+  const digest = (error as { digest?: unknown }).digest
+  return typeof digest === 'string' && digest.startsWith('NEXT_REDIRECT')
+}
+
 export default function RegisterForm() {
   const router = useRouter()
   const {
@@ -32,10 +40,15 @@ export default function RegisterForm() {
     formData.append('confirmPassword', data.confirmPassword)
 
     clearErrors('root')
-    const result: ActionResult = await registerUser(formData)
-    if (result.success) {
-      router.push('/login')
-    } else {
+    try {
+      const result = (await registerUser(formData)) as ActionResult | undefined
+      if (!result) return
+
+      if (result.success) {
+        router.push('/login')
+        return
+      }
+
       if (result.field) {
         setError(result.field as keyof RegisterInput, {
           type: 'manual',
@@ -47,6 +60,15 @@ export default function RegisterForm() {
           message: result.error,
         })
       }
+    } catch (error) {
+      if (isNextRedirectError(error)) {
+        throw error
+      }
+
+      setError('root', {
+        type: 'manual',
+        message: '发生未知错误，请稍后再试',
+      })
     }
   }
 

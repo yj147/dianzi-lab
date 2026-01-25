@@ -16,6 +16,14 @@ type LoginFormProps = {
   callbackUrl?: string
 }
 
+function isNextRedirectError(error: unknown): boolean {
+  if (error instanceof Error && error.message === 'NEXT_REDIRECT') return true
+  if (typeof error !== 'object' || error === null) return false
+  if (!('digest' in error)) return false
+  const digest = (error as { digest?: unknown }).digest
+  return typeof digest === 'string' && digest.startsWith('NEXT_REDIRECT')
+}
+
 function getSafeCallbackUrl(callbackUrl: string | undefined): string {
   if (!callbackUrl) return '/dashboard'
   return callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\') ? callbackUrl : '/dashboard'
@@ -43,7 +51,9 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
 
     clearErrors('root')
     try {
-      const result: ActionResult = await loginUser(formData)
+      const result = (await loginUser(formData)) as ActionResult | undefined
+      if (!result) return
+
       if (result.success) {
         router.push(safeCallbackUrl)
       } else {
@@ -59,7 +69,11 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           })
         }
       }
-    } catch {
+    } catch (error) {
+      if (isNextRedirectError(error)) {
+        throw error
+      }
+
       setError('root', {
         type: 'manual',
         message: '发生未知错误，请稍后再试',
