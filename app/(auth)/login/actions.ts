@@ -7,9 +7,8 @@ import { getUserByEmail } from '@/lib/users'
 import { signJWT, setSessionCookie } from '@/lib/auth'
 import { loginSchema } from './schema'
 
-export type ActionResult =
-  | { success: true }
-  | { success: false; error: string; field?: string }
+// 成功时调用 redirect() 永不返回，此类型只表示错误情况
+export type ActionResult = { success: false; error: string; field?: string }
 
 function getFormString(formData: FormData, key: string): string {
   const value = formData.get(key)
