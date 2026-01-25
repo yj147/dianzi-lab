@@ -2,18 +2,17 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
-import { registerUser, ActionResult } from './actions'
+import { registerUser } from './actions'
 import { registerSchema } from './schema'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { isNextRedirectError } from '@/lib/utils'
 
 type RegisterInput = z.infer<typeof registerSchema>
 
 export default function RegisterForm() {
-  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -32,10 +31,11 @@ export default function RegisterForm() {
     formData.append('confirmPassword', data.confirmPassword)
 
     clearErrors('root')
-    const result: ActionResult = await registerUser(formData)
-    if (result.success) {
-      router.push('/login')
-    } else {
+    try {
+      // 成功时 server 调用 redirect() 抛出 NEXT_REDIRECT，不会返回
+      // 只有错误时才会返回 result
+      const result = await registerUser(formData)
+
       if (result.field) {
         setError(result.field as keyof RegisterInput, {
           type: 'manual',
@@ -47,6 +47,15 @@ export default function RegisterForm() {
           message: result.error,
         })
       }
+    } catch (error) {
+      if (isNextRedirectError(error)) {
+        throw error
+      }
+
+      setError('root', {
+        type: 'manual',
+        message: '发生未知错误，请稍后再试',
+      })
     }
   }
 
