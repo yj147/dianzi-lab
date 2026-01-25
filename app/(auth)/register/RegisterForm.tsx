@@ -81,7 +81,7 @@ export default function RegisterForm() {
           placeholder="探险家邮箱"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-all outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white"
+          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
         />
         {errors.email && (
           <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
@@ -108,7 +108,7 @@ export default function RegisterForm() {
           placeholder="秘钥口令（至少 6 位）"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? 'password-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-all outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white"
+          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
         />
         {errors.password && (
           <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
@@ -135,7 +135,7 @@ export default function RegisterForm() {
           placeholder="再次确认秘钥"
           aria-invalid={!!errors.confirmPassword}
           aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-all outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white"
+          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
         />
         {errors.confirmPassword && (
           <p id="confirmPassword-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">

@@ -101,7 +101,7 @@ export default async function AdminDashboardPage() {
           <div
             key={key}
             className="group relative rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl p-6
-                       shadow-sm transition-all duration-300 ease-out
+                       shadow-sm transition-[transform,box-shadow,background-color,border-color] duration-300 ease-out motion-reduce:transition-none
                        hover:-translate-y-1 hover:shadow-lg hover:border-white/60 hover:bg-white/60"
           >
             <div className="flex items-start justify-between gap-4">
@@ -126,7 +126,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Welcome Card with Quick Actions */}
-      <div className="rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl shadow-sm transition-all hover:shadow-md">
+      <div className="rounded-3xl border border-white/40 bg-white/40 backdrop-blur-xl shadow-sm transition-shadow duration-200 hover:shadow-md motion-reduce:transition-none">
         <div className="border-b border-gray-100/50 px-8 py-6">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-full
@@ -147,7 +147,7 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="p-8">
-          <h3 className="mb-6 text-sm font-medium text-muted-foreground uppercase tracking-wider">
+          <h3 className="mb-6 text-sm font-medium text-muted-foreground">
             快捷操作
           </h3>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -156,7 +156,7 @@ export default async function AdminDashboardPage() {
                 key={href}
                 href={href}
                 className="group flex items-start gap-4 rounded-2xl border border-white/60
-                         bg-white/50 p-5 transition-all duration-200
+                         bg-white/50 p-5 transition-[box-shadow,background-color,border-color] duration-200 motion-reduce:transition-none
                          hover:border-primary/30 hover:bg-white/80 hover:shadow-md
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
               >
@@ -168,8 +168,7 @@ export default async function AdminDashboardPage() {
                     <span className="font-semibold text-foreground">
                       {label}
                     </span>
-                    <ArrowRight className="h-4 w-4 text-gray-400 transition-all
-                                         group-hover:translate-x-1 group-hover:text-primary" />
+                    <ArrowRight className="h-4 w-4 text-gray-400 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-primary motion-reduce:transition-none motion-reduce:transform-none" />
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground truncate leading-relaxed">
                     {description}

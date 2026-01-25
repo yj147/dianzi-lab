@@ -17,7 +17,7 @@ export default async function AdminLayout({
     <div className="relative min-h-dvh overflow-x-hidden bg-background text-foreground">
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div
-          className="absolute top-[-10%] left-[-5%] w-[60%] h-[60%] blob-shape bg-lavender-100/60 blur-3xl opacity-60 animate-pulse"
+          className="absolute top-[-10%] left-[-5%] w-[60%] h-[60%] blob-shape bg-lavender-100/60 blur-3xl opacity-60 animate-none sm:animate-pulse motion-reduce:animate-none"
           style={{ animationDuration: '8s' }}
         />
         <div className="absolute bottom-[-10%] right-[-5%] w-[50%] h-[60%] blob-shape bg-mint-100/60 blur-3xl opacity-60" />

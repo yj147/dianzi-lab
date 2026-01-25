@@ -131,7 +131,7 @@ export default async function Footer() {
               </p>
               <div className="flex gap-4">
                 <a
-                  className="flex size-12 items-center justify-center rounded-full border-2 border-lavender-200 bg-white text-lavender-300 shadow-sm transition-all hover:-translate-y-1 hover:border-coral-400 hover:bg-coral-400 hover:text-white"
+                  className="flex size-12 items-center justify-center rounded-full border-2 border-lavender-200 bg-white text-lavender-300 shadow-sm transition-transform transition-colors duration-200 hover:-translate-y-1 hover:border-coral-400 hover:bg-coral-400 hover:text-white motion-reduce:transform-none motion-reduce:transition-none"
                   href="#"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">
@@ -139,7 +139,7 @@ export default async function Footer() {
                   </span>
                 </a>
                 <a
-                  className="flex size-12 items-center justify-center rounded-full border-2 border-lavender-200 bg-white text-lavender-300 shadow-sm transition-all hover:-translate-y-1 hover:border-lavender-300 hover:bg-lavender-300 hover:text-white"
+                  className="flex size-12 items-center justify-center rounded-full border-2 border-lavender-200 bg-white text-lavender-300 shadow-sm transition-transform transition-colors duration-200 hover:-translate-y-1 hover:border-lavender-300 hover:bg-lavender-300 hover:text-white motion-reduce:transform-none motion-reduce:transition-none"
                   href="#"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">

@@ -121,7 +121,7 @@ export default async function Home({ searchParams }: HomePageProps) {
                     />
                     <button
                       type="submit"
-                      className="flex size-12 items-center justify-center rounded-full bg-lavender-100 text-lavender-500 shadow-sm transition-all hover:scale-105 hover:bg-lavender-200 hover:text-lavender-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                      className="flex size-12 items-center justify-center rounded-full bg-lavender-100 text-lavender-500 shadow-sm transition-transform transition-colors duration-200 hover:scale-105 hover:bg-lavender-200 hover:text-lavender-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
                       aria-label="搜索"
                     >
                       <span className="material-symbols-outlined" aria-hidden="true">

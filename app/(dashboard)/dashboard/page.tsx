@@ -78,26 +78,26 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <div>
-      <nav className="px-6 py-4">
-        <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/50 bg-white/30 px-6 py-3 shadow-sm backdrop-blur-md">
+      <nav className="px-4 py-4 sm:px-6">
+        <div className="mx-auto flex max-w-7xl items-center justify-between rounded-full border border-white/50 bg-white/30 px-4 py-3 shadow-sm backdrop-blur-md sm:px-6">
           <Link href="/" className="flex items-center gap-3">
             <div className="flex size-10 items-center justify-center rounded-full bg-gradient-to-br from-lavender-300 to-coral-300 text-white shadow-inner rotate-3">
               <span className="material-symbols-outlined" aria-hidden="true">
                 auto_awesome
               </span>
             </div>
-            <span className="font-script text-2xl text-slate-800">奇迹工坊</span>
+            <span className="sr-only font-script text-2xl text-slate-800 sm:not-sr-only">奇迹工坊</span>
           </Link>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 sm:gap-6">
             <Link
               href="/submit"
-              className="flex items-center gap-2 rounded-full bg-coral-400 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-coral-200 transition-transform hover:-translate-y-0.5 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+              className="flex items-center gap-2 rounded-full bg-coral-400 px-4 py-2 text-sm font-bold text-white shadow-lg shadow-coral-200 transition-transform hover:-translate-y-0.5 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none sm:px-5"
             >
               <span className="material-symbols-outlined text-sm" aria-hidden="true">
                 add
               </span>
-              新建梦境
+              <span className="sr-only sm:not-sr-only">新建梦境</span>
             </Link>
 
             <DashboardAvatar displayName={displayName} />
@@ -126,12 +126,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <div className="mb-6 flex justify-center gap-4 text-center tabular-nums">
                 <div>
                   <div className="text-2xl font-black text-coral-400">{ideas.length}</div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-400">梦境</div>
+                  <div className="text-xs font-bold text-slate-400">梦境</div>
                 </div>
                 <div className="w-px bg-slate-200" aria-hidden="true" />
                 <div>
                   <div className="text-2xl font-black text-mint-500">{completedCount}</div>
-                  <div className="text-xs font-bold uppercase tracking-wider text-slate-400">已成真</div>
+                  <div className="text-xs font-bold text-slate-400">已成真</div>
                 </div>
               </div>
 
@@ -205,7 +205,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <details className="relative">
                 <summary
                   aria-label="搜索"
-                  className="list-none [&::-webkit-details-marker]:hidden flex size-12 items-center justify-center rounded-full border border-slate-100 bg-white text-slate-400 shadow-sm transition-all hover:scale-110 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
+                  className="list-none [&::-webkit-details-marker]:hidden flex size-12 items-center justify-center rounded-full border border-slate-100 bg-white text-slate-400 shadow-sm transition-transform transition-colors duration-200 hover:scale-110 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer motion-reduce:transform-none motion-reduce:transition-none"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">
                     search
@@ -226,7 +226,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     />
                     <button
                       type="submit"
-                      className="flex size-12 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-all hover:scale-105 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                      className="flex size-12 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-transform transition-colors duration-200 hover:scale-105 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
                       aria-label="搜索"
                     >
                       <span className="material-symbols-outlined" aria-hidden="true">
@@ -432,9 +432,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
               <Link
                 href="/submit"
-                className="group flex min-h-[340px] flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-slate-300 p-6 text-center transition-all hover:border-mint-300 hover:bg-mint-50/50"
+                className="group flex min-h-[340px] flex-col items-center justify-center rounded-[2.5rem] border-2 border-dashed border-slate-300 p-6 text-center transition-colors hover:border-mint-300 hover:bg-mint-50/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transition-none"
               >
-                <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-white shadow-sm transition-transform group-hover:scale-110">
+                <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-white shadow-sm transition-transform group-hover:scale-110 motion-reduce:transform-none motion-reduce:transition-none">
                   <span className="material-symbols-outlined text-4xl text-slate-300 transition-colors group-hover:text-mint-400" aria-hidden="true">
                     add
                   </span>
@@ -481,7 +481,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </p>
               <Link
                 href="/"
-                className="rounded-full bg-lavender-300 px-8 py-3 font-bold text-white shadow-lg shadow-lavender-200 transition-all hover:bg-lavender-400 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+                className="rounded-full bg-lavender-300 px-8 py-3 font-bold text-white shadow-lg shadow-lavender-200 transition-transform transition-colors duration-200 hover:scale-105 hover:bg-lavender-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
               >
                 进入公共梦域
               </Link>

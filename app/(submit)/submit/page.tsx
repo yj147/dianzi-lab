@@ -20,8 +20,11 @@ export default async function SubmitPage() {
           </svg>
         </div>
 
-        <div className="mb-6 inline-block rounded-full border-2 border-coral-100 bg-coral-50 px-5 py-2 text-sm font-bold text-coral-500 shadow-sm -rotate-2">
-          ✨ 创意孵化器
+        <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-coral-100 bg-coral-50 px-5 py-2 text-sm font-bold text-coral-500 shadow-sm -rotate-2">
+          <span className="material-symbols-outlined text-base" aria-hidden="true">
+            auto_awesome
+          </span>
+          创意孵化器
         </div>
         <h1 className="text-balance mb-6 text-5xl font-black leading-tight text-slate-800 lg:text-7xl">
           <span className="mb-2 block text-4xl font-script text-lavender-500 lg:text-5xl -rotate-1 origin-bottom-left">
@@ -55,9 +58,9 @@ export default async function SubmitPage() {
       </div>
 
       <div className="relative lg:col-span-7">
-        <div className="absolute -top-10 -right-10 size-40 rounded-full bg-coral-200 blur-2xl opacity-40 mix-blend-multiply animate-blob" aria-hidden="true" />
+        <div className="absolute -top-10 -right-10 size-40 rounded-full bg-coral-200 blur-2xl opacity-40 mix-blend-multiply animate-none sm:animate-blob motion-reduce:animate-none" aria-hidden="true" />
         <div
-          className="absolute -bottom-10 -left-10 size-40 rounded-full bg-lavender-200 blur-2xl opacity-40 mix-blend-multiply animate-blob animation-delay-2000"
+          className="absolute -bottom-10 -left-10 size-40 rounded-full bg-lavender-200 blur-2xl opacity-40 mix-blend-multiply animate-none sm:animate-blob animation-delay-2000 motion-reduce:animate-none"
           aria-hidden="true"
         />
 

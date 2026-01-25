@@ -28,6 +28,7 @@ function getDisplayName(userEmail?: string): string {
 }
 
 export default function NavbarClient({ isLoggedIn, userEmail, userRole }: NavbarClientProps) {
+  const [isNavMenuOpen, setIsNavMenuOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
   const pathname = usePathname()
   const displayName = getDisplayName(userEmail)
@@ -55,11 +56,13 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
         { name: '关于我们', href: '/#about' },
       ]
 
+  const showOverlay = isNavMenuOpen || isUserMenuOpen
+
   return (
     <>
-      {isLoggedIn && isUserMenuOpen ? (
+      {showOverlay ? (
         <div
-          className="fixed inset-0 z-40 bg-slate-900/10 backdrop-blur-sm transition-all duration-500 motion-reduce:transition-none"
+          className="fixed inset-0 z-40 bg-slate-900/10 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none"
           aria-hidden="true"
         />
       ) : null}
@@ -121,6 +124,74 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
           </div>
 
           <div className="flex items-center gap-3 sm:gap-4">
+            <DropdownMenu open={isNavMenuOpen} onOpenChange={setIsNavMenuOpen}>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  aria-label={isNavMenuOpen ? '关闭菜单' : '打开菜单'}
+                  className="flex size-10 items-center justify-center rounded-full border border-white/50 bg-white/40 text-slate-600 shadow-sm backdrop-blur-md transition-colors hover:bg-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-white/10 dark:bg-white/10 dark:text-slate-200 dark:hover:bg-white/20 md:hidden"
+                >
+                  <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
+                    {isNavMenuOpen ? 'close' : 'menu'}
+                  </span>
+                </button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                align="end"
+                sideOffset={12}
+                className="w-64 rounded-[1.5rem] border border-white/60 bg-white/90 p-2 shadow-[0_20px_60px_-10px_rgba(180,160,255,0.3)] backdrop-blur-xl md:hidden"
+              >
+                {navLinks.map((link) => {
+                  const isEmphasized = 'emphasized' in link && link.emphasized
+                  const isActive = isActiveLink(link.href)
+                  return (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link
+                        href={link.href}
+                        className={cn(
+                          'group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 transition-colors hover:bg-lavender-50',
+                          isActive && 'bg-lavender-50',
+                          isEmphasized ? 'font-bold text-lavender-500' : 'font-medium text-slate-700'
+                        )}
+                        onClick={() => setIsNavMenuOpen(false)}
+                      >
+                        {isEmphasized ? (
+                          <span className="material-symbols-outlined text-lg text-lavender-400" aria-hidden="true">
+                            {link.icon}
+                          </span>
+                        ) : (
+                          <span className="material-symbols-outlined text-lg text-slate-400" aria-hidden="true">
+                            {link.href === '/' ? 'home' : link.href.startsWith('/#') ? 'auto_fix' : 'link'}
+                          </span>
+                        )}
+                        <span className={cn(isActive ? 'text-coral-500' : 'group-hover:text-coral-400')}>
+                          {link.name}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                  )
+                })}
+
+                {!isLoggedIn ? (
+                  <div className="mt-2 border-t border-slate-100 pt-2">
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/login"
+                        className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 font-medium text-slate-700 transition-colors hover:bg-white/60"
+                        onClick={() => setIsNavMenuOpen(false)}
+                      >
+                        <span className="material-symbols-outlined text-lg text-slate-400" aria-hidden="true">
+                          login
+                        </span>
+                        潜入
+                      </Link>
+                    </DropdownMenuItem>
+                  </div>
+                ) : null}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <ThemeToggle />
             {isLoggedIn ? (
               <div className="flex items-center gap-5">
@@ -204,7 +275,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                       <DropdownMenuItem asChild>
                         <Link
                           href="/dashboard"
-                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-all hover:bg-white/60 hover:shadow-sm"
+                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-colors hover:bg-white/60 hover:shadow-sm"
                         >
                           <div className="flex size-9 items-center justify-center rounded-full bg-lavender-50 transition-colors group-hover:bg-coral-50">
                             <span
@@ -229,7 +300,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                       <DropdownMenuItem asChild>
                         <Link
                           href="/dashboard/favorites"
-                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-all hover:bg-white/60 hover:shadow-sm"
+                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-colors hover:bg-white/60 hover:shadow-sm"
                         >
                           <div className="flex size-9 items-center justify-center rounded-full bg-lavender-50 transition-colors group-hover:bg-coral-50">
                             <span
@@ -248,7 +319,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                       <DropdownMenuItem asChild>
                         <Link
                           href="/dashboard/settings"
-                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-all hover:bg-white/60 hover:shadow-sm"
+                          className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-colors hover:bg-white/60 hover:shadow-sm"
                         >
                           <div className="flex size-9 items-center justify-center rounded-full bg-lavender-50 transition-colors group-hover:bg-coral-50">
                             <span
@@ -268,7 +339,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                         <DropdownMenuItem asChild>
                           <Link
                             href="/admin/ideas"
-                            className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-all hover:bg-white/60 hover:shadow-sm"
+                            className="group flex w-full items-center gap-4 rounded-2xl px-4 py-3.5 transition-colors hover:bg-white/60 hover:shadow-sm"
                           >
                             <div className="flex size-9 items-center justify-center rounded-full bg-amber-50 transition-colors group-hover:bg-amber-100">
                               <span
@@ -295,7 +366,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                     <div className="mt-3 border-t border-slate-100/60 pt-3">
                       <button
                         type="button"
-                        className="group flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-slate-400 transition-all hover:bg-red-50 hover:text-red-500 hover:shadow-inner"
+                        className="group flex w-full items-center justify-center gap-2 rounded-2xl px-4 py-3 text-slate-400 transition-colors hover:bg-red-50 hover:text-red-500 hover:shadow-inner"
                         onClick={() => void handleLogout()}
                       >
                         <span
@@ -312,7 +383,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
 
                 <Link
                   href="/submit"
-                  className="flex items-center gap-2 rounded-full bg-coral-400 px-5 sm:px-6 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-all hover:scale-105 hover:bg-coral-500 hover:shadow-[0_10px_25px_rgba(251,113,133,0.45)] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="flex items-center gap-2 rounded-full bg-coral-400 px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-transform transition-colors hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transform-none motion-reduce:transition-none sm:px-6"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">
                     palette
@@ -324,7 +395,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
               <>
                 <Link
                   href="/login"
-                  className="px-3 sm:px-4 font-semibold text-slate-600 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:text-coral-400 dark:text-slate-200"
+                  className="hidden px-3 font-semibold text-slate-600 transition-colors hover:text-coral-400 focus-visible:outline-none focus-visible:text-coral-400 dark:text-slate-200 sm:inline sm:px-4"
                 >
                   潜入
                 </Link>

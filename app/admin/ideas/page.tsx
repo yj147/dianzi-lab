@@ -56,7 +56,7 @@ export default async function AdminIdeasPage({
         </div>
         <div className="flex gap-4">
           <details className="relative">
-            <summary className="flex list-none items-center gap-2 rounded-2xl border border-white/60 bg-white/60 px-5 py-2.5 font-bold text-slate-600 shadow-sm transition-all hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400 [&::-webkit-details-marker]:hidden">
+            <summary className="flex list-none items-center gap-2 rounded-2xl border border-white/60 bg-white/60 px-5 py-2.5 font-bold text-slate-600 shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400 motion-reduce:transition-none [&::-webkit-details-marker]:hidden">
               <span className="material-symbols-outlined text-lavender-400">filter_list</span>
               筛选：{statusLabel}
               <span className="material-symbols-outlined text-[20px] text-slate-400">expand_more</span>
@@ -87,7 +87,7 @@ export default async function AdminIdeasPage({
           </details>
           <a
             href="/submit"
-            className="flex items-center gap-2 rounded-2xl bg-coral-400 px-6 py-2.5 font-bold text-white shadow-lg shadow-coral-400/20 transition-all hover:bg-coral-500"
+            className="flex items-center gap-2 rounded-2xl bg-coral-400 px-6 py-2.5 font-bold text-white shadow-lg shadow-coral-400/20 transition-colors duration-200 hover:bg-coral-500 motion-reduce:transition-none"
           >
             <span className="material-symbols-outlined">add</span>
             新增灵感
