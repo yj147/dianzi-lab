@@ -24,7 +24,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="relative z-10 h-full w-full flex items-center justify-center">
-            <div className="relative animate-float-slow">
+            <div className="relative animate-none sm:animate-float-slow motion-reduce:animate-none">
               <div className="size-20 sm:size-24 rounded-full bg-mint-50 border-4 border-white shadow-lg overflow-hidden flex items-center justify-center">
                 <span className="material-symbols-outlined text-5xl sm:text-6xl text-mint-300/90 mt-2" aria-hidden="true">
                   toys
@@ -34,7 +34,7 @@ export default function RegisterPage() {
                 <div className="h-full w-20 sm:w-24 rounded-t-[4rem] bg-lavender-300 opacity-50" />
               </div>
 
-              <div className="absolute -right-10 sm:-right-12 top-0 animate-bounce animation-delay-500">
+              <div className="absolute -right-10 sm:-right-12 top-0 animate-none sm:animate-bounce animation-delay-500 motion-reduce:animate-none">
                 <div className="bg-white p-2 rounded-xl shadow-md rotate-12">
                   <span className="material-symbols-outlined text-3xl text-coral-400" aria-hidden="true">
                     star
@@ -42,7 +42,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="absolute -left-8 sm:-left-10 top-10 animate-bounce animation-delay-1000">
+              <div className="absolute -left-8 sm:-left-10 top-10 animate-none sm:animate-bounce animation-delay-1000 motion-reduce:animate-none">
                 <div className="bg-white p-2 rounded-full shadow-md -rotate-12">
                   <span className="material-symbols-outlined text-3xl text-lavender-400" aria-hidden="true">
                     auto_awesome
@@ -50,7 +50,7 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[130%] sm:h-[140%] sm:w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-white/60 animate-spin-slow">
+              <div className="pointer-events-none absolute left-1/2 top-1/2 h-[130%] w-[130%] sm:h-[140%] sm:w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-dashed border-white/60 animate-none sm:animate-spin-slow motion-reduce:animate-none">
                 <span
                   className="material-symbols-outlined absolute -top-3 left-1/2 -translate-x-1/2 text-xl text-yellow-300"
                   aria-hidden="true"

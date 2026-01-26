@@ -91,7 +91,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           placeholder="探险家邮箱"
           aria-invalid={!!errors.email}
           aria-describedby={errors.email ? 'email-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-all outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white"
+          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
         />
         {errors.email && (
           <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
@@ -118,7 +118,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           placeholder="秘钥口令"
           aria-invalid={!!errors.password}
           aria-describedby={errors.password ? 'password-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-all outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white"
+          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
         />
         {errors.password && (
           <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
@@ -149,7 +149,7 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           <>
             <span>开启梦境</span>
             <span
-              className="material-symbols-outlined ml-2 transition-transform group-hover:rotate-12"
+              className="material-symbols-outlined ml-2 transition-transform group-hover:rotate-12 motion-reduce:transition-none motion-reduce:transform-none"
               aria-hidden="true"
             >
               auto_awesome

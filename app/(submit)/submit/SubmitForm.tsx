@@ -256,7 +256,7 @@ export default function SubmitForm() {
                   placeholder="给你的梦起个名字..."
                   aria-invalid={!!errors.title}
                   aria-describedby={cn("title-helper", errors.title && "title-error")}
-                  className="h-14 w-full rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80"
+                  className="h-14 w-full rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-colors duration-200 focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80 motion-reduce:transition-none"
                 />
                 <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
                   {title.length}/50
@@ -288,7 +288,7 @@ export default function SubmitForm() {
                   placeholder="哪怕是最荒诞的细节，也请告诉我们..."
                   aria-invalid={!!errors.description}
                   aria-describedby={cn("description-helper", errors.description && "description-error")}
-                  className="min-h-[140px] w-full resize-none rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 py-4 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-all focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80"
+                  className="min-h-[140px] w-full resize-none rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 py-4 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-colors duration-200 focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80 motion-reduce:transition-none"
                 />
                 <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
                   {description.length}/1000
@@ -314,7 +314,7 @@ export default function SubmitForm() {
                     onClick={() => toggleTag(tag)}
                     aria-pressed={selectedTags.includes(tag)}
                     className={cn(
-                      "rounded-full border-2 px-5 py-2 text-sm font-bold transition-transform hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]",
+                      "rounded-full border-2 px-5 py-2 text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none",
                       selectedTags.includes(tag)
                         ? "bg-lavender-300 border-lavender-300 text-white shadow-lavender"
                         : "bg-white/60 border-lavender-200 text-slate-600 hover:border-lavender-300 hover:bg-white"
@@ -334,10 +334,10 @@ export default function SubmitForm() {
 
             <button
               type="submit"
-              className="group flex h-14 w-full items-center justify-center rounded-full bg-coral-400 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-transform hover:-translate-y-1 hover:bg-coral-500 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
+              className="group flex h-14 w-full items-center justify-center rounded-full bg-coral-400 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-[transform,color] duration-200 hover:-translate-y-1 hover:bg-coral-500 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
             >
               下一步：评估点子
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:transform-none" />
             </button>
           </form>
         </>

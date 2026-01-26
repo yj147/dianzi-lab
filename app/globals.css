@@ -219,7 +219,7 @@ body {
 }
 
 .table-row-glass {
-  transition: all 0.3s;
+  transition: transform 0.3s, background-color 0.3s, box-shadow 0.3s;
 }
 
 .table-row-glass:hover {
@@ -234,7 +234,7 @@ body {
 }
 
 .action-btn {
-  @apply flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-90 shadow-sm;
+  @apply flex items-center justify-center w-10 h-10 rounded-full transition-transform duration-200 hover:scale-110 active:scale-90 shadow-sm motion-reduce:transition-none motion-reduce:transform-none;
 }
 
 .action-btn:focus-visible {

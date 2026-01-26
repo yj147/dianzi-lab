@@ -56,7 +56,7 @@ export default async function SubmitLayout({
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
               </svg>
             </div>
-            <span className="font-script text-3xl tracking-wider text-slate-800 md:text-4xl">奇迹工坊</span>
+            <span className="font-script text-3xl text-slate-800 md:text-4xl">奇迹工坊</span>
           </Link>
 
           <div className="hidden items-center gap-8 rounded-full border border-white/60 bg-white/40 px-8 py-3 shadow-sm backdrop-blur-md md:flex">
@@ -72,6 +72,47 @@ export default async function SubmitLayout({
           </div>
 
           <div className="flex items-center gap-4">
+            <details className="relative md:hidden">
+              <summary
+                aria-label="打开菜单"
+                className="list-none [&::-webkit-details-marker]:hidden flex size-10 items-center justify-center rounded-full border border-white/60 bg-white/50 text-slate-600 shadow-sm backdrop-blur-md transition-colors hover:bg-white/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
+                  menu
+                </span>
+              </summary>
+
+              <div className="absolute right-0 mt-3 w-64 rounded-[1.5rem] border border-white/70 bg-white/85 p-2 shadow-lg backdrop-blur-xl">
+                <Link
+                  href="/"
+                  className="flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold text-slate-700 transition-colors hover:bg-lavender-50"
+                >
+                  <span className="material-symbols-outlined text-lg text-slate-400" aria-hidden="true">
+                    home
+                  </span>
+                  幻象大厅
+                </Link>
+                <Link
+                  href="/#tools"
+                  className="mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold text-slate-700 transition-colors hover:bg-lavender-50"
+                >
+                  <span className="material-symbols-outlined text-lg text-slate-400" aria-hidden="true">
+                    auto_fix
+                  </span>
+                  造梦工具
+                </Link>
+                <Link
+                  href="/#about"
+                  className="mt-1 flex items-center gap-3 rounded-xl px-3 py-2.5 font-bold text-slate-700 transition-colors hover:bg-lavender-50"
+                >
+                  <span className="material-symbols-outlined text-lg text-slate-400" aria-hidden="true">
+                    info
+                  </span>
+                  关于我们
+                </Link>
+              </div>
+            </details>
+
             {session ? (
               <Link
                 href="/dashboard"
@@ -110,4 +151,3 @@ export default async function SubmitLayout({
     </div>
   )
 }
-
