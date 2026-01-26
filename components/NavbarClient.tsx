@@ -383,7 +383,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
 
                 <Link
                   href="/submit"
-                  className="flex items-center gap-2 rounded-full bg-coral-400 px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-transform transition-colors hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transform-none motion-reduce:transition-none sm:px-6"
+                  className="flex items-center gap-2 rounded-full bg-coral-400 px-5 py-2.5 text-sm font-bold text-white shadow-[0_8px_20px_rgba(251,113,133,0.35)] transition-[transform,color] hover:scale-105 hover:bg-coral-500 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transform-none motion-reduce:transition-none sm:px-6"
                 >
                   <span className="material-symbols-outlined text-xl" aria-hidden="true">
                     palette

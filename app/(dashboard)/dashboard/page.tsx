@@ -205,7 +205,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               <details className="relative">
                 <summary
                   aria-label="搜索"
-                  className="list-none [&::-webkit-details-marker]:hidden flex size-12 items-center justify-center rounded-full border border-slate-100 bg-white text-slate-400 shadow-sm transition-transform transition-colors duration-200 hover:scale-110 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer motion-reduce:transform-none motion-reduce:transition-none"
+                  className="list-none [&::-webkit-details-marker]:hidden flex size-12 items-center justify-center rounded-full border border-slate-100 bg-white text-slate-400 shadow-sm transition-[transform,color] duration-200 hover:scale-110 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] cursor-pointer motion-reduce:transform-none motion-reduce:transition-none"
                 >
                   <span className="material-symbols-outlined" aria-hidden="true">
                     search
@@ -226,7 +226,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     />
                     <button
                       type="submit"
-                      className="flex size-12 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-transform transition-colors duration-200 hover:scale-105 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
+                      className="flex size-12 items-center justify-center rounded-full bg-white text-slate-400 shadow-sm transition-[transform,color] duration-200 hover:scale-105 hover:text-coral-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
                       aria-label="搜索"
                     >
                       <span className="material-symbols-outlined" aria-hidden="true">
@@ -481,7 +481,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               </p>
               <Link
                 href="/"
-                className="rounded-full bg-lavender-300 px-8 py-3 font-bold text-white shadow-lg shadow-lavender-200 transition-transform transition-colors duration-200 hover:scale-105 hover:bg-lavender-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
+                className="rounded-full bg-lavender-300 px-8 py-3 font-bold text-white shadow-lg shadow-lavender-200 transition-[transform,color] duration-200 hover:scale-105 hover:bg-lavender-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
               >
                 进入公共梦域
               </Link>

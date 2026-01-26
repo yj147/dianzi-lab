@@ -24,7 +24,7 @@ export default function Hero() {
       <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
         <a
           href="/submit"
-          className="group flex items-center gap-3 rounded-full bg-coral-400 px-8 py-4 text-base font-bold text-white shadow-[0_10px_30px_rgba(251,113,133,0.4)] transition-transform transition-colors duration-200 hover:scale-105 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none sm:px-10 sm:py-5 sm:text-xl sm:hover:-rotate-2 sm:hover:scale-110"
+          className="group flex items-center gap-3 rounded-full bg-coral-400 px-8 py-4 text-base font-bold text-white shadow-[0_10px_30px_rgba(251,113,133,0.4)] transition-[transform,color] duration-200 hover:scale-105 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none sm:px-10 sm:py-5 sm:text-xl sm:hover:-rotate-2 sm:hover:scale-110"
         >
           <span className="material-symbols-outlined transition-transform group-hover:rotate-12 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true">
             temp_preferences_custom
