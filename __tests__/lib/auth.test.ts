@@ -27,7 +27,7 @@ describe('lib/auth', () => {
 
   beforeEach(() => {
     process.env.JWT_SECRET = secret
-    process.env.NODE_ENV = 'test'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'test', writable: true })
     jest.clearAllMocks()
   })
 
@@ -121,7 +121,7 @@ describe('lib/auth', () => {
   })
 
   it('setSessionCookie: production 环境 secure=true', async () => {
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
 
     const set = jest.fn()
     const get = jest.fn()

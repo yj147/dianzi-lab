@@ -68,7 +68,7 @@ describe('loginUser action', () => {
   const bcryptCompareMock = bcrypt.compare as jest.Mock
   const signJWTMock = signJWT as jest.Mock
   const setSessionCookieMock = setSessionCookie as jest.Mock
-  const redirectMock = redirect as jest.Mock
+  const redirectMock = redirect as unknown as jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -161,7 +161,7 @@ describe('loginUser action', () => {
 
   it('blocks the seed default admin password in production', async () => {
     const originalNodeEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
+    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
 
     getUserByEmailMock.mockResolvedValue({
       id: 'admin-1',
@@ -178,6 +178,6 @@ describe('loginUser action', () => {
     expect(setSessionCookieMock).not.toHaveBeenCalled()
     expect(redirectMock).not.toHaveBeenCalled()
 
-    process.env.NODE_ENV = originalNodeEnv
+    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, writable: true })
   })
 })
