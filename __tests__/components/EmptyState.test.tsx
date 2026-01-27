@@ -10,7 +10,7 @@ jest.mock('lucide-react', () => ({
 }));
 
 describe('EmptyState Component', () => {
-  const defaultMessage = '暂无已完成的工具，敬请期待！';
+  const defaultMessage = '暂无已交付案例';
 
   it('renders the message correctly with default style', () => {
     render(<EmptyState message={defaultMessage} />);

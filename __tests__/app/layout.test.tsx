@@ -1,9 +1,9 @@
 import React from 'react'
 
 jest.mock('next/font/google', () => ({
-  Ma_Shan_Zheng: () => ({ className: 'ma-shan-zheng', variable: '--font-ma-shan-zheng' }),
-  Quicksand: () => ({ className: 'quicksand', variable: '--font-quicksand' }),
-  ZCOOL_KuaiLe: () => ({ className: 'zcool-kuai-le', variable: '--font-zcool' }),
+  DM_Sans: () => ({ className: 'dm-sans', variable: '--font-sans' }),
+  Space_Grotesk: () => ({ className: 'space-grotesk', variable: '--font-heading' }),
+  JetBrains_Mono: () => ({ className: 'jetbrains-mono', variable: '--font-mono' }),
 }))
 
 describe('RootLayout', () => {

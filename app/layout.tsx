@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
-import { Ma_Shan_Zheng, Quicksand, ZCOOL_KuaiLe } from "next/font/google";
+import { DM_Sans, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
-const quicksand = Quicksand({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
   display: "swap",
-  variable: "--font-quicksand",
+  variable: "--font-sans",
 });
 
-const zcoolKuaiLe = ZCOOL_KuaiLe({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["300", "500", "700"],
   display: "swap",
-  variable: "--font-zcool",
+  variable: "--font-heading",
 });
 
-const maShanZheng = Ma_Shan_Zheng({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "500"],
   display: "swap",
-  variable: "--font-ma-shan-zheng",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  title: "奇迹工坊",
-  description: "点亮你的奇思妙想",
+  title: "Bambi Lab Idea",
+  description: "让好点子不再只是想法",
 };
 
 const themeInitScript = `
@@ -56,7 +56,7 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${quicksand.variable} ${zcoolKuaiLe.variable} ${maShanZheng.variable}`}
+      className={`${dmSans.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
       <head>

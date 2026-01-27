@@ -55,11 +55,9 @@ describe('Dashboard Page', () => {
     const PageContent = await DashboardPage({})
     render(PageContent)
 
-    expect(screen.getByText('造梦者·test')).toBeInTheDocument()
-    expect(screen.getByText('我的梦境记录')).toBeInTheDocument()
-    expect(screen.getByText('梦境还在孵化中...')).toBeInTheDocument()
-    expect(screen.getByText('播撒第一颗种子')).toBeInTheDocument()
-    expect(screen.getByText('退出登录')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '我的点子' })).toBeInTheDocument()
+    expect(screen.getByText('暂无点子')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '提交第一个点子' })).toHaveAttribute('href', '/submit')
   })
 
   it('renders dashboard with ideas list', async () => {
@@ -73,8 +71,10 @@ describe('Dashboard Page', () => {
         id: 'idea-1',
         title: '测试点子',
         description: '这是一个测试点子的描述',
+        tags: [],
         status: 'PENDING',
         createdAt: new Date('2025-01-20'),
+        assessment: null,
       },
     ]
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)
@@ -86,33 +86,6 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByText('测试点子')).toBeInTheDocument()
     expect(screen.getByText('这是一个测试点子的描述')).toBeInTheDocument()
-    expect(screen.getByText('待审核')).toBeInTheDocument()
-  })
-
-  it('truncates long descriptions', async () => {
-    const mockSession = {
-      sub: 'user-1',
-      email: 'test@example.com',
-      role: 'USER',
-    }
-    const longDescription = 'A'.repeat(200)
-    const mockIdeas = [
-      {
-        id: 'idea-2',
-        title: '长描述点子',
-        description: longDescription,
-        status: 'PENDING',
-        createdAt: new Date('2025-01-20'),
-      },
-    ]
-    ;(getSession as jest.Mock).mockResolvedValue(mockSession)
-    ;(prisma.idea.findMany as jest.Mock).mockResolvedValue(mockIdeas)
-    ;(prisma.idea.count as jest.Mock).mockResolvedValue(0)
-
-    const PageContent = await DashboardPage({})
-    render(PageContent)
-
-    const truncatedText = 'A'.repeat(80) + '…'
-    expect(screen.getByText(truncatedText)).toBeInTheDocument()
+    expect(screen.getByText('审核中')).toBeInTheDocument()
   })
 })

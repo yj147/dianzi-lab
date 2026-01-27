@@ -22,17 +22,17 @@ describe('Login Page', () => {
   it('renders login form correctly', () => {
     render(<LoginPage />)
 
-    expect(screen.getByRole('heading', { level: 1, name: '欢迎回来' })).toBeInTheDocument()
-    expect(screen.getByLabelText('邮箱')).toBeInTheDocument()
-    expect(screen.getByLabelText('密码')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '开启梦境' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '注册' })).toHaveAttribute('href', '/register')
+    expect(screen.getByRole('heading', { level: 1, name: '欢迎回到实验室' })).toBeInTheDocument()
+    expect(screen.getByLabelText('Email')).toBeInTheDocument()
+    expect(screen.getByLabelText('Password')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '登录' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '立即注册' })).toHaveAttribute('href', '/register')
   })
 
   it('shows validation errors for invalid input', async () => {
     render(<LoginPage />)
 
-    const submitButton = screen.getByRole('button', { name: '开启梦境' })
+    const submitButton = screen.getByRole('button', { name: '登录' })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -44,13 +44,13 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: false, error: '邮箱或密码错误' })
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByLabelText('邮箱'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByLabelText('密码'), {
+    fireEvent.change(screen.getByLabelText('Password'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
+    fireEvent.click(screen.getByRole('button', { name: '登录' }))
 
     await waitFor(() => {
       expect(screen.getByText(/邮箱或密码错误/i)).toBeInTheDocument()
@@ -61,13 +61,13 @@ describe('Login Page', () => {
     loginUserMock.mockRejectedValue(new Error('Unknown error'))
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByLabelText('邮箱'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByLabelText('密码'), {
+    fireEvent.change(screen.getByLabelText('Password'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
+    fireEvent.click(screen.getByRole('button', { name: '登录' }))
 
     await waitFor(() => {
       expect(screen.getByText(/发生未知错误，请稍后再试/i)).toBeInTheDocument()
@@ -83,14 +83,14 @@ describe('Login Page', () => {
     )
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByLabelText('邮箱'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByLabelText('密码'), {
+    fireEvent.change(screen.getByLabelText('Password'), {
       target: { value: 'password123' },
     })
 
-    const submitButton = screen.getByRole('button', { name: '开启梦境' })
+    const submitButton = screen.getByRole('button', { name: '登录' })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -108,13 +108,13 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: false, error: '邮箱或密码错误' })
     render(<LoginPage searchParams={{ callbackUrl: '/submit' }} />)
 
-    fireEvent.change(screen.getByLabelText('邮箱'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByLabelText('密码'), {
+    fireEvent.change(screen.getByLabelText('Password'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
+    fireEvent.click(screen.getByRole('button', { name: '登录' }))
 
     await waitFor(() => {
       expect(loginUserMock).toHaveBeenCalled()
@@ -128,13 +128,13 @@ describe('Login Page', () => {
     loginUserMock.mockResolvedValue({ success: false, error: '邮箱格式不正确', field: 'email' })
     render(<LoginPage />)
 
-    fireEvent.change(screen.getByLabelText('邮箱'), {
+    fireEvent.change(screen.getByLabelText('Email'), {
       target: { value: 'test@example.com' },
     })
-    fireEvent.change(screen.getByLabelText('密码'), {
+    fireEvent.change(screen.getByLabelText('Password'), {
       target: { value: 'password123' },
     })
-    fireEvent.click(screen.getByRole('button', { name: '开启梦境' }))
+    fireEvent.click(screen.getByRole('button', { name: '登录' }))
 
     await waitFor(() => {
       expect(screen.getByText(/邮箱格式不正确/i)).toBeInTheDocument()

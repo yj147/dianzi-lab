@@ -3,12 +3,13 @@
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
-import { ArrowRight, RotateCcw, AlertTriangle } from "lucide-react";
+import Link from "next/link";
+import { AlertTriangle, BarChart3, Eye, Lightbulb, Palette, RotateCcw } from "lucide-react";
 import { submitIdeaSchema, SubmitIdeaInput, TAGS } from "./schema";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import IdeaCard from "@/components/IdeaCard";
 import ValidatorForm from "@/components/validator/ValidatorForm";
 import RadarChart from "@/components/validator/RadarChart";
 import ResultPanel from "@/components/validator/ResultPanel";
@@ -22,7 +23,6 @@ const MIN_SCORE_TO_SUBMIT = 50;
 type Step = "idea" | "assessment" | "result";
 
 export default function SubmitForm() {
-  const router = useRouter();
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("idea");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -51,19 +51,25 @@ export default function SubmitForm() {
     },
   });
 
-  const selectedTags = watch("tags");
   const title = watch("title");
   const description = watch("description");
+  const [tagsText, setTagsText] = useState("");
 
-  const toggleTag = (tag: (typeof TAGS)[number]) => {
-    const currentTags = [...selectedTags];
-    const index = currentTags.indexOf(tag);
-    if (index > -1) {
-      currentTags.splice(index, 1);
-    } else {
-      currentTags.push(tag);
+  const parseTagsText = (value: string): (typeof TAGS)[number][] => {
+    const unique = new Set<(typeof TAGS)[number]>();
+    for (const raw of value.split(",")) {
+      const trimmed = raw.trim();
+      if (!trimmed) continue;
+      if (TAGS.includes(trimmed as (typeof TAGS)[number])) {
+        unique.add(trimmed as (typeof TAGS)[number]);
+      }
     }
-    setValue("tags", currentTags, { shouldValidate: true });
+    return Array.from(unique);
+  };
+
+  const handleTagsTextChange = (value: string) => {
+    setTagsText(value);
+    setValue("tags", parseTagsText(value), { shouldValidate: true });
   };
 
   // Step 1: 点子表单提交 → 进入评估
@@ -79,7 +85,7 @@ export default function SubmitForm() {
         toast({
           variant: "destructive",
           title: "错误",
-          description: "请先填写点子信息",
+          description: "请先填写项目信息",
         });
         setStep("idea");
         return;
@@ -149,7 +155,7 @@ export default function SubmitForm() {
           toast({
             variant: "success",
             title: "提交成功",
-            description: "您的点子已成功提交！",
+            description: "您的项目已成功提交！",
           });
         } else {
           toast({
@@ -180,6 +186,7 @@ export default function SubmitForm() {
     setIdeaData(null);
     setResult(null);
     reset();
+    setTagsText("");
   };
 
   // 转换结果为 ResultPanel 格式
@@ -194,247 +201,265 @@ export default function SubmitForm() {
       }
     : null;
 
-  return (
-    <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[3rem] border border-white/80 bg-white/60 p-8 shadow-[0_20px_60px_-15px_rgba(167,139,250,0.25)] backdrop-blur-2xl md:p-12">
-      <div
-        className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-lavender-300 via-coral-300 to-mint-300"
-        aria-hidden="true"
-      />
-
-      {/* 步骤指示器 */}
-      <div className="mb-6 flex items-center justify-center gap-2 pt-4">
-        {[
+  const stepIndicator = (
+    <div className="mb-8 flex items-center justify-center gap-2">
+      {(
+        [
           { key: "idea", label: "创建" },
           { key: "assessment", label: "评估" },
           { key: "result", label: "结果" },
-        ].map((s, i) => (
-          <div key={s.key} className="flex items-center gap-2">
-            {i > 0 && <div className="h-0.5 w-4 bg-lavender-200" />}
-            <div
+        ] as const
+      ).map((s, i) => (
+        <div key={s.key} className="flex items-center gap-2">
+          {i > 0 ? <div className="h-px w-6 bg-brand-dark/20" aria-hidden="true" /> : null}
+          <div
+            className={cn(
+              "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 font-heading text-sm font-bold transition-colors duration-200 motion-reduce:transition-none",
+              step === s.key
+                ? "border-brand-dark bg-brand-dark text-white"
+                : "border-gray-200 bg-gray-100 text-gray-600"
+            )}
+          >
+            <span
               className={cn(
-                "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-bold transition-colors",
-                step === s.key
-                  ? "bg-lavender-400 text-white"
-                  : "bg-white/60 text-slate-500"
+                "flex size-5 items-center justify-center rounded-full text-xs font-mono",
+                step === s.key ? "bg-white/15 text-white" : "bg-white text-gray-500"
               )}
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white/30 text-xs">
-                {i + 1}
-              </span>
-              {s.label}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Step 1: 点子表单 */}
-      {step === "idea" && (
-        <>
-          <div className="mb-6 flex items-center justify-between gap-6">
-            <div>
-              <h1 className="mb-1 text-3xl font-script text-slate-800">记录你的奇遇</h1>
-              <p className="text-sm font-bold text-slate-500 tabular-nums">Idea Lab #2026-SUB</p>
-            </div>
-            <span className="material-symbols-outlined text-4xl text-coral-400 rotate-12" aria-hidden="true">
-              emoji_objects
+              {i + 1}
             </span>
+            {s.label}
           </div>
+        </div>
+      ))}
+    </div>
+  );
 
-          <form onSubmit={handleSubmit(onIdeaSubmit)} className="space-y-8">
-            <div>
-              <label htmlFor="title" className="ml-2 mb-2 block text-lg font-bold text-slate-500">
-                点子名称
-              </label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-lavender-400" aria-hidden="true">
-                  star
-                </span>
+  if (step === "idea") {
+    const rawPreviewTags = tagsText
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    const previewTags = rawPreviewTags.length > 0 ? rawPreviewTags : ["标签1", "标签2"];
+
+    const previewIdea = {
+      id: "PREVIEW",
+      title: title.trim() ? title : "项目标题",
+      description: description.trim() ? description : "这里将显示你对创意的详细描述...",
+      tags: previewTags,
+      status: "PENDING" as const,
+      authorName: "当前用户",
+    };
+
+    return (
+      <div>
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+        >
+          &larr; 返回首页
+        </Link>
+
+        <div className="grid items-start gap-8 md:gap-12 lg:grid-cols-2">
+          <div className="animate-fade-in-left motion-reduce:animate-none">
+            <h1 className="mb-2 font-heading text-3xl font-bold text-brand-dark md:text-4xl">绘制蓝图</h1>
+            <p className="mb-8 text-lg text-gray-600">清晰的描述是落地的第一步。</p>
+
+            <form
+              onSubmit={handleSubmit(onIdeaSubmit)}
+              className="space-y-6 rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid md:p-8"
+            >
+              <div>
+                <label htmlFor="title" className="mb-2 block font-heading text-lg font-bold text-brand-dark">
+                  标题 <span className="text-brand-accent">*</span>
+                </label>
                 <input
                   {...register("title")}
                   id="title"
+                  maxLength={50}
                   autoComplete="off"
-                  placeholder="给你的梦起个名字..."
+                  placeholder="给你的项目起个响亮的名字"
                   aria-invalid={!!errors.title}
-                  aria-describedby={cn("title-helper", errors.title && "title-error")}
-                  className="h-14 w-full rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-colors duration-200 focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80 motion-reduce:transition-none"
+                  aria-describedby={errors.title ? "title-error" : undefined}
+                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
-                <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
+                <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
                   {title.length}/50
-                </span>
+                </div>
+                {errors.title ? (
+                  <p id="title-error" className="mt-1 text-sm font-medium text-red-600">
+                    {errors.title.message}
+                  </p>
+                ) : null}
               </div>
-              <p id="title-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
-                简洁明了，让大家一眼就知道你的点子。
-              </p>
-              {errors.title && (
-                <p id="title-error" className="ml-2 mt-1 text-sm font-medium text-danger">
-                  {errors.title.message}
-                </p>
-              )}
-            </div>
 
-            <div>
-              <label htmlFor="description" className="ml-2 mb-2 block text-lg font-bold text-slate-500">
-                梦境描述
-              </label>
-              <div className="relative">
-                <span className="material-symbols-outlined absolute left-4 top-5 text-mint-400" aria-hidden="true">
-                  edit_note
-                </span>
+              <div>
+                <label
+                  htmlFor="description"
+                  className="mb-2 block font-heading text-lg font-bold text-brand-dark"
+                >
+                  核心描述 <span className="text-brand-accent">*</span>
+                </label>
                 <textarea
                   {...register("description")}
                   id="description"
-                  rows={6}
+                  maxLength={1000}
                   autoComplete="off"
-                  placeholder="哪怕是最荒诞的细节，也请告诉我们..."
+                  placeholder="解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景..."
                   aria-invalid={!!errors.description}
-                  aria-describedby={cn("description-helper", errors.description && "description-error")}
-                  className="min-h-[140px] w-full resize-none rounded-2xl bg-white/50 border-2 border-lavender-200 px-6 py-4 pl-12 text-lg font-medium text-slate-700 placeholder:text-slate-400 outline-none transition-colors duration-200 focus:bg-white focus:border-coral-300 focus:ring-4 focus:ring-coral-100 hover:bg-white/80 motion-reduce:transition-none"
+                  aria-describedby={errors.description ? "description-error" : undefined}
+                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
-                <span className="absolute bottom-4 right-4 text-xs font-medium text-slate-400 tabular-nums">
+                <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
                   {description.length}/1000
-                </span>
+                </div>
+                {errors.description ? (
+                  <p id="description-error" className="mt-1 text-sm font-medium text-red-600">
+                    {errors.description.message}
+                  </p>
+                ) : null}
               </div>
-              <p id="description-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
-                详细描述你的想法、解决的问题、实现思路等。
-              </p>
-              {errors.description && (
-                <p id="description-error" className="ml-2 mt-1 text-sm font-medium text-danger">
-                  {errors.description.message}
-                </p>
-              )}
-            </div>
 
-            <fieldset aria-describedby="tags-helper">
-              <legend className="ml-2 mb-3 block text-lg font-bold text-slate-500">奇思标签</legend>
-              <div className="flex flex-wrap gap-2.5" role="group" aria-label="选择标签">
-                {TAGS.map((tag) => (
-                  <button
-                    key={tag}
-                    type="button"
-                    onClick={() => toggleTag(tag)}
-                    aria-pressed={selectedTags.includes(tag)}
-                    className={cn(
-                      "rounded-full border-2 px-5 py-2 text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none",
-                      selectedTags.includes(tag)
-                        ? "bg-lavender-300 border-lavender-300 text-white shadow-lavender"
-                        : "bg-white/60 border-lavender-200 text-slate-600 hover:border-lavender-300 hover:bg-white"
-                    )}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-              <p id="tags-helper" className="ml-2 mt-2 text-sm font-medium text-slate-500">
-                选择相关标签，帮助大家发现你的点子（可选）。
-              </p>
-              {errors.tags && (
-                <p className="ml-2 mt-1 text-sm font-medium text-danger">{errors.tags.message}</p>
-              )}
-            </fieldset>
-
-            <button
-              type="submit"
-              className="group flex h-14 w-full items-center justify-center rounded-full bg-coral-400 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-[transform,color] duration-200 hover:-translate-y-1 hover:bg-coral-500 active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none"
-            >
-              下一步：评估点子
-              <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1 motion-reduce:transition-none motion-reduce:transform-none" />
-            </button>
-          </form>
-        </>
-      )}
-
-      {/* Step 2: 评估表单 */}
-      {step === "assessment" && (
-        <>
-          <div className="mb-6 flex items-center justify-between gap-6">
-            <div>
-              <h1 className="mb-1 text-3xl font-script text-slate-800">评估你的创意</h1>
-              <p className="text-sm font-medium text-slate-500">
-                对「{ideaData?.title}」进行全方位评估
-              </p>
-            </div>
-            <span className="material-symbols-outlined text-4xl text-lavender-400" aria-hidden="true">
-              analytics
-            </span>
-          </div>
-          <ValidatorForm onSubmit={handleAssessmentSubmit} isLoading={isSubmitting} />
-          <div className="mt-4 text-center">
-            <Button variant="ghost" onClick={() => setStep("idea")} className="text-slate-500">
-              返回修改点子
-            </Button>
-          </div>
-        </>
-      )}
-
-      {/* Step 3: 结果展示 */}
-      {step === "result" && result && (
-        <>
-          <div className="mb-6 text-center">
-            <h1 className="mb-2 text-3xl font-script text-slate-800">{ideaData?.title}</h1>
-            <p className="text-sm font-medium text-slate-500">创业点子评估结果</p>
-          </div>
-
-          {/* 未达标警告 */}
-          {!result.submitted && (
-            <div className="mb-6 flex items-center gap-3 rounded-2xl border-2 border-coral-200 bg-coral-50 p-4">
-              <AlertTriangle className="h-6 w-6 flex-shrink-0 text-coral-500" />
               <div>
-                <p className="font-bold text-coral-600">评分未达标，点子未提交</p>
-                <p className="text-sm text-coral-500">
-                  当前评分 {result.finalScore} 分，需达到 {MIN_SCORE_TO_SUBMIT} 分才能提交。请优化你的点子后重新评估。
-                </p>
+                <label className="mb-2 block font-heading text-lg font-bold text-brand-dark">标签</label>
+                <div className="relative">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                    <Palette size={18} aria-hidden="true" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="工具, AI, 效率 (用逗号分隔)"
+                    className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                    value={tagsText}
+                    onChange={(e) => handleTagsTextChange(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
+                <Button variant="ghost" asChild>
+                  <Link href="/">取消</Link>
+                </Button>
+                <Button type="submit" size="lg">
+                  下一步：创意评估
+                </Button>
+              </div>
+            </form>
+          </div>
+
+          <div className="sticky top-28 hidden lg:block animate-fade-in-right motion-reduce:animate-none">
+            <div className="mb-4 flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-wider text-gray-500">
+              <Eye size={16} aria-hidden="true" /> 实时预览
+            </div>
+
+            <div className="rounded-2xl border-2 border-brand-dark/10 bg-[#E5E5E5] p-8">
+              <IdeaCard idea={previewIdea} className="pointer-events-none transform scale-105" />
+
+              <div className="mt-8 space-y-4">
+                <div className="h-2 w-3/4 rounded-full bg-gray-300 opacity-50" />
+                <div className="h-2 w-1/2 rounded-full bg-gray-300 opacity-50" />
+                <div className="h-2 w-5/6 rounded-full bg-gray-300 opacity-50" />
               </div>
             </div>
-          )}
 
-          <div className="grid gap-6 md:grid-cols-2">
-            <div className="flex flex-col items-center">
-              <h2 className="mb-4 text-lg font-bold text-slate-700">维度分析</h2>
-              <RadarChart scores={result.scores} className="w-full max-w-[300px]" />
-            </div>
-            <div>
-              <h2 className="mb-4 text-lg font-bold text-slate-700">评估结果</h2>
-              <ResultPanel result={validationResult} />
+            <div className="mt-6 flex gap-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+              <Lightbulb className="flex-shrink-0" size={20} aria-hidden="true" />
+              <p>
+                提示：好的创意通常包含具体的应用场景。例如“一个专门给设计师用的番茄钟”，比“做一个好用的倒计时”更具吸引力。
+              </p>
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
 
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            {result.submitted ? (
-              <>
-                <Button onClick={() => router.push("/dashboard")} size="lg">
-                  <span className="material-symbols-outlined mr-2" aria-hidden="true">
-                    dashboard
-                  </span>
-                  查看我的点子
-                </Button>
-                <Button variant="secondary" onClick={handleReset} size="lg">
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  提交新点子
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button onClick={() => setStep("assessment")} size="lg">
-                  <span className="material-symbols-outlined mr-2" aria-hidden="true">
-                    edit
-                  </span>
-                  重新评估
-                </Button>
-                <Button variant="secondary" onClick={() => setStep("idea")} size="lg">
-                  <RotateCcw className="mr-2 h-4 w-4" />
-                  修改点子
-                </Button>
-              </>
-            )}
-          </div>
-        </>
-      )}
+  return (
+    <div className="w-full max-w-6xl overflow-hidden rounded-2xl border-2 border-brand-dark bg-white p-8 shadow-solid-lg">
+      {stepIndicator}
 
-      <div className="pointer-events-none absolute bottom-4 right-4 opacity-50" aria-hidden="true">
-        <svg className="h-16 w-16 text-lavender-200" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 100 100">
-          <path d="M10 50 Q 25 25 50 50 T 90 50" />
-          <path d="M10 60 Q 25 35 50 60 T 90 60" />
-        </svg>
+      <div key={step} className="animate-fade-in-up motion-reduce:animate-none">
+        {/* Step 2: 评估表单 */}
+        {step === "assessment" ? (
+          <>
+            <div className="mb-6 flex items-start justify-between gap-6">
+              <div>
+                <h1 className="font-heading text-2xl font-bold text-brand-dark">创意评估</h1>
+                <p className="mt-1 text-sm text-gray-600">对「{ideaData?.title}」进行 9 维度打分</p>
+              </div>
+              <BarChart3 size={24} className="text-brand-primary" aria-hidden="true" />
+            </div>
+
+            <ValidatorForm onSubmit={handleAssessmentSubmit} isLoading={isSubmitting} />
+
+            <div className="mt-6 text-center">
+              <Button variant="ghost" onClick={() => setStep("idea")}>
+                返回修改项目
+              </Button>
+            </div>
+          </>
+        ) : null}
+
+        {/* Step 3: 结果展示 */}
+        {step === "result" && result ? (
+          <>
+            <div className="mb-6 text-center">
+              <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark">{ideaData?.title}</h1>
+              <p className="mt-2 text-sm text-gray-600">创业项目评估结果</p>
+            </div>
+
+            {!result.submitted ? (
+              <div className="mb-6 flex items-start gap-3 rounded-xl border-2 border-red-200 bg-red-50 p-4">
+                <AlertTriangle className="mt-0.5 h-5 w-5 flex-shrink-0 text-red-600" aria-hidden="true" />
+                <div>
+                  <p className="font-heading text-sm font-bold text-red-700">评分未达标，项目未提交</p>
+                  <p className="mt-1 text-pretty text-sm text-red-700/80">
+                    当前评分 {result.finalScore} 分，需达到 {MIN_SCORE_TO_SUBMIT} 分才能提交。请优化后重新评估。
+                  </p>
+                </div>
+              </div>
+            ) : null}
+
+            <div className="grid gap-8 md:grid-cols-2">
+              <div className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
+                <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
+                <RadarChart scores={result.scores} className="mx-auto mt-4 w-full max-w-[380px]" />
+              </div>
+
+              <div className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
+                <h2 className="font-heading text-lg font-bold text-brand-dark">评估结果</h2>
+                <ResultPanel
+                  result={validationResult}
+                  className="mt-4 rounded-none border-0 bg-transparent p-0 shadow-none"
+                />
+              </div>
+            </div>
+
+            <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              {result.submitted ? (
+                <>
+                  <Button asChild size="lg">
+                    <Link href="/dashboard">查看我的点子</Link>
+                  </Button>
+                  <Button variant="secondary" onClick={handleReset} size="lg">
+                    <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />
+                    提交新项目
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button onClick={() => setStep("assessment")} size="lg">
+                    重新评估
+                  </Button>
+                  <Button variant="secondary" onClick={() => setStep("idea")} size="lg">
+                    <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />
+                    修改项目
+                  </Button>
+                </>
+              )}
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );

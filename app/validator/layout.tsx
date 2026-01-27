@@ -2,7 +2,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import RouteTransition from '@/components/RouteTransition'
 
-export default function SubmitLayout({
+export default function ValidatorLayout({
   children,
 }: Readonly<{
   children: React.ReactNode

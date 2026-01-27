@@ -1,21 +1,28 @@
 import Link from 'next/link'
+import { ArrowLeft, Settings } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
 
 export default function SettingsPage() {
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10">
-      <div className="glass-panel rounded-[3rem] p-10 text-center">
-        <h1 className="text-balance mb-3 text-4xl font-script text-slate-800 md:text-5xl">账号设置</h1>
-        <p className="text-pretty mx-auto mb-8 max-w-md font-medium text-slate-500">
-          你的账号偏好与安全设置会出现在这里。现在还在编织中。
+    <div className="container mx-auto px-4 py-12">
+      <div className="rounded-xl border-2 border-brand-dark bg-brand-surface p-10 text-center shadow-solid-sm">
+        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-solid-sm">
+          <Settings className="size-6" aria-hidden="true" />
+        </div>
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">账号设置</h1>
+        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
+          账号偏好与安全设置正在建设中。
         </p>
-        <Link
-          href="/dashboard"
-          className="inline-flex items-center justify-center rounded-full bg-coral-400 px-8 py-3 font-bold text-white shadow-lg shadow-coral-200 transition-transform hover:-translate-y-1 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
-        >
-          返回我的梦境
-        </Link>
+        <div className="mt-8 flex justify-center">
+          <Button asChild variant="secondary">
+            <Link href="/dashboard" className="inline-flex items-center gap-2">
+              <ArrowLeft className="size-4" aria-hidden="true" />
+              返回我的点子
+            </Link>
+          </Button>
+        </div>
       </div>
     </div>
   )
 }
-

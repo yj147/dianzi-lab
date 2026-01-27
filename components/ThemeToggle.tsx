@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { Contrast, Moon, Sun } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -43,9 +44,10 @@ export default function ThemeToggle({ className }: { className?: string }) {
     setIsDark(nextIsDark)
   }
 
-  const icon = isDark === null ? 'contrast' : isDark ? 'light_mode' : 'dark_mode'
   const label =
     isDark === null ? '切换主题' : isDark ? '切换为亮色模式' : '切换为暗色模式'
+
+  const Icon = isDark === null ? Contrast : isDark ? Sun : Moon
 
   return (
     <button
@@ -54,13 +56,11 @@ export default function ThemeToggle({ className }: { className?: string }) {
       title={label}
       onClick={handleToggle}
       className={cn(
-        'inline-flex size-10 items-center justify-center rounded-full border border-white/50 bg-white/40 text-slate-700 shadow-sm backdrop-blur-md transition-colors duration-200 hover:bg-white/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-white/10 dark:bg-white/5 dark:text-slate-200 dark:hover:bg-white/10',
+        'inline-flex size-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200 hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',
         className
       )}
     >
-      <span className="material-symbols-outlined text-[22px]" aria-hidden="true">
-        {icon}
-      </span>
+      <Icon size={18} aria-hidden="true" />
     </button>
   )
 }

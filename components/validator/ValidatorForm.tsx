@@ -57,23 +57,23 @@ export default function ValidatorForm({
         {DIMENSIONS.map((dim) => (
           <div
             key={dim.key}
-            className="space-y-3 rounded-2xl bg-white/40 p-4 backdrop-blur-sm"
+            className="space-y-3 rounded-xl border-2 border-brand-dark bg-brand-surface p-4 shadow-solid-sm"
           >
             {/* 标签和当前值 */}
             <div className="flex items-center justify-between">
               <label
                 htmlFor={`slider-${dim.key}`}
-                className="font-medium text-slate-700"
+                className="text-sm font-heading font-bold text-brand-dark"
               >
                 {dim.label}
               </label>
-              <span className="tabular-nums text-lg font-bold text-lavender-500">
+              <span className="tabular-nums text-lg font-bold text-brand-primary">
                 {scores[dim.key]}
               </span>
             </div>
 
             {/* 描述 */}
-            <p className="text-sm text-slate-500">{dim.description}</p>
+            <p className="text-pretty text-sm text-gray-600">{dim.description}</p>
 
             {/* 滑块 */}
             <Slider
@@ -88,7 +88,7 @@ export default function ValidatorForm({
             />
 
             {/* 范围标签 */}
-            <div className="flex justify-between text-xs text-slate-400">
+            <div className="flex justify-between text-xs tabular-nums text-gray-500">
               <span>{MIN_SCORE}</span>
               <span>{MAX_SCORE}</span>
             </div>

@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Loader2 } from 'lucide-react'
+import { KeyRound, Loader2, Mail, ShieldCheck } from 'lucide-react'
 import { registerUser } from './actions'
 import { registerSchema } from './schema'
 import { z } from 'zod'
@@ -60,110 +60,116 @@ export default function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-      <div className="group relative">
-        <label htmlFor="email" className="sr-only">
-          邮箱
-        </label>
-        <span
-          className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-coral-400"
-          aria-hidden="true"
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div>
+        <label
+          htmlFor="email"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
-          mail
-        </span>
-        <Input
-          {...register('email')}
-          id="email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          spellCheck={false}
-          placeholder="探险家邮箱"
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? 'email-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
-        />
+          Email
+        </label>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <Mail size={16} aria-hidden="true" />
+          </div>
+          <Input
+            {...register('email')}
+            id="email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            spellCheck={false}
+            placeholder="name@example.com"
+            aria-invalid={!!errors.email}
+            aria-describedby={errors.email ? 'email-error' : undefined}
+            className="pl-10"
+          />
+        </div>
         {errors.email && (
-          <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
+          <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
             {errors.email.message}
           </p>
         )}
       </div>
 
-      <div className="group relative">
-        <label htmlFor="password" className="sr-only">
-          密码
-        </label>
-        <span
-          className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-coral-400"
-          aria-hidden="true"
+      <div>
+        <label
+          htmlFor="password"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
-          key
-        </span>
-        <Input
-          {...register('password')}
-          id="password"
-          type="password"
-          autoComplete="new-password"
-          placeholder="秘钥口令（至少 6 位）"
-          aria-invalid={!!errors.password}
-          aria-describedby={errors.password ? 'password-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
-        />
+          Password
+        </label>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <KeyRound size={16} aria-hidden="true" />
+          </div>
+          <Input
+            {...register('password')}
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            placeholder="至少 6 位"
+            aria-invalid={!!errors.password}
+            aria-describedby={errors.password ? 'password-error' : undefined}
+            className="pl-10"
+          />
+        </div>
         {errors.password && (
-          <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
+          <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
             {errors.password.message}
           </p>
         )}
       </div>
 
-      <div className="group relative">
-        <label htmlFor="confirmPassword" className="sr-only">
-          确认密码
-        </label>
-        <span
-          className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-coral-400"
-          aria-hidden="true"
+      <div>
+        <label
+          htmlFor="confirmPassword"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
-          verified_user
-        </span>
-        <Input
-          {...register('confirmPassword')}
-          id="confirmPassword"
-          type="password"
-          autoComplete="new-password"
-          placeholder="再次确认秘钥"
-          aria-invalid={!!errors.confirmPassword}
-          aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
-          className="h-14 rounded-full bg-white/60 border-2 border-lavender-200 pl-14 font-medium text-slate-700 placeholder:text-slate-400 transition-colors duration-200 outline-none focus-visible:ring-0 focus-visible:border-coral-400 focus-visible:bg-white motion-reduce:transition-none"
-        />
+          Confirm
+        </label>
+        <div className="relative">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+            <ShieldCheck size={16} aria-hidden="true" />
+          </div>
+          <Input
+            {...register('confirmPassword')}
+            id="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            placeholder="再次确认"
+            aria-invalid={!!errors.confirmPassword}
+            aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
+            className="pl-10"
+          />
+        </div>
         {errors.confirmPassword && (
-          <p id="confirmPassword-error" role="alert" className="mt-2 px-2 text-sm font-medium text-danger">
+          <p id="confirmPassword-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
             {errors.confirmPassword.message}
           </p>
         )}
       </div>
 
       {errors.root && (
-        <p role="alert" className="px-2 text-sm font-medium text-danger">
+        <p role="alert" className="px-2 text-sm font-medium text-red-600">
           {errors.root.message}
         </p>
       )}
 
       <Button
         type="submit"
-        className="h-14 w-full rounded-full bg-coral-400 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-transform hover:bg-coral-500 hover:-translate-y-0.5 active:translate-y-0"
         size="lg"
+        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark"
         disabled={isSubmitting}
         aria-busy={isSubmitting}
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            <Loader2 className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none" />
             注册中…
           </>
         ) : (
-          '开启梦境'
+          '注册账户'
         )}
       </Button>
     </form>

@@ -1,65 +1,55 @@
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+'use client'
+
+import type { IdeaStatus } from '@prisma/client'
+import { User } from 'lucide-react'
+
+import StatusBadge from '@/components/StatusBadge'
+import { cn } from '@/lib/utils'
 
 type IdeaCardProps = {
   idea: {
-    id: string;
-    title: string;
-    description: string;
-    tags: string[];
-  };
-};
-
-// Color palette for tags - cycles through these colors
-const tagColors = [
-  { bg: 'bg-lavender-100', text: 'text-lavender-600' },
-  { bg: 'bg-mint-100', text: 'text-mint-700' },
-  { bg: 'bg-coral-100', text: 'text-coral-600' },
-  { bg: 'bg-amber-100', text: 'text-amber-800' },
-];
-
-function getTagColor(index: number) {
-  return tagColors[index % tagColors.length];
+    id: string
+    title: string
+    description: string
+    tags: string[]
+    status: IdeaStatus
+    authorName: string
+  }
+  className?: string
 }
 
-export default function IdeaCard({ idea }: IdeaCardProps) {
-  const truncatedDescription =
-    idea.description.length > 100 ? `${idea.description.slice(0, 100)}…` : idea.description;
-
+export default function IdeaCard({ idea, className }: IdeaCardProps) {
   return (
-    <Card className="group h-full border-white/40 bg-white/50 backdrop-blur-xl shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:shadow-hover">
-      <CardHeader>
-        <CardTitle className="text-xl leading-tight transition-colors group-hover:text-coral-400">
-          {idea.title}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <CardDescription className="text-pretty text-base leading-relaxed text-slate-500">
-          {truncatedDescription}
-        </CardDescription>
-      </CardContent>
-      <CardFooter className="pt-2">
-        <div className="flex flex-wrap gap-2">
-          {idea.tags.map((tag, index) => {
-            const color = getTagColor(index);
-            return (
-              <span
-                key={tag}
-                className={cn('rounded-full px-3 py-1 text-xs font-medium border border-white/60', color.bg, color.text)}
-              >
-                {tag}
-              </span>
-            );
-          })}
+    <div
+      className={cn(
+        'group relative flex h-full flex-col rounded-xl border-2 border-brand-dark bg-white p-5 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-1.5 hover:shadow-solid motion-reduce:transition-none',
+        className
+      )}
+    >
+      <div className="mb-3 flex items-start justify-between">
+        <StatusBadge status={idea.status} size="sm" />
+        <span className="font-mono text-xs text-gray-400">#{idea.id}</span>
+      </div>
+
+      <h3 className="mb-2 font-heading text-xl font-bold leading-tight text-brand-dark transition-colors group-hover:text-brand-primary">
+        {idea.title}
+      </h3>
+
+      <p className="mb-4 flex-grow text-sm text-gray-600 line-clamp-3">{idea.description}</p>
+
+      <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
+        <div className="flex gap-2">
+          {idea.tags.slice(0, 2).map((tag) => (
+            <span key={tag} className="rounded-md bg-gray-100 px-2 py-1 font-mono text-xs text-gray-500">
+              {tag}
+            </span>
+          ))}
         </div>
-      </CardFooter>
-    </Card>
-  );
+        <div className="flex items-center gap-1 text-xs font-medium text-gray-400">
+          <User size={12} aria-hidden="true" />
+          {idea.authorName}
+        </div>
+      </div>
+    </div>
+  )
 }
