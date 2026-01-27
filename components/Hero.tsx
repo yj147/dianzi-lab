@@ -1,54 +1,126 @@
+import Link from 'next/link'
+import { Eye, ScrollText } from 'lucide-react'
+
+import { Button } from '@/components/ui/button'
+
+const PAIN_POINTS = [
+  {
+    title: '技术门槛',
+    description: '不懂编程，配置环境就劝退，服务器维护更是噩梦。',
+  },
+  {
+    title: '设计苦手',
+    description: '脑子里画面很美，做出来却像上个世纪的软件。',
+  },
+  {
+    title: '时间碎片化',
+    description: '全职工作之余，根本没有整块时间推进项目。',
+  },
+] as const
+
+const PROCESS_STEPS = [
+  {
+    step: '01',
+    title: '提交点子',
+    description: '不需要长篇大论的商业计划书。只需要清晰描述你的痛点和解决方案。',
+  },
+  {
+    step: '02',
+    title: '可行性评估',
+    description: '社区投票筛选，管理员评估技术实现难度和潜在价值。',
+  },
+  {
+    step: '03',
+    title: '设计与开发',
+    description: '实验室的工程师和设计师接手项目。你只需要参与核心决策。',
+  },
+  {
+    step: '04',
+    title: '发布上线',
+    description: '部署到生产环境，发布到 Product Hunt，让世界看到你的创意。',
+  },
+] as const
+
 export default function Hero() {
   return (
-    <section className="relative mx-auto max-w-7xl px-6 pb-24 pt-12 text-center sm:pb-32 sm:pt-16">
-      <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-mint-100 px-4 py-1.5 text-sm font-bold text-emerald-600">
-        <span className="material-symbols-outlined text-base" aria-hidden="true">
-          auto_awesome
-        </span>
-        欢迎来到造梦者的集散地
-      </div>
+    <div className="relative z-10">
+      <section className="pb-20 pt-24 md:pt-28">
+        <div className="container mx-auto max-w-7xl px-4">
+          <p className="font-mono text-sm text-gray-500">99% 的点子死于“没时间做”</p>
 
-      <h1 className="text-balance mb-8 text-5xl font-black sm:text-6xl md:text-8xl">
-        <span className="script-title block mb-4">点亮你的</span>
-        <span className="bg-gradient-to-r from-lavender-300 via-coral-400 to-mint-200 bg-clip-text text-transparent drop-shadow-sm">
-          奇思妙想
-        </span>
-      </h1>
+          <h1 className="mt-6 text-balance font-heading text-6xl font-bold leading-[0.95] text-brand-dark md:text-7xl">
+            让好点子 <span className="text-brand-primary">不再只是想法</span>
+          </h1>
 
-      <p className="text-pretty mx-auto mb-12 max-w-2xl text-xl font-medium leading-relaxed text-slate-500 md:text-2xl">
-        在这里，每一个古怪的念头都能编织成现实。
-        <br />
-        和志同道合的探索者一起，在梦境中构建奇迹。
-      </p>
+          <p className="mt-6 max-w-2xl border-l-4 border-brand-primary py-2 pl-6 text-pretty text-lg font-medium leading-relaxed text-gray-700 md:text-xl">
+            点子 Lab 是一个创意孵化器。你负责提供灵感，我们提供
+            <br className="hidden sm:block" />
+            设计、代码和运营，把它们变成真实可用的产品。
+          </p>
 
-      <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
-        <a
-          href="/submit"
-          className="group flex items-center gap-3 rounded-full bg-coral-400 px-8 py-4 text-base font-bold text-white shadow-[0_10px_30px_rgba(251,113,133,0.4)] transition-[transform,color] duration-200 hover:scale-105 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transform-none motion-reduce:transition-none sm:px-10 sm:py-5 sm:text-xl sm:hover:-rotate-2 sm:hover:scale-110"
-        >
-          <span className="material-symbols-outlined transition-transform group-hover:rotate-12 motion-reduce:transition-none motion-reduce:transform-none" aria-hidden="true">
-            temp_preferences_custom
-          </span>
-          编织梦想
-        </a>
+          <div className="mt-10 flex flex-col gap-5 sm:flex-row">
+            <Button asChild size="lg">
+              <Link href="/submit">
+                <ScrollText size={18} className="mr-3" aria-hidden="true" />
+                提交我的点子
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="secondary">
+              <Link href="/#tools">
+                <Eye size={18} className="mr-3" aria-hidden="true" />
+                看看大家的作品
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
 
-        <a
-          href="/#tools"
-          className="flex items-center gap-3 rounded-full border-2 border-dashed border-mint-300 bg-white/80 px-8 py-4 text-base font-bold text-slate-600 transition-colors duration-200 hover:border-mint-500 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff] motion-reduce:transition-none sm:px-10 sm:py-5 sm:text-xl"
-        >
-          <span className="material-symbols-outlined text-mint-500" aria-hidden="true">
-            explore
-          </span>
-          探索奇迹工坊
-        </a>
-      </div>
+      <section className="border-t-2 border-brand-dark/10 py-20">
+        <div className="container mx-auto max-w-7xl px-4">
+          <h2 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+            为什么你的想法总是无法落地？
+          </h2>
+          <p className="mt-3 text-pretty text-lg text-gray-600">因为创造一个产品比想象中难得多。</p>
 
-      <div className="absolute -left-10 top-1/4 hidden opacity-20 lg:block" aria-hidden="true">
-        <span className="material-symbols-outlined text-[12rem] text-lavender-300">toys_fan</span>
-      </div>
-      <div className="absolute -right-10 bottom-0 hidden opacity-20 lg:block" aria-hidden="true">
-        <span className="material-symbols-outlined text-[15rem] text-mint-200">wind_power</span>
-      </div>
-    </section>
-  );
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {PAIN_POINTS.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid-sm"
+              >
+                <h3 className="font-heading text-xl font-bold text-brand-dark">{item.title}</h3>
+                <p className="mt-3 text-pretty text-sm leading-relaxed text-gray-600">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t-2 border-brand-dark/10 py-20">
+        <div className="container mx-auto max-w-7xl px-4">
+          <p className="font-mono text-xs text-gray-500">PROCESS</p>
+          <h2 className="mt-3 text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+            孵化四部曲
+          </h2>
+          <p className="mt-3 text-pretty text-lg text-gray-600">从想法到产品，只需要简单的四步</p>
+
+          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {PROCESS_STEPS.map((item) => (
+              <div
+                key={item.step}
+                className="rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid-sm"
+              >
+                <p className="font-mono text-xl font-bold text-brand-primary tabular-nums">{item.step}</p>
+                <h3 className="mt-3 font-heading text-xl font-bold text-brand-dark">{item.title}</h3>
+                <p className="mt-3 text-pretty text-sm leading-relaxed text-gray-600">{item.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <p className="mt-8 font-mono text-xs text-gray-500">滚动查看更多流程</p>
+        </div>
+      </section>
+    </div>
+  )
 }
+
