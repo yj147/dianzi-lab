@@ -38,7 +38,7 @@ const themeInitScript = `
 
     const stored = localStorage.getItem(storageKey);
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const isDark = stored === 'dark' || (stored !== 'light' && systemDark);
+    const isDark = stored === 'dark' || (stored === 'system' && systemDark) || (!stored && systemDark);
 
     root.classList.toggle(classNameDark, isDark);
     root.style.colorScheme = isDark ? 'dark' : 'light';

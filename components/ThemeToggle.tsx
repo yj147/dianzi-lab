@@ -1,53 +1,76 @@
 'use client'
 
 import * as React from 'react'
-import { Contrast, Moon, Sun } from 'lucide-react'
+import { Monitor, Moon, Sun } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 const STORAGE_KEY = 'theme'
 const DARK_CLASS = 'dark'
 
+type ThemeMode = 'light' | 'dark' | 'system'
+
 function getRoot(): HTMLElement | null {
   return typeof document === 'undefined' ? null : document.documentElement
 }
 
-function getIsDark(): boolean {
-  const root = getRoot()
-  return root ? root.classList.contains(DARK_CLASS) : false
+function getSystemDark(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
-function applyTheme(isDark: boolean) {
+function applyTheme(mode: ThemeMode) {
   const root = getRoot()
   if (!root) return
 
+  const isDark = mode === 'dark' || (mode === 'system' && getSystemDark())
   root.classList.toggle(DARK_CLASS, isDark)
   root.style.colorScheme = isDark ? 'dark' : 'light'
 
   try {
-    localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light')
+    localStorage.setItem(STORAGE_KEY, mode)
   } catch {
     // ignore
   }
 }
 
+function getStoredMode(): ThemeMode {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
+  } catch {
+    // ignore
+  }
+  return 'system'
+}
+
 export default function ThemeToggle({ className }: { className?: string }) {
-  const [isDark, setIsDark] = React.useState<boolean | null>(null)
+  const [mode, setMode] = React.useState<ThemeMode | null>(null)
 
   React.useEffect(() => {
-    setIsDark(getIsDark())
+    setMode(getStoredMode())
   }, [])
 
+  React.useEffect(() => {
+    if (mode !== 'system') return
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    const handler = () => applyTheme('system')
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [mode])
+
   const handleToggle = () => {
-    const nextIsDark = !getIsDark()
-    applyTheme(nextIsDark)
-    setIsDark(nextIsDark)
+    const next: ThemeMode = mode === 'light' ? 'dark' : mode === 'dark' ? 'system' : 'light'
+    applyTheme(next)
+    setMode(next)
   }
 
-  const label =
-    isDark === null ? '切换主题' : isDark ? '切换为亮色模式' : '切换为暗色模式'
-
-  const Icon = isDark === null ? Contrast : isDark ? Sun : Moon
+  const labels: Record<ThemeMode, string> = {
+    light: '亮色模式（点击切换暗色）',
+    dark: '暗色模式（点击切换跟随系统）',
+    system: '跟随系统（点击切换亮色）',
+  }
+  const label = mode ? labels[mode] : '切换主题'
+  const Icon = mode === 'light' ? Sun : mode === 'dark' ? Moon : Monitor
 
   return (
     <button
@@ -56,7 +79,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
       title={label}
       onClick={handleToggle}
       className={cn(
-        'inline-flex size-9 items-center justify-center rounded-full bg-gray-100 text-gray-600 transition-colors duration-200 hover:bg-gray-200 hover:text-brand-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',
+        'inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-200 hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',
         className
       )}
     >
