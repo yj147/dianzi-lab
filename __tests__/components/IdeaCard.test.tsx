@@ -39,25 +39,27 @@ describe('IdeaCard Component', () => {
     expect(screen.getByText('短描述')).toBeInTheDocument();
   });
 
-  it('renders tags as colorful chips with rounded-full class', () => {
+  it('renders tags as chips with rounded-md class', () => {
     render(<IdeaCard idea={mockIdea} />);
     const reactTag = screen.getByText('React');
     const tsTag = screen.getByText('TypeScript');
-    expect(reactTag).toHaveClass('rounded-full');
-    expect(tsTag).toHaveClass('rounded-full');
+    expect(reactTag).toHaveClass('rounded-md');
+    expect(tsTag).toHaveClass('rounded-md');
   });
 
-  it('card has glassmorphism effect classes', () => {
+  it('card uses Industrial Blueprint v3 surface styling', () => {
     const { container } = render(<IdeaCard idea={mockIdea} />);
     const card = container.firstChild;
-    expect(card).toHaveClass('backdrop-blur-xl');
-    expect(card).toHaveClass('bg-white/50');
+    expect(card).toHaveClass('border-2');
+    expect(card).toHaveClass('border-brand-dark');
+    expect(card).toHaveClass('bg-white');
+    expect(card).toHaveClass('shadow-solid-sm');
   });
 
   it('card has hover effect classes', () => {
     const { container } = render(<IdeaCard idea={mockIdea} />);
     const card = container.firstChild;
-    expect(card).toHaveClass('hover:-translate-y-1');
-    expect(card).toHaveClass('hover:shadow-hover');
+    expect(card).toHaveClass('hover:-translate-y-1.5');
+    expect(card).toHaveClass('hover:shadow-solid');
   });
 });

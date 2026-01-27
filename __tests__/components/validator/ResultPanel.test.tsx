@@ -37,33 +37,32 @@ describe("ResultPanel Component", () => {
   });
 
   it("renders success feedback with correct styling", () => {
-    render(<ResultPanel result={mockResult} />);
+    const { container } = render(<ResultPanel result={mockResult} />);
 
     expect(screen.getByText("目标用户定位清晰")).toBeInTheDocument();
-    expect(screen.getByText("check_circle")).toBeInTheDocument();
+    expect(container.querySelector('svg[data-lucide="CheckCircle2"]')).toBeInTheDocument();
   });
 
   it("renders warning feedback with correct styling", () => {
-    render(<ResultPanel result={mockResult} />);
+    const { container } = render(<ResultPanel result={mockResult} />);
 
     expect(
       screen.getByText(/市场竞争较为激烈/)
     ).toBeInTheDocument();
-    expect(screen.getByText("warning")).toBeInTheDocument();
+    expect(container.querySelector('svg[data-lucide="AlertTriangle"]')).toBeInTheDocument();
   });
 
   it("renders error feedback with correct styling", () => {
-    render(<ResultPanel result={mockResult} />);
+    const { container } = render(<ResultPanel result={mockResult} />);
 
     expect(screen.getByText(/预算不足/)).toBeInTheDocument();
-    expect(screen.getByText("error")).toBeInTheDocument();
+    expect(container.querySelector('svg[data-lucide="XCircle"]')).toBeInTheDocument();
   });
 
   it("shows skeleton when isLoading is true", () => {
     const { container } = render(<ResultPanel result={null} isLoading={true} />);
 
-    const skeletons = container.querySelectorAll(".animate-pulse");
-    expect(skeletons.length).toBeGreaterThan(0);
+    expect(container.querySelector(".bg-gray-200")).toBeTruthy();
   });
 
   it("renders reset button when onReset is provided", () => {
@@ -118,7 +117,9 @@ describe("ResultPanel Component", () => {
   it("has glassmorphism styling", () => {
     const { container } = render(<ResultPanel result={mockResult} />);
 
-    expect(container.firstChild).toHaveClass("backdrop-blur-sm");
-    expect(container.firstChild).toHaveClass("bg-white/40");
+    expect(container.firstChild).toHaveClass("border-2");
+    expect(container.firstChild).toHaveClass("border-brand-dark");
+    expect(container.firstChild).toHaveClass("bg-brand-surface");
+    expect(container.firstChild).toHaveClass("shadow-solid-sm");
   });
 });

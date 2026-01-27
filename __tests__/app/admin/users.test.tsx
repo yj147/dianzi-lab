@@ -50,8 +50,8 @@ describe('Admin: Dashboard + Users', () => {
     expect(screen.getByText('1')).toBeInTheDocument()
     expect(screen.getByText('5')).toBeInTheDocument()
 
-    // Verify welcome section shows admin email
-    expect(screen.getByText('欢迎回来')).toBeInTheDocument()
+    // Verify operator card shows admin email
+    expect(screen.getByText('快捷操作')).toBeInTheDocument()
     expect(screen.getByText('admin@example.com')).toBeInTheDocument()
 
     // Verify quick actions

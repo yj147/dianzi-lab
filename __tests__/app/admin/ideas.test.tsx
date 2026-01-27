@@ -94,7 +94,7 @@ describe('Admin Ideas Page + Table', () => {
 
     render(await AdminIdeasPage({ searchParams: {} }))
 
-    expect(screen.getByText('梦境管理员')).toBeInTheDocument()
+    expect(screen.getByText('梦境管理')).toBeInTheDocument()
     expect(screen.getAllByText('Idea 1')[0]).toBeInTheDocument()
     expect(screen.getAllByText('u1@example.com')[0]).toBeInTheDocument()
     expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()
@@ -160,7 +160,7 @@ describe('Admin Ideas Page + Table', () => {
 
   it('renders an empty-state row when there are no ideas', () => {
     render(<IdeasTable ideas={[]} />)
-    expect(screen.getByText('暂无符合筛选条件的梦境')).toBeInTheDocument()
+    expect(screen.getByText('暂无符合筛选条件的点子')).toBeInTheDocument()
   })
 
   it('supports status transitions beyond approval', async () => {

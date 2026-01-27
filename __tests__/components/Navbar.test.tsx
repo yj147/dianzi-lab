@@ -34,14 +34,15 @@ describe('Navbar (Server Component)', () => {
     const NavbarResolved = await Navbar()
     render(NavbarResolved)
     
-    expect(screen.getByRole('link', { name: '潜入' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '用户菜单' })).not.toBeInTheDocument()
   })
 
   it('正确传递已登录状态给 NavbarClient', async () => {
     ;(auth.getSession as jest.Mock).mockResolvedValue({
       email: 'test@example.com',
       sub: '123',
-      role: 'user'
+      role: 'USER',
     })
     
     const NavbarResolved = await Navbar()
@@ -66,16 +67,16 @@ describe('NavbarClient', () => {
   it('登录状态：渲染主导航与 CTA', () => {
     render(<NavbarClient isLoggedIn={true} userEmail="test@example.com" />)
 
-    expect(screen.getByRole('link', { name: '幻象大厅' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '造梦工具' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '我的梦境' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '开始编织' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '探索' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '提交点子' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '我的空间' })).toBeInTheDocument()
   })
 
   it('未登录时显示登录链接', () => {
     render(<NavbarClient isLoggedIn={false} />)
-    expect(screen.getByRole('link', { name: '潜入' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: '退出' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '加入实验室' })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: '用户菜单' })).not.toBeInTheDocument()
   })
 
   it('已登录时显示退出按钮和用户邮箱', () => {
@@ -91,29 +92,27 @@ describe('NavbarClient', () => {
 
     const trigger = screen.getByRole('button', { name: '用户菜单' })
 
-    expect(screen.queryByRole('menuitem', { name: '我的梦境' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('menuitem', { name: '我的空间' })).not.toBeInTheDocument()
 
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
 
-    const dreamsItem = await screen.findByRole('menuitem', { name: '我的梦境' })
-    expect(dreamsItem).toHaveAttribute('href', '/dashboard')
-    expect(screen.getByRole('menuitem', { name: '灵感收藏' })).toHaveAttribute('href', '/dashboard/favorites')
-    expect(screen.getByRole('menuitem', { name: '账号设置' })).toHaveAttribute('href', '/dashboard/settings')
+    const dashboardItem = await screen.findByRole('menuitem', { name: '我的空间' })
+    expect(dashboardItem).toHaveAttribute('href', '/dashboard')
 
-    const menu = dreamsItem.closest('[role="menu"]')
+    const menu = dashboardItem.closest('[role="menu"]')
     expect(menu).toBeInTheDocument()
 
     // Escape 关闭菜单
     fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
     await waitFor(() => {
-      expect(screen.queryByRole('menuitem', { name: '我的梦境' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('menuitem', { name: '我的空间' })).not.toBeInTheDocument()
     })
 
     // 再次打开并点击退出
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
-    fireEvent.click(await screen.findByRole('button', { name: '离开工坊' }))
+    fireEvent.click(await screen.findByRole('menuitem', { name: '退出登录' }))
     expect(authActions.logout).toHaveBeenCalled()
   })
 })
