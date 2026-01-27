@@ -80,7 +80,7 @@ export default function Hero() {
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">乙方:</span>
-                      <span className="font-bold">点子 Lab</span>
+                      <span className="font-bold">Bambi Lab Idea</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">交付物:</span>

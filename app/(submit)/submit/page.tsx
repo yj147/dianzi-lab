@@ -15,7 +15,7 @@ export default async function SubmitPage() {
       ) : (
         <div className="rounded-2xl border-2 border-brand-dark bg-white p-8 shadow-solid-lg">
           <h2 className="font-heading text-2xl font-bold text-brand-dark">登录后即可提交点子</h2>
-          <p className="mt-2 text-pretty text-gray-600">提交后可在「我的工坊」查看进度与评估结果。</p>
+          <p className="mt-2 text-pretty text-gray-600">提交后可在「我的点子」查看进度与评估结果。</p>
           <div className="mt-8">
             <Button asChild size="lg" className="w-full">
               <Link href="/login?callbackUrl=/submit">

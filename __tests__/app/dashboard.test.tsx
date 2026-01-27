@@ -55,8 +55,8 @@ describe('Dashboard Page', () => {
     const PageContent = await DashboardPage({})
     render(PageContent)
 
-    expect(screen.getByRole('heading', { level: 1, name: '我的工坊' })).toBeInTheDocument()
-    expect(screen.getByText('工坊空空如也')).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '我的点子' })).toBeInTheDocument()
+    expect(screen.getByText('暂无点子')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '提交第一个点子' })).toHaveAttribute('href', '/submit')
   })
 

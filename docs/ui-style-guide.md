@@ -1,4 +1,4 @@
-# 点子 Lab 视觉与交互规范（工业蓝图主题 v3）
+# Bambi Lab Idea 视觉与交互规范（工业蓝图主题 v3）
 
 > **设计方向**：工业蓝图 + 实心阴影 + 网格背景 + 专业排版
 > **技术栈**：Next.js 14 + Tailwind CSS + shadcn/ui (Radix) + Lucide Icons + Motion
@@ -696,5 +696,5 @@ className="inline-flex items-center gap-1.5 rounded-full font-mono font-medium b
 
 **文档版本**: v3.0
 **最后更新**: 2026-01-26
-**维护者**: 点子 Lab 团队
+**维护者**: Bambi Lab Idea 团队
 **设计风格**: Industrial Blueprint

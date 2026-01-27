@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { AlertTriangle, BarChart3, Eye, Lightbulb, Palette, RotateCcw } from "lucide-react";
 import { submitIdeaSchema, SubmitIdeaInput, TAGS } from "./schema";
 import { useToast } from "@/components/ui/use-toast";
@@ -23,7 +23,6 @@ const MIN_SCORE_TO_SUBMIT = 50;
 type Step = "idea" | "assessment" | "result";
 
 export default function SubmitForm() {
-  const router = useRouter();
   const { toast } = useToast();
   const [step, setStep] = useState<Step>("idea");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -254,13 +253,12 @@ export default function SubmitForm() {
 
     return (
       <div>
-        <button
-          type="button"
-          onClick={() => router.push("/")}
-          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-brand-dark"
+        <Link
+          href="/"
+          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
         >
           &larr; 返回首页
-        </button>
+        </Link>
 
         <div className="grid items-start gap-8 md:gap-12 lg:grid-cols-2">
           <div className="animate-fade-in-left motion-reduce:animate-none">
@@ -283,7 +281,7 @@ export default function SubmitForm() {
                   placeholder="给你的项目起个响亮的名字"
                   aria-invalid={!!errors.title}
                   aria-describedby={errors.title ? "title-error" : undefined}
-                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark outline-none transition-colors focus:border-brand-primary focus:bg-white focus:outline-none motion-reduce:transition-none"
+                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
                 <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
                   {title.length}/50
@@ -310,7 +308,7 @@ export default function SubmitForm() {
                   placeholder="解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景..."
                   aria-invalid={!!errors.description}
                   aria-describedby={errors.description ? "description-error" : undefined}
-                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base leading-relaxed text-brand-dark outline-none transition-colors focus:border-brand-primary focus:bg-white focus:outline-none motion-reduce:transition-none"
+                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
                 <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
                   {description.length}/1000
@@ -331,7 +329,7 @@ export default function SubmitForm() {
                   <input
                     type="text"
                     placeholder="工具, AI, 效率 (用逗号分隔)"
-                    className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 pl-10 font-mono text-sm text-brand-dark outline-none transition-colors focus:border-brand-primary focus:bg-white focus:outline-none motion-reduce:transition-none"
+                    className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                     value={tagsText}
                     onChange={(e) => handleTagsTextChange(e.target.value)}
                   />
@@ -339,8 +337,8 @@ export default function SubmitForm() {
               </div>
 
               <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
-                <Button type="button" variant="ghost" onClick={() => router.push("/")}>
-                  取消
+                <Button variant="ghost" asChild>
+                  <Link href="/">取消</Link>
                 </Button>
                 <Button type="submit" size="lg">
                   下一步：创意评估
@@ -440,8 +438,8 @@ export default function SubmitForm() {
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
               {result.submitted ? (
                 <>
-                  <Button onClick={() => router.push("/dashboard")} size="lg">
-                    查看我的工坊
+                  <Button asChild size="lg">
+                    <Link href="/dashboard">查看我的点子</Link>
                   </Button>
                   <Button variant="secondary" onClick={handleReset} size="lg">
                     <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />

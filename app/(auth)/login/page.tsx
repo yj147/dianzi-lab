@@ -5,7 +5,7 @@ import { User } from 'lucide-react'
 import LoginForm from './LoginForm'
 
 export const metadata: Metadata = {
-  title: '登录 | 点子 Lab',
+  title: '登录 | Bambi Lab Idea',
 }
 
 type LoginPageProps = {

@@ -133,7 +133,7 @@ describe('Submit Page (3-step)', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
 
-    expect(screen.getByRole('button', { name: /返回首页/ })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /返回首页/ })).toBeInTheDocument()
 
     expect(screen.getByPlaceholderText('给你的项目起个响亮的名字')).toBeInTheDocument()
     expect(
@@ -226,12 +226,11 @@ describe('Submit Page (3-step)', () => {
     await click(screen.getByRole('button', { name: '提交高分评估' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '查看我的工坊' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: '查看我的点子' })).toBeInTheDocument()
       expect(screen.getByRole('button', { name: '提交新项目' })).toBeInTheDocument()
     })
 
-    await click(screen.getByRole('button', { name: '查看我的工坊' }))
-    expect(pushMock).toHaveBeenCalledWith('/dashboard')
+    expect(screen.getByRole('link', { name: '查看我的点子' })).toHaveAttribute('href', '/dashboard')
     expect(submitIdeaWithAssessment).toHaveBeenCalledTimes(1)
   })
 })

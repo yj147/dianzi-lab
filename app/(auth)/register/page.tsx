@@ -5,7 +5,7 @@ import { UserPlus } from 'lucide-react'
 import RegisterForm from './RegisterForm'
 
 export const metadata: Metadata = {
-  title: '注册 | 点子 Lab',
+  title: '注册 | Bambi Lab Idea',
 }
 
 export default function RegisterPage() {

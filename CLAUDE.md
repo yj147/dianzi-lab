@@ -1,8 +1,8 @@
-# CLAUDE.md - 点子 Lab 仓库指南
+# CLAUDE.md - Bambi Lab Idea 仓库指南
 
 ## 项目概述
 
-点子 Lab 是一个创意实现平台：用户提交点子 → 管理员审核 → 推进开发 → 首页展示已完成工具。
+Bambi Lab Idea 是一个软件开发服务平台：用户提交点子 → 管理员审核 → 推进开发 → 首页展示已完成案例。
 
 **技术栈**: Next.js 14 (App Router) + Prisma + Supabase (PostgreSQL) + Tailwind CSS + shadcn/ui
 

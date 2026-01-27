@@ -64,7 +64,7 @@ export default async function IdeaResultPage({ params }: Props) {
         <Button asChild size="lg">
           <Link href="/dashboard" className="inline-flex items-center gap-2">
             <LayoutDashboard className="size-5" aria-hidden="true" />
-            查看我的工坊
+            查看我的点子
           </Link>
         </Button>
         <Button asChild variant="secondary" size="lg">

@@ -18,7 +18,7 @@ export default function InboxPage() {
           <Button asChild variant="secondary">
             <Link href="/dashboard" className="inline-flex items-center gap-2">
               <ArrowLeft className="size-4" aria-hidden="true" />
-              返回我的工坊
+              返回我的点子
             </Link>
           </Button>
         </div>

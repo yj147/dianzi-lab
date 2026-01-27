@@ -120,7 +120,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <div className="container mx-auto px-4 py-12">
       <header className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <h1 className="font-heading font-bold text-3xl md:text-4xl text-brand-dark mb-2">我的工坊</h1>
+          <h1 className="font-heading font-bold text-3xl md:text-4xl text-brand-dark mb-2">我的点子</h1>
           <p className="text-gray-500 text-lg">查看你提交的项目进度。</p>
         </div>
         <Button asChild>
@@ -219,7 +219,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <Lightbulb size={40} aria-hidden="true" />
           </div>
           <h3 className="font-heading font-bold text-2xl text-gray-700 mb-2">
-            {hasFilters ? '没有匹配的项目' : '工坊空空如也'}
+            {hasFilters ? '没有匹配的项目' : '暂无点子'}
           </h3>
           <p className="text-gray-500 mb-8 max-w-md mx-auto">
             {hasFilters

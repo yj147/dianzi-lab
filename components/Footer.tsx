@@ -9,10 +9,10 @@ export default function Footer() {
             <div className="flex size-8 items-center justify-center rounded-lg bg-white font-heading font-bold text-brand-dark">
               L
             </div>
-            <span className="font-heading text-xl font-bold">点子 Lab</span>
+            <span className="font-heading text-xl font-bold">Bambi Lab Idea</span>
           </div>
           <p className="text-sm font-mono text-gray-400">
-            © {year} Idea Lab. Built for builders.
+            © {year} Bambi Lab Idea. Built for builders.
           </p>
         </div>
       </div>

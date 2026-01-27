@@ -1,7 +1,7 @@
-# Test Cases: 点子项目 (Idea Lab)
+# Test Cases: Bambi Lab Idea
 
 ## Overview
-- **Feature**: 点子项目 - 创意实现平台
+- **Feature**: Bambi Lab Idea - 软件开发服务平台
 - **Requirements Source**: docs/dianzi-prd.md
 - **Test Coverage**: 7个用户故事 + 5个核心功能模块
 - **Last Updated**: 2026-01-27

@@ -25,7 +25,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "点子 Lab",
+  title: "Bambi Lab Idea",
   description: "让好点子不再只是想法",
 };
 

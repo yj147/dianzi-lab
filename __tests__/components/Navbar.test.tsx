@@ -69,7 +69,7 @@ describe('NavbarClient', () => {
 
     expect(screen.getByRole('link', { name: '探索' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '提交点子' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '我的空间' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '我的点子' })).toBeInTheDocument()
   })
 
   it('未登录时显示登录链接', () => {
@@ -92,12 +92,12 @@ describe('NavbarClient', () => {
 
     const trigger = screen.getByRole('button', { name: '用户菜单' })
 
-    expect(screen.queryByRole('menuitem', { name: '我的空间' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('menuitem', { name: '我的点子' })).not.toBeInTheDocument()
 
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
 
-    const dashboardItem = await screen.findByRole('menuitem', { name: '我的空间' })
+    const dashboardItem = await screen.findByRole('menuitem', { name: '我的点子' })
     expect(dashboardItem).toHaveAttribute('href', '/dashboard')
 
     const menu = dashboardItem.closest('[role="menu"]')
@@ -106,7 +106,7 @@ describe('NavbarClient', () => {
     // Escape 关闭菜单
     fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
     await waitFor(() => {
-      expect(screen.queryByRole('menuitem', { name: '我的空间' })).not.toBeInTheDocument()
+      expect(screen.queryByRole('menuitem', { name: '我的点子' })).not.toBeInTheDocument()
     })
 
     // 再次打开并点击退出

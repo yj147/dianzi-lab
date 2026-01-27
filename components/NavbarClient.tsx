@@ -53,7 +53,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
     ? [
         { name: '探索', href: '/' },
         { name: '提交点子', href: '/submit' },
-        { name: '我的空间', href: '/dashboard' },
+        { name: '我的点子', href: '/dashboard' },
         ...(userRole === 'ADMIN' ? [{ name: '管理后台', href: '/admin' }] : []),
       ]
     : [
@@ -68,7 +68,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
             <Lightbulb size={20} strokeWidth={2.5} aria-hidden="true" />
           </div>
           <span className="font-heading text-2xl font-bold text-brand-dark">
-            点子<span className="text-brand-primary"> Lab</span>
+            Bambi<span className="text-brand-primary"> Lab Idea</span>
           </span>
         </Link>
 
@@ -134,7 +134,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="flex items-center gap-2 font-bold">
                       <User size={16} aria-hidden="true" />
-                      我的空间
+                      我的点子
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
