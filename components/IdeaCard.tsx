@@ -22,7 +22,7 @@ export default function IdeaCard({ idea, className }: IdeaCardProps) {
   return (
     <div
       className={cn(
-        'group relative flex h-full cursor-pointer flex-col rounded-xl border-2 border-brand-dark bg-white p-5 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-1.5 hover:shadow-solid motion-reduce:transition-none',
+        'group relative flex h-full flex-col rounded-xl border-2 border-brand-dark bg-white p-5 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-1.5 hover:shadow-solid motion-reduce:transition-none',
         className
       )}
     >

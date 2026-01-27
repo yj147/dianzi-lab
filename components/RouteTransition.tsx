@@ -11,7 +11,7 @@ export default function RouteTransition({ children }: { children: React.ReactNod
   if (reducedMotion) return <>{children}</>
 
   return (
-    <AnimatePresence mode="wait">
+    <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={pathname}
         data-route-transition=""
