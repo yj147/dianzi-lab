@@ -5,6 +5,20 @@ import * as authActions from '@/lib/auth-actions'
 import * as auth from '@/lib/auth'
 import { redirect, usePathname } from 'next/navigation'
 
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: jest.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+})
+
 // Mock logout action
 jest.mock('@/lib/auth-actions', () => ({
   logout: jest.fn(),
