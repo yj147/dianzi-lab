@@ -1,10 +1,12 @@
 'use client'
 
 import type { IdeaStatus } from '@prisma/client'
+import { CheckCircle2, Code, Eye, RotateCcw, Trash2, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+import StatusBadge from '@/components/StatusBadge'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,7 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { STATUS_CONFIG } from '@/lib/constants'
+import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { moveToTrash, updateIdeaStatus } from '../actions'
 
@@ -30,14 +32,6 @@ type IdeaRow = {
   user: { email: string }
   assessment?: { finalScore: number } | null
 }
-
-const IDEA_ICON_PRESETS = [
-  { icon: 'cloud_circle', iconClassName: 'bg-indigo-50 text-indigo-400', titleHover: 'group-hover:text-indigo-500' },
-  { icon: 'potted_plant', iconClassName: 'bg-mint-50 text-mint-500', titleHover: 'group-hover:text-mint-600' },
-  { icon: 'rocket_launch', iconClassName: 'bg-coral-50 text-coral-400', titleHover: 'group-hover:text-coral-500' },
-  { icon: 'pets', iconClassName: 'bg-purple-50 text-purple-400', titleHover: 'group-hover:text-purple-500' },
-  { icon: 'water_drop', iconClassName: 'bg-blue-50 text-blue-400', titleHover: 'group-hover:text-blue-500' },
-] as const
 
 function formatRelativeTime(value: Date | string): string {
   const date = value instanceof Date ? value : new Date(value)
@@ -59,53 +53,6 @@ function formatRelativeTime(value: Date | string): string {
   return date.toLocaleDateString('zh-CN')
 }
 
-function StatusPill({ status, isDeleted }: { status: IdeaStatus; isDeleted: boolean }) {
-  if (isDeleted) {
-    return (
-      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold bg-coral-50 text-coral-500 border border-coral-100">
-        <span className="material-symbols-outlined text-[14px]">cancel</span>
-        已驳回
-      </span>
-    )
-  }
-
-  const label = STATUS_CONFIG[status].label
-
-  const { icon, className } = (() => {
-    switch (status) {
-      case 'PENDING':
-        return {
-          icon: 'hourglass_top',
-          className: 'bg-gray-100 text-gray-700 border border-gray-200',
-        }
-      case 'APPROVED':
-        return {
-          icon: 'thumb_up',
-          className: 'bg-blue-100 text-blue-700 border border-blue-200',
-        }
-      case 'IN_PROGRESS':
-        return {
-          icon: 'build',
-          className: 'bg-orange-100 text-orange-700 border border-orange-200',
-        }
-      case 'COMPLETED':
-        return {
-          icon: 'check_circle',
-          className: 'bg-green-100 text-green-700 border border-green-200',
-        }
-    }
-  })()
-
-  return (
-    <span className={cn('inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-bold', className)}>
-      <span className="material-symbols-outlined text-[14px]" aria-hidden="true">
-        {icon}
-      </span>
-      {label}
-    </span>
-  )
-}
-
 function getAvatarText(email: string): string {
   const trimmed = email.trim()
   if (!trimmed) return '?'
@@ -115,46 +62,21 @@ function getAvatarText(email: string): string {
 function getPrimaryAction(status: IdeaStatus): {
   nextStatus: IdeaStatus
   label: string
-  icon: string
-  className: string
+  Icon: typeof CheckCircle2
 } {
   switch (status) {
     case 'PENDING':
-      return {
-        nextStatus: 'APPROVED',
-        label: '批准',
-        icon: 'auto_fix_high',
-        className: 'bg-mint-100 text-mint-600 hover:bg-mint-200 hover:shadow-mint-200/50',
-      }
+      return { nextStatus: 'APPROVED', label: '批准', Icon: CheckCircle2 }
     case 'APPROVED':
-      return {
-        nextStatus: 'IN_PROGRESS',
-        label: '开始开发',
-        icon: 'rocket_launch',
-        className: 'bg-blue-100 text-blue-700 hover:bg-blue-200 hover:shadow-blue-200/50',
-      }
+      return { nextStatus: 'IN_PROGRESS', label: '开始开发', Icon: Code }
     case 'IN_PROGRESS':
-      return {
-        nextStatus: 'COMPLETED',
-        label: '标记完成',
-        icon: 'check_circle',
-        className: 'bg-orange-100 text-orange-700 hover:bg-orange-200 hover:shadow-orange-200/50',
-      }
+      return { nextStatus: 'COMPLETED', label: '标记完成', Icon: Trophy }
     case 'COMPLETED':
-      return {
-        nextStatus: 'IN_PROGRESS',
-        label: '回退开发中',
-        icon: 'undo',
-        className: 'bg-lavender-100 text-lavender-500 hover:bg-lavender-200 hover:shadow-lavender-200/50',
-      }
+      return { nextStatus: 'IN_PROGRESS', label: '回退开发中', Icon: RotateCcw }
   }
 }
 
-export default function IdeasTable({
-  ideas,
-}: {
-  ideas: IdeaRow[]
-}) {
+export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
   const router = useRouter()
   const [busyIdeaId, setBusyIdeaId] = useState<string | null>(null)
   const [rowError, setRowError] = useState<{ ideaId: string; message: string } | null>(null)
@@ -174,186 +96,137 @@ export default function IdeasTable({
   }
 
   return (
-    <div className="glass-panel rounded-[2.5rem] p-1 overflow-hidden">
+    <div className="overflow-hidden rounded-xl border-2 border-brand-dark bg-brand-surface shadow-solid-sm">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left">
-          <thead>
-            <tr className="border-b border-lavender-200/50 text-slate-500">
-              <th
-                scope="col"
-                className="py-6 px-8 font-display text-lg font-normal tracking-wide w-1/3"
-              >
-                奇思妙想 (Idea Title)
+        <table className="w-full min-w-[900px] text-left text-sm">
+          <thead className="bg-gray-50 text-xs font-bold text-gray-600">
+            <tr className="border-b-2 border-brand-dark">
+              <th scope="col" className="px-6 py-4">
+                点子
               </th>
-              <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
-                造梦者 (Dreamer)
+              <th scope="col" className="px-6 py-4">
+                提交者
               </th>
-              <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
-                状态 (Status)
+              <th scope="col" className="px-6 py-4">
+                状态
               </th>
-              <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
-                评分 (Score)
+              <th scope="col" className="px-6 py-4">
+                评分
               </th>
-              <th scope="col" className="py-6 px-6 font-display text-lg font-normal tracking-wide">
-                提交时间 (Time)
+              <th scope="col" className="px-6 py-4">
+                时间
               </th>
-              <th
-                scope="col"
-                className="py-6 px-8 font-display text-lg font-normal tracking-wide text-right"
-              >
-                魔法操作 (Magic Actions)
+              <th scope="col" className="px-6 py-4 text-right">
+                操作
               </th>
             </tr>
           </thead>
-          <tbody className="text-slate-600">
+          <tbody className="text-gray-700">
             {ideas.length === 0 ? (
-              <tr className="table-row-glass group">
-                <td colSpan={6} className="py-16 px-8 text-center text-sm font-medium text-slate-400">
-                  暂无符合筛选条件的梦境
+              <tr>
+                <td colSpan={6} className="px-6 py-16 text-center text-sm text-gray-500">
+                  暂无符合筛选条件的点子
                 </td>
               </tr>
             ) : (
-              ideas.map((idea, index) => {
-                const preset = IDEA_ICON_PRESETS[index % IDEA_ICON_PRESETS.length]
+              ideas.map((idea) => {
                 const isBusy = busyIdeaId === idea.id
-                const primaryAction = getPrimaryAction(idea.status)
+                const { nextStatus, label, Icon } = getPrimaryAction(idea.status)
+
+                const score = idea.assessment?.finalScore
+                const scoreStyle =
+                  score === undefined
+                    ? ''
+                    : score >= 70
+                      ? 'bg-brand-success/15 text-brand-success'
+                      : score >= 40
+                        ? 'bg-amber-100/60 text-amber-800'
+                        : 'bg-red-100/60 text-red-700'
 
                 return (
-                  <tr
-                    key={idea.id}
-                    className={cn(
-                      'table-row-glass group',
-                      index !== ideas.length - 1 ? 'border-b border-dashed border-lavender-100' : ''
-                    )}
-                  >
-                    <td className="py-5 px-8">
-                      <div className="flex items-start gap-4">
-                        <div
-                          className={cn(
-                            'w-12 h-12 rounded-2xl flex items-center justify-center shrink-0',
-                            preset.iconClassName
-                          )}
-                        >
-                          <span className="material-symbols-outlined" aria-hidden="true">
-                            {preset.icon}
-                          </span>
+                  <tr key={idea.id} className="border-b border-brand-dark/10 last:border-b-0 hover:bg-gray-50/60">
+                    <td className="px-6 py-5 align-top">
+                      <div className="min-w-0 space-y-1">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <p className="font-heading text-base font-bold text-brand-dark">{idea.title}</p>
                         </div>
-                        <div className="min-w-0">
-                          <div
-                            className={cn(
-                              'font-bold text-lg text-slate-800 transition-colors',
-                              preset.titleHover
-                            )}
-                          >
-                            {idea.title}
-                          </div>
-                          {idea.description ? (
-                            <div className="text-sm text-slate-400 mt-0.5">
-                              {idea.description}
-                            </div>
-                          ) : null}
-                        </div>
+                        {idea.description ? (
+                          <p className="text-pretty text-sm text-gray-600">{idea.description}</p>
+                        ) : null}
                       </div>
                     </td>
-
-                    <td className="py-5 px-6">
+                    <td className="px-6 py-5 align-top">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-lavender-100 flex items-center justify-center text-xs font-bold text-lavender-500">
+                        <div className="flex size-10 items-center justify-center rounded-full bg-brand-dark text-sm font-heading font-bold text-white">
                           {getAvatarText(idea.user.email)}
                         </div>
-                        <span className="font-medium">{idea.user.email}</span>
+                        <span className="max-w-[220px] truncate font-bold text-brand-dark">{idea.user.email}</span>
                       </div>
                     </td>
-
-                    <td className="py-5 px-6">
-                      <StatusPill status={idea.status} isDeleted={idea.isDeleted} />
+                    <td className="px-6 py-5 align-top">
+                      <StatusBadge status={idea.status} />
                     </td>
-
-                    <td className="py-5 px-6">
-                      {idea.assessment ? (
+                    <td className="px-6 py-5 align-top">
+                      {score === undefined ? (
+                        <span className="font-mono text-xs text-gray-400">-</span>
+                      ) : (
                         <span
                           className={cn(
-                            'inline-flex items-center gap-1 rounded-full px-3 py-1 text-sm font-bold',
-                            idea.assessment.finalScore >= 70
-                              ? 'bg-mint-100 text-mint-600'
-                              : idea.assessment.finalScore >= 40
-                                ? 'bg-amber-100 text-amber-600'
-                                : 'bg-coral-100 text-coral-500'
+                            'inline-flex items-center rounded-full border-2 border-brand-dark/10 px-3 py-1 font-mono text-sm font-bold tabular-nums',
+                            scoreStyle
                           )}
                         >
-                          {idea.assessment.finalScore}
+                          {score}
                         </span>
-                      ) : (
-                        <span className="text-sm text-slate-400">-</span>
                       )}
                     </td>
-
-                    <td className="py-5 px-6 font-sans text-slate-400 text-sm">
+                    <td className="px-6 py-5 align-top font-mono text-xs text-gray-500">
                       {formatRelativeTime(idea.createdAt)}
                     </td>
-
-                    <td className="py-5 px-8">
-                      <div className="flex items-center justify-end gap-3">
-                        {idea.assessment && (
-                          <Link
-                            href={`/admin/ideas/${idea.id}`}
-                            className="action-btn bg-lavender-50 text-lavender-400 hover:bg-lavender-100 hover:shadow-lavender-200/50"
-                            title="查看详情"
-                            aria-label="查看详情"
-                          >
-                            <span className="material-symbols-outlined" aria-hidden="true">
-                              visibility
-                            </span>
+                    <td className="px-6 py-5 align-top">
+                      <div className="flex items-center justify-end gap-2">
+                        <Button asChild variant="ghost" size="icon" aria-label="查看详情">
+                          <Link href={`/admin/ideas/${idea.id}`}>
+                            <Eye className="size-4" aria-hidden="true" />
                           </Link>
-                        )}
+                        </Button>
 
-                        <button
+                        <Button
                           type="button"
-                          className={cn(
-                            'action-btn disabled:cursor-not-allowed disabled:opacity-50',
-                            primaryAction.className,
-                          )}
-                          title={primaryAction.label}
-                          aria-label={primaryAction.label}
+                          variant="secondary"
+                          size="icon"
+                          aria-label={label}
                           disabled={isBusy}
-                          onClick={() =>
-                            runRowAction(idea.id, () =>
-                              updateIdeaStatus(idea.id, primaryAction.nextStatus),
-                            )
-                          }
+                          onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, nextStatus))}
                         >
-                          <span className="material-symbols-outlined" aria-hidden="true">
-                            {primaryAction.icon}
-                          </span>
-                        </button>
+                          <Icon className="size-4" aria-hidden="true" />
+                        </Button>
 
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
-                            <button
+                            <Button
                               type="button"
-                              className="action-btn bg-coral-50 text-coral-400 hover:bg-coral-100 hover:shadow-coral-200/50 disabled:cursor-not-allowed disabled:opacity-50"
-                              title="驳回 (Reject)"
+                              variant="ghost"
+                              size="icon"
                               aria-label="驳回"
                               disabled={isBusy}
+                              className="text-red-600 hover:bg-red-50 hover:text-red-700 focus-visible:ring-red-600"
                             >
-                              <span className="material-symbols-outlined" aria-hidden="true">
-                                cloud_off
-                              </span>
-                            </button>
+                              <Trash2 className="size-4" aria-hidden="true" />
+                            </Button>
                           </AlertDialogTrigger>
 
                           <AlertDialogContent>
                             <AlertDialogHeader>
                               <AlertDialogTitle>确认驳回？</AlertDialogTitle>
                               <AlertDialogDescription>
-                                驳回会将梦境移入垃圾箱，您可以在垃圾箱中恢复或永久删除。
+                                驳回会将点子移入回收站，您可以在回收站中恢复或永久删除。
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                               <AlertDialogCancel disabled={isBusy}>取消</AlertDialogCancel>
                               <AlertDialogAction
                                 disabled={isBusy}
-                                className="bg-coral-500 hover:bg-coral-600"
                                 onClick={() => runRowAction(idea.id, () => moveToTrash(idea.id))}
                               >
                                 确认驳回
@@ -364,9 +237,7 @@ export default function IdeasTable({
                       </div>
 
                       {rowError?.ideaId === idea.id ? (
-                        <p className="mt-2 text-right text-xs font-medium text-coral-500">
-                          {rowError.message}
-                        </p>
+                        <p className="mt-2 text-right text-xs font-bold text-red-600">{rowError.message}</p>
                       ) : null}
                     </td>
                   </tr>
@@ -376,9 +247,10 @@ export default function IdeasTable({
           </tbody>
         </table>
       </div>
-      <div className="px-8 py-6 border-t border-lavender-200/50 flex justify-between items-center bg-white/20">
-        <span className="text-sm font-medium text-slate-500">
-          显示 1 至 {ideas.length} 项，共 {ideas.length} 个奇思妙想
+
+      <div className="flex items-center justify-between border-t-2 border-brand-dark/10 bg-gray-50 px-6 py-4">
+        <span className="text-sm font-bold text-gray-600">
+          显示 1 至 {ideas.length} 项，共 {ideas.length} 个点子
         </span>
       </div>
     </div>

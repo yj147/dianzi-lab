@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { Home, LayoutDashboard } from 'lucide-react'
 import { getIdeaWithAssessment } from '@/lib/idea-actions'
 import RadarChart from '@/components/validator/RadarChart'
 import ResultPanel from '@/components/validator/ResultPanel'
@@ -40,50 +41,38 @@ export default async function IdeaResultPage({ params }: Props) {
   }
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
-      <div className="relative overflow-hidden rounded-[3rem] border border-white/80 bg-white/60 p-8 shadow-[0_20px_60px_-15px_rgba(167,139,250,0.25)] backdrop-blur-2xl md:p-12">
-        <div
-          className="absolute left-0 top-0 h-2 w-full bg-gradient-to-r from-lavender-300 via-coral-300 to-mint-300"
-          aria-hidden="true"
-        />
+    <div className="mx-auto w-full max-w-5xl px-4 py-10">
+      <header className="mb-8">
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+          {idea.title}
+        </h1>
+        <p className="text-pretty mt-2 text-sm text-gray-600">创业点子评估结果</p>
+      </header>
 
-        {/* 标题区域 */}
-        <div className="mb-8 pt-4 text-center">
-          <h1 className="mb-2 text-3xl font-bold text-slate-800">{idea.title}</h1>
-          <p className="text-slate-500">创业点子评估结果</p>
-        </div>
+      <div className="grid gap-6 lg:grid-cols-2">
+        <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
+          <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
+          <RadarChart scores={scores} className="mx-auto mt-4 w-full max-w-[380px]" />
+        </section>
+        <section>
+          <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
+          <ResultPanel result={validationResult} />
+        </section>
+      </div>
 
-        {/* 雷达图和结果面板 */}
-        <div className="grid gap-8 md:grid-cols-2">
-          <div className="flex flex-col items-center">
-            <h2 className="mb-4 text-lg font-bold text-slate-700">维度分析</h2>
-            <RadarChart scores={scores} className="w-full max-w-[350px]" />
-          </div>
-          <div>
-            <h2 className="mb-4 text-lg font-bold text-slate-700">评估结果</h2>
-            <ResultPanel result={validationResult} />
-          </div>
-        </div>
-
-        {/* 操作按钮 */}
-        <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button asChild variant="default" size="lg">
-            <Link href="/dashboard">
-              <span className="material-symbols-outlined mr-2" aria-hidden="true">
-                dashboard
-              </span>
-              查看我的点子
-            </Link>
-          </Button>
-          <Button asChild variant="secondary" size="lg">
-            <Link href="/">
-              <span className="material-symbols-outlined mr-2" aria-hidden="true">
-                home
-              </span>
-              返回首页
-            </Link>
-          </Button>
-        </div>
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+        <Button asChild size="lg">
+          <Link href="/dashboard" className="inline-flex items-center gap-2">
+            <LayoutDashboard className="size-5" aria-hidden="true" />
+            查看我的点子
+          </Link>
+        </Button>
+        <Button asChild variant="secondary" size="lg">
+          <Link href="/" className="inline-flex items-center gap-2">
+            <Home className="size-5" aria-hidden="true" />
+            返回首页
+          </Link>
+        </Button>
       </div>
     </div>
   )

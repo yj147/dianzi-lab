@@ -3,6 +3,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import type { ValidationResult, FeedbackItem } from "./types";
 
 type ResultPanelProps = {
@@ -22,12 +23,11 @@ const feedbackVariantMap: Record<
   error: "destructive",
 };
 
-// 反馈类型到 Material Symbols 图标的映射
-const feedbackIconMap: Record<FeedbackItem["type"], string> = {
-  success: "check_circle",
-  warning: "warning",
-  error: "error",
-};
+const feedbackIconMap = {
+  success: CheckCircle2,
+  warning: AlertTriangle,
+  error: XCircle,
+} as const;
 
 export default function ResultPanel({
   result,
@@ -40,14 +40,14 @@ export default function ResultPanel({
     return (
       <div
         className={cn(
-          "space-y-4 rounded-3xl bg-white/40 p-6 backdrop-blur-sm",
+          "space-y-4 rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm",
           className
         )}
       >
-        <div className="h-16 animate-pulse rounded-lg bg-lavender-100" />
+        <div className="h-16 rounded-lg bg-gray-200" />
         <div className="space-y-2">
-          <div className="h-12 animate-pulse rounded-lg bg-lavender-50" />
-          <div className="h-12 animate-pulse rounded-lg bg-lavender-50" />
+          <div className="h-12 rounded-lg bg-gray-100" />
+          <div className="h-12 rounded-lg bg-gray-100" />
         </div>
       </div>
     );
@@ -58,46 +58,52 @@ export default function ResultPanel({
     return (
       <div
         className={cn(
-          "flex flex-col items-center justify-center rounded-3xl bg-white/40 p-8 backdrop-blur-sm",
+          "flex flex-col items-center justify-center rounded-xl border-2 border-brand-dark bg-brand-surface p-8 text-center shadow-solid-sm",
           className
         )}
       >
-        <p className="text-slate-500">完成评估后，结果将在此展示</p>
+        <p className="text-pretty text-sm text-gray-600">完成评估后，结果将在此展示</p>
       </div>
     );
   }
 
+  const scoreClassName =
+    result.overallScore >= 70
+      ? "text-brand-success"
+      : result.overallScore >= 40
+        ? "text-amber-700"
+        : "text-red-700";
+
   return (
     <div
       className={cn(
-        "space-y-6 rounded-3xl bg-white/40 p-6 backdrop-blur-sm",
+        "space-y-6 rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm",
         className
       )}
     >
       {/* 总分展示 */}
       <div className="text-center">
-        <p className="mb-2 text-sm text-slate-500">综合评分</p>
-        <div className="text-6xl font-bold text-lavender-500">
+        <p className="mb-2 text-sm font-bold text-gray-600">综合评分</p>
+        <div className={cn("text-6xl font-heading font-bold tabular-nums", scoreClassName)}>
           {result.overallScore}
         </div>
-        <p className="mt-1 text-sm text-slate-400">满分 100</p>
+        <p className="mt-1 text-xs text-gray-500">满分 100</p>
       </div>
 
       {/* 反馈列表 */}
       {result.feedback.length > 0 && (
         <div className="space-y-3">
-          <h3 className="font-medium text-slate-700">评估反馈</h3>
+          <h3 className="font-heading font-bold text-brand-dark">评估反馈</h3>
           <div className="space-y-2">
-            {result.feedback.map((item, index) => (
-              <Alert key={index} variant={feedbackVariantMap[item.type]}>
-                <AlertDescription className="flex items-start gap-2">
-                  <span className="material-symbols-outlined flex-shrink-0 text-base">
-                    {feedbackIconMap[item.type]}
-                  </span>
-                  <span>{item.message}</span>
-                </AlertDescription>
-              </Alert>
-            ))}
+            {result.feedback.map((item, index) => {
+              const Icon = feedbackIconMap[item.type];
+              return (
+                <Alert key={index} variant={feedbackVariantMap[item.type]}>
+                  <Icon className="h-4 w-4" aria-hidden="true" />
+                  <AlertDescription>{item.message}</AlertDescription>
+                </Alert>
+              );
+            })}
           </div>
         </div>
       )}

@@ -1,7 +1,7 @@
 'use client'
 
+import { Inbox, RotateCcw, Trash2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { RotateCcw, Trash2, InboxIcon } from 'lucide-react'
 
 import {
   AlertDialog,
@@ -14,12 +14,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { permanentDeleteIdea, restoreIdea } from '../actions'
 
 type IdeaRow = {
@@ -34,52 +30,48 @@ function formatDate(value: Date | string): string {
   return Number.isNaN(date.getTime()) ? '-' : date.toLocaleString('zh-CN')
 }
 
-// Mobile card component
-function TrashCard({ idea, onRestore, onPermanentDelete }: {
+function TrashCard({
+  idea,
+  onRestore,
+  onPermanentDelete,
+}: {
   idea: IdeaRow
   onRestore: (ideaId: string) => void
   onPermanentDelete: (ideaId: string) => void
 }) {
   return (
-    <div className="rounded-lg border bg-white p-4 shadow-sm dark:bg-gray-900">
-      <h3 className="mb-2 font-medium text-gray-900 dark:text-gray-100">{idea.title}</h3>
-      <div className="mb-3 space-y-1 text-sm text-gray-600 dark:text-gray-400">
-        <p>{idea.user.email}</p>
-        <p>删除于 {formatDate(idea.updatedAt)}</p>
+    <div className="rounded-xl border-2 border-brand-dark bg-brand-surface p-4 shadow-solid-sm">
+      <h3 className="text-pretty font-heading text-base font-bold text-brand-dark">{idea.title}</h3>
+      <div className="mt-2 space-y-1 text-sm text-gray-600">
+        <p className="truncate font-mono text-xs text-gray-500">{idea.user.email}</p>
+        <p className="font-mono text-xs text-gray-500">删除于 {formatDate(idea.updatedAt)}</p>
       </div>
-      <div className="flex items-center gap-2">
-        <button
+      <div className="mt-4 flex items-center gap-2">
+        <Button
           type="button"
-          className="inline-flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
+          variant="secondary"
+          className="flex-1"
           onClick={() => onRestore(idea.id)}
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="mr-2 size-4" aria-hidden="true" />
           恢复
-        </button>
+        </Button>
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <button
-              type="button"
-              className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
-              aria-label="永久删除"
-            >
-              <Trash2 className="h-4 w-4" />
-            </button>
+            <Button type="button" variant="ghost" size="icon" aria-label="永久删除" className="text-red-600 hover:bg-red-50 hover:text-red-700 focus-visible:ring-red-600">
+              <Trash2 className="size-4" aria-hidden="true" />
+            </Button>
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>确认永久删除？</AlertDialogTitle>
-              <AlertDialogDescription>
-                此操作不可撤销，是否继续？
-              </AlertDialogDescription>
+              <AlertDialogDescription>此操作不可撤销，是否继续？</AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>取消</AlertDialogCancel>
-              <AlertDialogAction onClick={() => onPermanentDelete(idea.id)}>
-                确认删除
-              </AlertDialogAction>
+              <AlertDialogAction onClick={() => onPermanentDelete(idea.id)}>确认删除</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
@@ -103,113 +95,109 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
 
   if (ideas.length === 0) {
     return (
-      <div className="overflow-hidden rounded-xl border bg-white shadow-sm dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center py-16 text-center">
-          <div className="mb-4 rounded-full bg-gray-100 p-4 dark:bg-gray-800">
-            <InboxIcon className="h-8 w-8 text-gray-400 dark:text-gray-500" />
-          </div>
-          <p className="text-sm font-medium text-gray-900 dark:text-gray-100">回收站为空</p>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            没有被删除的点子
-          </p>
+      <div className="rounded-xl border-2 border-dashed border-brand-dark/40 bg-brand-surface p-12 text-center shadow-solid-sm">
+        <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-solid-sm">
+          <Inbox className="size-6" aria-hidden="true" />
         </div>
+        <h2 className="text-balance font-heading text-2xl font-bold text-brand-dark">回收站为空</h2>
+        <p className="text-pretty mx-auto mt-3 max-w-xl text-sm text-gray-600">没有被删除的点子。</p>
       </div>
     )
   }
 
   return (
     <TooltipProvider>
-      <div className="overflow-hidden rounded-xl border bg-white shadow-sm dark:bg-gray-900">
-        {/* Desktop table view */}
-        <div className="hidden overflow-x-auto md:block">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-left text-gray-600 dark:bg-gray-800 dark:text-gray-300">
-              <tr>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  标题
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  提交者邮箱
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  删除时间
-                </th>
-                <th scope="col" className="px-4 py-3 font-medium">
-                  操作
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
-              {ideas.map((idea) => (
-                <tr
-                  key={idea.id}
-                  className="transition-colors hover:bg-gray-50 dark:hover:bg-gray-800/50"
-                >
-                  <td className="px-4 py-3 font-medium text-gray-900 dark:text-gray-100">
-                    {idea.title}
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                    {idea.user.email}
-                  </td>
-                  <td className="px-4 py-3 text-gray-600 dark:text-gray-400">
-                    {formatDate(idea.updatedAt)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <button
-                            type="button"
-                            className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-2 text-emerald-600 transition-colors hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-400 dark:hover:bg-emerald-900/40"
-                            onClick={() => handleRestore(idea.id)}
-                            aria-label="恢复"
-                          >
-                            <RotateCcw className="h-4 w-4" />
-                          </button>
-                        </TooltipTrigger>
-                        <TooltipContent>恢复</TooltipContent>
-                      </Tooltip>
-
-                      <AlertDialog>
+      <div className="overflow-hidden rounded-xl border-2 border-brand-dark bg-brand-surface shadow-solid-sm">
+        <div className="hidden md:block">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left text-sm">
+              <thead className="bg-gray-50 text-xs font-bold text-gray-600">
+                <tr className="border-b-2 border-brand-dark">
+                  <th scope="col" className="px-6 py-4">
+                    标题
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    提交者邮箱
+                  </th>
+                  <th scope="col" className="px-6 py-4">
+                    删除时间
+                  </th>
+                  <th scope="col" className="px-6 py-4 text-right">
+                    操作
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-gray-700">
+                {ideas.map((idea) => (
+                  <tr
+                    key={idea.id}
+                    className="border-b border-brand-dark/10 last:border-b-0 hover:bg-gray-50/60"
+                  >
+                    <td className="px-6 py-5 font-heading font-bold text-brand-dark">{idea.title}</td>
+                    <td className="px-6 py-5 font-mono text-xs text-gray-600">{idea.user.email}</td>
+                    <td className="px-6 py-5 font-mono text-xs text-gray-600">{formatDate(idea.updatedAt)}</td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center justify-end gap-2">
                         <Tooltip>
                           <TooltipTrigger asChild>
-                            <AlertDialogTrigger asChild>
-                              <button
-                                type="button"
-                                className="inline-flex cursor-pointer items-center justify-center rounded-lg border border-red-200 bg-red-50 p-2 text-red-600 transition-colors hover:bg-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500/20 dark:border-red-800 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40"
-                                aria-label="永久删除"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
-                            </AlertDialogTrigger>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              aria-label="恢复"
+                              className="text-brand-success hover:bg-brand-success/10 focus-visible:ring-brand-success"
+                              onClick={() => handleRestore(idea.id)}
+                            >
+                              <RotateCcw className="size-4" aria-hidden="true" />
+                            </Button>
                           </TooltipTrigger>
-                          <TooltipContent>永久删除</TooltipContent>
+                          <TooltipContent>恢复</TooltipContent>
                         </Tooltip>
 
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>确认永久删除？</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              此操作不可撤销，是否继续？
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>取消</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => handlePermanentDelete(idea.id)}>
-                              确认删除
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                        <AlertDialog>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="永久删除"
+                                  className="text-red-600 hover:bg-red-50 hover:text-red-700 focus-visible:ring-red-600"
+                                >
+                                  <Trash2 className="size-4" aria-hidden="true" />
+                                </Button>
+                              </AlertDialogTrigger>
+                            </TooltipTrigger>
+                            <TooltipContent>永久删除</TooltipContent>
+                          </Tooltip>
+
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle>确认永久删除？</AlertDialogTitle>
+                              <AlertDialogDescription>此操作不可撤销，是否继续？</AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                              <AlertDialogCancel>取消</AlertDialogCancel>
+                              <AlertDialogAction onClick={() => handlePermanentDelete(idea.id)}>
+                                确认删除
+                              </AlertDialogAction>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="border-t-2 border-brand-dark/10 bg-gray-50 px-6 py-4">
+            <span className="text-sm font-bold text-gray-600">共 {ideas.length} 项</span>
+          </div>
         </div>
 
-        {/* Mobile card view */}
         <div className="grid gap-3 p-4 md:hidden">
           {ideas.map((idea) => (
             <TrashCard

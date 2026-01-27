@@ -1,10 +1,12 @@
 import type { IdeaStatus } from '@prisma/client'
 
+import Link from 'next/link'
+import { Check, ChevronDown, Filter, Plus } from 'lucide-react'
+
 import { prisma } from '@/lib/db'
 import { STATUS_CONFIG } from '@/lib/constants'
+import { Button } from '@/components/ui/button'
 import IdeasTable from './_components/IdeasTable'
-import { Sparkles } from 'lucide-react'
-import Link from 'next/link'
 
 function isIdeaStatus(value: string | undefined): value is IdeaStatus {
   return value !== undefined && Object.prototype.hasOwnProperty.call(STATUS_CONFIG, value)
@@ -44,54 +46,48 @@ export default async function AdminIdeasPage({
       {/* 页面头部 */}
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
-          <h1 className="relative inline-block text-balance font-script text-5xl text-slate-800 md:text-6xl">
-            梦境管理员
-            <span className="absolute -right-8 -top-4 text-amber-400">
-              <Sparkles className="h-8 w-8 fill-current" />
-            </span>
+          <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+            梦境管理
           </h1>
-          <p className="mt-2 pl-2 font-medium text-slate-500">
-            审核来自世界各地的奇思妙想，编织新的现实。
-          </p>
+          <p className="text-pretty mt-2 text-gray-600">审核和管理用户提交的点子。</p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap items-center gap-3">
           <details className="relative">
-            <summary className="flex list-none items-center gap-2 rounded-2xl border border-white/60 bg-white/60 px-5 py-2.5 font-bold text-slate-600 shadow-sm transition-colors duration-200 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400 motion-reduce:transition-none [&::-webkit-details-marker]:hidden">
-              <span className="material-symbols-outlined text-lavender-400">filter_list</span>
+            <summary className="flex list-none cursor-pointer items-center gap-2 rounded-full border-2 border-brand-dark bg-brand-surface px-4 py-2 text-sm font-bold text-brand-dark shadow-solid-sm transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none [&::-webkit-details-marker]:hidden">
+              <Filter className="size-4 text-brand-primary" aria-hidden="true" />
               筛选：{statusLabel}
-              <span className="material-symbols-outlined text-[20px] text-slate-400">expand_more</span>
+              <ChevronDown className="size-4 text-gray-400" aria-hidden="true" />
             </summary>
-            <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-2xl border border-white/60 bg-white/80 p-2 shadow-lg backdrop-blur-xl">
+            <div className="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border-2 border-brand-dark bg-white p-2 shadow-solid-sm">
               <Link
                 href="/admin/ideas"
-                className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-lavender-50"
+                className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-bold text-brand-dark transition-colors hover:bg-gray-50"
               >
                 全部梦境
                 {!status ? (
-                  <span className="material-symbols-outlined text-[18px] text-coral-400">check</span>
+                  <Check className="size-4 text-brand-primary" aria-hidden="true" />
                 ) : null}
               </Link>
               {(['PENDING', 'APPROVED', 'IN_PROGRESS', 'COMPLETED'] as const).map((nextStatus) => (
                 <Link
                   key={nextStatus}
                   href={`/admin/ideas?status=${nextStatus}`}
-                  className="flex items-center justify-between rounded-xl px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-lavender-50"
+                  className="flex items-center justify-between rounded-lg px-3 py-2 text-sm font-bold text-brand-dark transition-colors hover:bg-gray-50"
                 >
                   {STATUS_CONFIG[nextStatus].label}
                   {status === nextStatus ? (
-                    <span className="material-symbols-outlined text-[18px] text-coral-400">check</span>
+                    <Check className="size-4 text-brand-primary" aria-hidden="true" />
                   ) : null}
                 </Link>
               ))}
             </div>
           </details>
-          <a
-            href="/submit"
-            className="flex items-center gap-2 rounded-2xl bg-coral-400 px-6 py-2.5 font-bold text-white shadow-lg shadow-coral-400/20 transition-colors duration-200 hover:bg-coral-500 motion-reduce:transition-none"
-          >
-            <span className="material-symbols-outlined">add</span>
-            新增灵感
-          </a>
+          <Button asChild size="lg">
+            <Link href="/submit" className="inline-flex items-center gap-2">
+              <Plus className="size-5" aria-hidden="true" />
+              新增点子
+            </Link>
+          </Button>
         </div>
       </div>
 

@@ -61,25 +61,34 @@ export default function ValidatorClient() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-lavender-50 to-white px-4 py-8">
-      <div className="mx-auto max-w-5xl">
-        <h1 className="mb-8 text-center text-3xl font-bold text-slate-800">
+    <div className="mx-auto max-w-5xl px-4 py-10">
+      <header className="mb-8 text-center">
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
           创业想法验证器
         </h1>
+        <p className="text-pretty mt-2 text-sm text-gray-600">
+          这是一页内部工具，用于快速跑一遍评估器输出。
+        </p>
+      </header>
 
-        {view === "form" ? (
-          <ValidatorForm
-            onSubmit={handleSubmit}
-            initialValues={lastScores.length > 0 ? lastScores : undefined}
-            isLoading={isLoading}
-          />
-        ) : (
-          <div className="grid gap-8 lg:grid-cols-2">
-            <RadarChart scores={result?.scores ?? []} className="h-80" />
+      {view === "form" ? (
+        <ValidatorForm
+          onSubmit={handleSubmit}
+          initialValues={lastScores.length > 0 ? lastScores : undefined}
+          isLoading={isLoading}
+        />
+      ) : (
+        <div className="grid gap-6 lg:grid-cols-2">
+          <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
+            <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
+            <RadarChart scores={result?.scores ?? []} className="mt-4" />
+          </section>
+          <section>
+            <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
             <ResultPanel result={result} onReset={handleReset} />
-          </div>
-        )}
-      </div>
-    </main>
+          </section>
+        </div>
+      )}
+    </div>
   );
 }
