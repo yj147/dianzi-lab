@@ -1,84 +1,90 @@
 import Link from 'next/link'
+import { ArrowRight, ClipboardPenLine, LineChart, Sparkles } from 'lucide-react'
 
 import { getSession } from '@/lib/auth'
+import { Button } from '@/components/ui/button'
 import SubmitForm from './SubmitForm'
 
 export default async function SubmitPage() {
   const session = await getSession()
 
   return (
-    <div className="mx-auto w-full max-w-6xl grid grid-cols-1 gap-12 items-center lg:grid-cols-12">
-      <div className="relative text-center lg:col-span-5 lg:text-left">
-        <div className="hidden lg:block absolute -top-24 -left-12 size-32 animate-wiggle" aria-hidden="true">
-          <svg className="h-full w-full text-lavender-300" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 100 100">
-            <path
-              d="M50 10 Q70 5 80 25 T90 60 T70 90 T30 90 T10 60 T20 25 T50 10Z"
-              strokeDasharray="5,5"
-            />
-            <circle className="text-coral-300" cx="30" cy="40" fill="currentColor" r="5" />
-            <circle className="text-mint-300" cx="70" cy="60" fill="currentColor" r="8" />
-          </svg>
-        </div>
+    <div className="container mx-auto max-w-6xl px-4 py-12">
+      <div className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-5">
+          <h1 className="font-heading text-4xl font-bold text-brand-dark">绘制蓝图</h1>
+          <p className="mt-2 text-pretty text-lg text-gray-600">
+            清晰描述 + 9 维度评估，让你的点子更容易被采纳并推进落地。
+          </p>
 
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border-2 border-coral-100 bg-coral-50 px-5 py-2 text-sm font-bold text-coral-500 shadow-sm -rotate-2">
-          <span className="material-symbols-outlined text-base" aria-hidden="true">
-            auto_awesome
-          </span>
-          创意孵化器
-        </div>
-        <h1 className="text-balance mb-6 text-5xl font-black leading-tight text-slate-800 lg:text-7xl">
-          <span className="mb-2 block text-4xl font-script text-lavender-500 lg:text-5xl -rotate-1 origin-bottom-left">
-            点亮你的
-          </span>
-          奇思妙想
-        </h1>
-        <p className="text-pretty mb-10 max-w-lg text-xl font-medium leading-relaxed text-slate-500 mx-auto lg:mx-0">
-          在这个充满无限可能的梦境里，每一个小小的想法都是一颗等待发芽的魔法种子。准备好编织你的现实了吗？
-        </p>
-
-        <Link
-          href="/#tools"
-          className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-lavender-200 bg-white/80 px-8 py-4 font-bold text-lavender-500 shadow-sm transition-colors hover:bg-lavender-50 hover:border-lavender-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
-        >
-          <span className="material-symbols-outlined" aria-hidden="true">
-            explore
-          </span>
-          探索奇迹工坊
-        </Link>
-
-        <div className="absolute bottom-0 -left-10 hidden h-24 w-24 lg:block animate-float-slow" aria-hidden="true">
-          <svg className="h-full w-full text-mint-300" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
-            <path
-              d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93"
-              strokeLinecap="round"
-            />
-            <circle cx="12" cy="12" fill="#dcfce7" r="4" />
-          </svg>
-        </div>
-      </div>
-
-      <div className="relative lg:col-span-7">
-        <div className="absolute -top-10 -right-10 size-40 rounded-full bg-coral-200 blur-2xl opacity-40 mix-blend-multiply animate-none sm:animate-blob motion-reduce:animate-none" aria-hidden="true" />
-        <div
-          className="absolute -bottom-10 -left-10 size-40 rounded-full bg-lavender-200 blur-2xl opacity-40 mix-blend-multiply animate-none sm:animate-blob animation-delay-2000 motion-reduce:animate-none"
-          aria-hidden="true"
-        />
-
-        {session ? (
-          <SubmitForm />
-        ) : (
-          <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[3rem] border border-white/80 bg-white/60 p-8 text-center shadow-[0_20px_60px_-15px_rgba(167,139,250,0.25)] backdrop-blur-2xl md:p-12">
-            <h2 className="text-balance mb-4 text-2xl font-bold text-slate-800">登录后即可提交点子</h2>
-            <p className="text-pretty mb-8 text-slate-500 font-medium">分享你的创意，让大家一起完善它。</p>
-            <Link
-              href="/login?callbackUrl=/submit"
-              className="inline-flex w-full items-center justify-center rounded-full bg-coral-400 py-4 text-lg font-bold text-white shadow-lg shadow-coral-400/30 transition-transform hover:-translate-y-0.5 hover:bg-coral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coral-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fdf8ff]"
-            >
-              立即登录
-            </Link>
+          <div className="mt-10 space-y-4">
+            {[
+              {
+                icon: ClipboardPenLine,
+                title: '点子信息',
+                desc: '填写标题、描述与标签（50 / 1000 字限制）',
+              },
+              {
+                icon: LineChart,
+                title: '创意评估',
+                desc: '对目标用户、渠道、市场、技术等维度打分',
+              },
+              {
+                icon: Sparkles,
+                title: '结果展示',
+                desc: '生成雷达图与反馈建议，达标后提交入库',
+              },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="flex gap-4 rounded-xl border-2 border-brand-dark bg-white p-5 shadow-solid-sm"
+              >
+                <div className="flex size-12 items-center justify-center rounded-xl border-2 border-brand-dark bg-brand-bg shadow-solid-sm">
+                  <item.icon size={22} className="text-brand-primary" aria-hidden="true" />
+                </div>
+                <div className="min-w-0">
+                  <div className="font-heading text-lg font-bold text-brand-dark">{item.title}</div>
+                  <div className="mt-1 text-sm text-gray-600">{item.desc}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        )}
+
+          {!session ? (
+            <div className="mt-10 rounded-xl border-2 border-brand-dark bg-brand-bg p-5 shadow-solid-sm">
+              <p className="text-sm font-bold text-brand-dark">提示</p>
+              <p className="mt-2 text-pretty text-sm text-gray-600">
+                你需要先登录，才能提交点子并在「我的空间」追踪进度。
+              </p>
+              <div className="mt-4">
+                <Button asChild>
+                  <Link href="/login?callbackUrl=/submit">
+                    去登录
+                    <ArrowRight size={18} className="ml-2" aria-hidden="true" />
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          ) : null}
+        </div>
+
+        <div className="lg:col-span-7">
+          {session ? (
+            <SubmitForm />
+          ) : (
+            <div className="rounded-2xl border-2 border-brand-dark bg-white p-8 shadow-solid-lg">
+              <h2 className="font-heading text-2xl font-bold text-brand-dark">登录后即可提交点子</h2>
+              <p className="mt-2 text-pretty text-gray-600">提交后可在「我的空间」查看进度与评估结果。</p>
+              <div className="mt-8">
+                <Button asChild size="lg" className="w-full">
+                  <Link href="/login?callbackUrl=/submit">立即登录</Link>
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
 }
+
