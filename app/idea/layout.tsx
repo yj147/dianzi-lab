@@ -1,10 +1,10 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
-export default function MainLayout({
+export default function IdeaLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-brand-bg font-sans text-brand-dark">
@@ -15,5 +15,6 @@ export default function MainLayout({
         <Footer />
       </div>
     </div>
-  );
+  )
 }
+
