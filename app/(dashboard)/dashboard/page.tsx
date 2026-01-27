@@ -110,7 +110,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   const filters = [
     { key: 'all', label: '全部' },
-    { key: 'incubating', label: '进行中' },
+    { key: 'incubating', label: '未上线' },
     { key: 'completed', label: '已上线' },
   ] as const
 

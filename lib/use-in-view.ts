@@ -4,13 +4,22 @@ import * as React from 'react'
 
 type Options = IntersectionObserverInit
 
-export function useInView<T extends Element>(ref: React.RefObject<T>, options: Options = {}): boolean {
+export function useInView<T extends Element>(
+  options: Options = {}
+): { ref: (node: T | null) => void; inView: boolean } {
   const [inView, setInView] = React.useState(false)
+  const [node, setNode] = React.useState<T | null>(null)
   const { root, rootMargin, threshold } = options
 
+  const ref = React.useCallback((next: T | null) => {
+    setNode(next)
+  }, [])
+
   React.useEffect(() => {
-    const el = ref.current
-    if (!el) return
+    if (!node) {
+      setInView(false)
+      return
+    }
 
     // Jest/jsdom doesn't ship this by default. Assume visible to avoid disabling UX in tests.
     if (typeof IntersectionObserver === 'undefined') {
@@ -23,10 +32,10 @@ export function useInView<T extends Element>(ref: React.RefObject<T>, options: O
       rootMargin,
       threshold,
     })
-    observer.observe(el)
+    observer.observe(node)
 
     return () => observer.disconnect()
-  }, [ref, root, rootMargin, threshold])
+  }, [node, root, rootMargin, threshold])
 
-  return inView
+  return { ref, inView }
 }

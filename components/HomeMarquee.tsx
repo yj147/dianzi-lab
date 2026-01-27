@@ -10,17 +10,6 @@ type Shipment = {
   id: string
   title: string
   tags: string[]
-  user: { email: string | null }
-}
-
-function getDisplayName(email: string | null | undefined): string {
-  if (!email) return '匿名'
-  const local = email.split('@')[0]?.trim()
-  return local ? local : '匿名'
-}
-
-function getInitial(name: string): string {
-  return name.slice(0, 1).toUpperCase()
 }
 
 function getTypeLabel(tags: string[]): string {
@@ -29,18 +18,18 @@ function getTypeLabel(tags: string[]): string {
 }
 
 function ShipmentCard({ idea }: { idea: Shipment }) {
-  const name = getDisplayName(idea.user?.email)
+  const name = '匿名客户'
   const typeLabel = getTypeLabel(idea.tags)
 
   return (
     <div className="group relative mx-4 flex h-80 w-72 shrink-0 flex-col border-2 border-transparent bg-white">
       <div className="relative z-10 flex items-center gap-3 border-b-2 border-gray-100 bg-white p-5">
         <div className="flex size-10 items-center justify-center rounded-full bg-brand-dark font-heading font-bold text-white">
-          {getInitial(name)}
+          {name.slice(0, 1)}
         </div>
         <div className="min-w-0">
           <div className="truncate font-bold text-brand-dark">{name}</div>
-          <div className="text-xs text-gray-400">创意提交者</div>
+          <div className="text-xs text-gray-400">需求方</div>
         </div>
       </div>
 
@@ -67,8 +56,7 @@ function ShipmentCard({ idea }: { idea: Shipment }) {
 
 export default function HomeMarquee({ items, reverse = false }: { items: Shipment[]; reverse?: boolean }) {
   const reducedMotion = usePrefersReducedMotion()
-  const containerRef = React.useRef<HTMLDivElement>(null)
-  const inView = useInView(containerRef, { rootMargin: '200px 0px' })
+  const { ref: containerRef, inView } = useInView<HTMLDivElement>({ rootMargin: '200px 0px' })
   const [isHovered, setIsHovered] = React.useState(false)
 
   const isPaused = reducedMotion || !inView || isHovered
@@ -85,7 +73,7 @@ export default function HomeMarquee({ items, reverse = false }: { items: Shipmen
     >
       <div
         className={cn(
-          'flex gap-8 whitespace-nowrap',
+          'flex gap-8 whitespace-nowrap motion-reduce:animate-none',
           reducedMotion ? 'w-max' : 'min-w-full',
           reducedMotion ? '' : reverse ? 'animate-marquee-reverse' : 'animate-marquee'
         )}

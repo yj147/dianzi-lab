@@ -11,8 +11,7 @@ import { usePrefersReducedMotion } from '@/lib/use-prefers-reduced-motion'
 
 export default function Hero() {
   const reducedMotion = usePrefersReducedMotion()
-  const sectionRef = React.useRef<HTMLElement>(null)
-  const inView = useInView(sectionRef, { rootMargin: '200px 0px' })
+  const { ref: sectionRef, inView } = useInView<HTMLElement>({ rootMargin: '200px 0px' })
   const pauseLoops = reducedMotion || !inView
 
   return (

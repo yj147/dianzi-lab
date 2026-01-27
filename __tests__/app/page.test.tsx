@@ -49,7 +49,6 @@ describe('Home Page', () => {
         title: 'Test',
         description: 'Desc',
         tags: ['tag'],
-        user: { email: 'test@example.com' },
       },
     ])
 

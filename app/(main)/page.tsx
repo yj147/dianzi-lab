@@ -22,7 +22,6 @@ async function getCompletedIdeas() {
       title: true,
       description: true,
       tags: true,
-      user: { select: { email: true } },
     },
   })
 }

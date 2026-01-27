@@ -14,7 +14,7 @@
 **模块:** dashboard  
 用户中心展示“我的点子”列表与状态；按提交时间倒序排列。
 
-#### 场景: 过滤已完成/进行中
+#### 场景: 过滤已上线/未上线
 - `status=completed` → 仅 `COMPLETED`
 - `status=incubating` → 非 `COMPLETED`
 

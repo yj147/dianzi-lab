@@ -12,8 +12,7 @@ type PulseDotProps = React.ComponentPropsWithoutRef<'span'> & {
 
 export default function PulseDot({ className, paused, style, ...props }: PulseDotProps) {
   const reducedMotion = usePrefersReducedMotion()
-  const dotRef = React.useRef<HTMLSpanElement>(null)
-  const inView = useInView(dotRef, { rootMargin: '200px 0px' })
+  const { ref: dotRef, inView } = useInView<HTMLSpanElement>({ rootMargin: '200px 0px' })
 
   const shouldPause = Boolean(paused) || reducedMotion || !inView
 
@@ -30,4 +29,3 @@ export default function PulseDot({ className, paused, style, ...props }: PulseDo
     />
   )
 }
-
