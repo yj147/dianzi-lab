@@ -18,48 +18,46 @@ describe('Home Page', () => {
     jest.clearAllMocks()
   })
 
-  it('渲染 Hero 和 tools 区域', async () => {
-    findManyMock.mockResolvedValueOnce([])
+  it('渲染 Hero 与核心区块', async () => {
     findManyMock.mockResolvedValueOnce([])
 
-    const element = await Home({})
+    const element = await Home()
     const { container } = render(element)
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /让好点子/ }),
+      screen.getByRole('heading', { level: 1, name: /技术合伙人/ }),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { level: 2, name: '实验室出品' }),
+      screen.getByRole('heading', { level: 2, name: '为什么选择我们？' }),
     ).toBeInTheDocument()
 
     expect(
-      screen.getByText('暂无已上线作品'),
+      screen.getByRole('heading', { level: 2, name: '客户案例库' }),
     ).toBeInTheDocument()
-
-    expect(
-      screen.getByRole('heading', { level: 2, name: '孵化中' }),
-    ).toBeInTheDocument()
-    expect(screen.getByText('还没有孵化中的项目')).toBeInTheDocument()
+    expect(screen.getByText('暂无已交付案例')).toBeInTheDocument()
 
     expect(screen.queryByText('Test')).not.toBeInTheDocument()
 
-    expect(container.querySelector('#tools')).toBeInTheDocument()
+    expect(container.querySelector('#capabilities')).toBeInTheDocument()
+    expect(container.querySelector('#showcase')).toBeInTheDocument()
   })
 
-  it('有已完成工具时渲染 IdeaCard，且不渲染 EmptyState', async () => {
+  it('有已完成工具时渲染 Showcase 卡片，且不渲染 EmptyState', async () => {
     findManyMock.mockResolvedValueOnce([
-      { id: '1', title: 'Test', description: 'Desc', tags: ['tag'] },
+      {
+        id: '1',
+        title: 'Test',
+        description: 'Desc',
+        tags: ['tag'],
+        user: { email: 'test@example.com' },
+      },
     ])
-    findManyMock.mockResolvedValueOnce([])
 
-    const element = await Home({})
+    const element = await Home()
     render(element)
 
-    expect(screen.getByText('Test')).toBeInTheDocument()
+    expect(screen.getAllByText('Test').length).toBeGreaterThan(0)
     expect(screen.getByText('Desc')).toBeInTheDocument()
-    expect(screen.getByText('tag', { selector: 'span' })).toBeInTheDocument()
-    expect(
-      screen.queryByText('暂无已上线作品'),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText('暂无已交付案例')).not.toBeInTheDocument()
   })
 })

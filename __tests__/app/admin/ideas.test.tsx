@@ -16,6 +16,7 @@ jest.mock('@/lib/db', () => ({
   prisma: {
     idea: {
       findMany: jest.fn(),
+      count: jest.fn(),
     },
   },
 }))
@@ -72,6 +73,7 @@ function createMockIdea(overrides: {
 describe('Admin Ideas Page + Table', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    ;(prisma.idea.count as jest.Mock).mockResolvedValue(0)
   })
 
   it('renders ideas list from prisma (isDeleted=false)', async () => {
@@ -94,19 +96,19 @@ describe('Admin Ideas Page + Table', () => {
 
     render(await AdminIdeasPage({ searchParams: {} }))
 
-    expect(screen.getByText('梦境管理')).toBeInTheDocument()
+    expect(screen.getByText('项目管理')).toBeInTheDocument()
     expect(screen.getAllByText('Idea 1')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('u1@example.com')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('u1')[0]).toBeInTheDocument()
     expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()
-    expect(screen.getAllByText('u2@example.com')[0]).toBeInTheDocument()
+    expect(screen.getAllByText('u2')[0]).toBeInTheDocument()
 
     const row1 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
     expect(row1).toBeTruthy()
-    expect(within(row1 as HTMLElement).getByText('待审核')).toBeInTheDocument()
+    expect(within(row1 as HTMLElement).getByText('审核中')).toBeInTheDocument()
 
     const row2 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 2'))
     expect(row2).toBeTruthy()
-    expect(within(row2 as HTMLElement).getByText('已采纳')).toBeInTheDocument()
+    expect(within(row2 as HTMLElement).getByText('已立项')).toBeInTheDocument()
   })
 
   it('applies status filter from URL searchParams', async () => {
@@ -119,11 +121,11 @@ describe('Admin Ideas Page + Table', () => {
         id: true,
         title: true,
         description: true,
+        tags: true,
         status: true,
         isDeleted: true,
         createdAt: true,
         user: { select: { email: true } },
-        assessment: { select: { finalScore: true } },
       },
       orderBy: { createdAt: 'desc' },
     })
@@ -149,18 +151,18 @@ describe('Admin Ideas Page + Table', () => {
     const row = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
     expect(row).toBeTruthy()
 
-    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '批准' }))
+    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '通过审核' }))
     await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_1', 'APPROVED'))
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
 
-    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '确认驳回' }))
+    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '确认移至回收站' }))
     await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea_1'))
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
   })
 
   it('renders an empty-state row when there are no ideas', () => {
     render(<IdeasTable ideas={[]} />)
-    expect(screen.getByText('暂无符合筛选条件的点子')).toBeInTheDocument()
+    expect(screen.getByText('没有找到符合条件的项目')).toBeInTheDocument()
   })
 
   it('supports status transitions beyond approval', async () => {
@@ -196,21 +198,14 @@ describe('Admin Ideas Page + Table', () => {
 
     const approvedRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea Approved'))
     expect(approvedRow).toBeTruthy()
-    fireEvent.click(within(approvedRow as HTMLElement).getByRole('button', { name: '开始开发' }))
+    fireEvent.click(within(approvedRow as HTMLElement).getByRole('button', { name: '启动开发' }))
     await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_approved', 'IN_PROGRESS'))
 
     const inProgressRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea In Progress'))
     expect(inProgressRow).toBeTruthy()
-    fireEvent.click(within(inProgressRow as HTMLElement).getByRole('button', { name: '标记完成' }))
+    fireEvent.click(within(inProgressRow as HTMLElement).getByRole('button', { name: '发布上线' }))
     await waitFor(() =>
       expect(updateIdeaStatus).toHaveBeenCalledWith('idea_in_progress', 'COMPLETED'),
-    )
-
-    const completedRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea Completed'))
-    expect(completedRow).toBeTruthy()
-    fireEvent.click(within(completedRow as HTMLElement).getByRole('button', { name: '回退开发中' }))
-    await waitFor(() =>
-      expect(updateIdeaStatus).toHaveBeenCalledWith('idea_completed', 'IN_PROGRESS'),
     )
   })
 })

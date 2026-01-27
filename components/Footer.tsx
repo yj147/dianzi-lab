@@ -12,7 +12,7 @@ export default function Footer() {
             <span className="font-heading text-xl font-bold">点子 Lab</span>
           </div>
           <p className="text-sm font-mono text-gray-400">
-            © {year} Idea Lab Incubator. Built for dreamers.
+            © {year} Idea Lab. Built for builders.
           </p>
         </div>
       </div>

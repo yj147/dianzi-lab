@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db'
+import AdminHeader from '@/app/admin/_components/AdminHeader'
 import TrashTable from './_components/TrashTable'
 
 async function getTrashedIdeas() {
@@ -7,6 +8,7 @@ async function getTrashedIdeas() {
     select: {
       id: true,
       title: true,
+      description: true,
       updatedAt: true,
       user: { select: { email: true } },
     },
@@ -18,12 +20,8 @@ export default async function AdminTrashPage() {
   const ideas = await getTrashedIdeas()
 
   return (
-    <div className="space-y-8">
-      <header>
-        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark sm:text-4xl">回收站</h1>
-        <p className="text-pretty mt-2 text-gray-600">已删除点子的恢复与永久删除。</p>
-      </header>
-
+    <div>
+      <AdminHeader activeTab="TRASH" trashCount={ideas.length} />
       <TrashTable ideas={ideas} />
     </div>
   )

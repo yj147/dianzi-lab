@@ -60,11 +60,11 @@ export default function RegisterForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div>
         <label
           htmlFor="email"
-          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
           Email
         </label>
@@ -95,7 +95,7 @@ export default function RegisterForm() {
       <div>
         <label
           htmlFor="password"
-          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
           Password
         </label>
@@ -124,7 +124,7 @@ export default function RegisterForm() {
       <div>
         <label
           htmlFor="confirmPassword"
-          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase"
+          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
         >
           Confirm
         </label>
@@ -156,10 +156,16 @@ export default function RegisterForm() {
         </p>
       )}
 
-      <Button type="submit" size="lg" className="w-full" disabled={isSubmitting} aria-busy={isSubmitting}>
+      <Button
+        type="submit"
+        size="lg"
+        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark"
+        disabled={isSubmitting}
+        aria-busy={isSubmitting}
+      >
         {isSubmitting ? (
           <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+            <Loader2 className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none" />
             注册中…
           </>
         ) : (

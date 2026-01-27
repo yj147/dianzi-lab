@@ -46,7 +46,7 @@ export default async function IdeaResultPage({ params }: Props) {
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
           {idea.title}
         </h1>
-        <p className="text-pretty mt-2 text-sm text-gray-600">创业点子评估结果</p>
+        <p className="text-pretty mt-2 text-sm text-gray-600">创业项目评估结果</p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
@@ -64,7 +64,7 @@ export default async function IdeaResultPage({ params }: Props) {
         <Button asChild size="lg">
           <Link href="/dashboard" className="inline-flex items-center gap-2">
             <LayoutDashboard className="size-5" aria-hidden="true" />
-            查看我的点子
+            查看我的工坊
           </Link>
         </Button>
         <Button asChild variant="secondary" size="lg">

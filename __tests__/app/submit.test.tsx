@@ -2,7 +2,6 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useRouter } from 'next/navigation'
 
 import SubmitPage from '@/app/(submit)/submit/page'
-import { TAGS } from '@/app/(submit)/submit/schema'
 import { getSession } from '@/lib/auth'
 import { submitIdeaWithAssessment } from '@/lib/idea-actions'
 
@@ -93,11 +92,10 @@ async function click(el: HTMLElement) {
 }
 
 async function fillIdeaBasics() {
-  fireEvent.change(screen.getByLabelText('标题'), {
+  fireEvent.change(screen.getByLabelText(/标题/), {
     target: { value: '测试点子' },
   })
-  fireEvent.change(screen.getByLabelText('描述'), { target: { value: '这是一个测试描述' } })
-  await click(screen.getByRole('button', { name: TAGS[0] }))
+  fireEvent.change(screen.getByLabelText(/核心描述/), { target: { value: '这是一个测试描述' } })
 }
 
 describe('Submit Page (3-step)', () => {
@@ -126,22 +124,24 @@ describe('Submit Page (3-step)', () => {
     expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
 
     // SubmitForm 不应渲染
-    expect(screen.queryByRole('heading', { level: 1, name: '点子信息' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { level: 1, name: '绘制蓝图' })).not.toBeInTheDocument()
   })
 
-  it('已登录时渲染三阶段步骤指示器与标签按钮', async () => {
+  it('已登录时渲染点子表单（含预览与标签输入）', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
     expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
 
-    expect(screen.getByText('点子')).toBeInTheDocument()
-    expect(screen.getByText('评估')).toBeInTheDocument()
-    expect(screen.getByText('结果')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /返回首页/ })).toBeInTheDocument()
 
-    for (const tag of TAGS) {
-      expect(screen.getByRole('button', { name: tag })).toBeInTheDocument()
-    }
+    expect(screen.getByPlaceholderText('给你的项目起个响亮的名字')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText('解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景...'),
+    ).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('工具, AI, 效率 (用逗号分隔)')).toBeInTheDocument()
+
+    expect(screen.getByText('实时预览')).toBeInTheDocument()
   })
 
   it('必填校验：标题/描述为空时显示错误', async () => {
@@ -156,7 +156,7 @@ describe('Submit Page (3-step)', () => {
     })
   })
 
-  it('填写完成后进入评估阶段，并可返回修改点子', async () => {
+  it('填写完成后进入评估阶段，并可返回修改项目', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
@@ -167,9 +167,9 @@ describe('Submit Page (3-step)', () => {
       expect(screen.getByRole('heading', { level: 1, name: '创意评估' })).toBeInTheDocument()
     })
 
-    await click(screen.getByRole('button', { name: '返回修改点子' }))
+    await click(screen.getByRole('button', { name: '返回修改项目' }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '点子信息' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
     })
   })
 
@@ -194,15 +194,15 @@ describe('Submit Page (3-step)', () => {
     await click(screen.getByRole('button', { name: '提交低分评估' }))
 
     await waitFor(() => {
-      expect(screen.getByText('评分未达标，点子未提交')).toBeInTheDocument()
+      expect(screen.getByText('评分未达标，项目未提交')).toBeInTheDocument()
       expect(screen.getByText(/当前评分 0 分/)).toBeInTheDocument()
     })
 
     expect(submitIdeaWithAssessment).not.toHaveBeenCalled()
 
-    await click(screen.getByRole('button', { name: '修改点子' }))
+    await click(screen.getByRole('button', { name: '修改项目' }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '点子信息' })).toBeInTheDocument()
+      expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
     })
   })
 
@@ -226,11 +226,11 @@ describe('Submit Page (3-step)', () => {
     await click(screen.getByRole('button', { name: '提交高分评估' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: '查看我的点子' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: '提交新点子' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: '查看我的工坊' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: '提交新项目' })).toBeInTheDocument()
     })
 
-    await click(screen.getByRole('button', { name: '查看我的点子' }))
+    await click(screen.getByRole('button', { name: '查看我的工坊' }))
     expect(pushMock).toHaveBeenCalledWith('/dashboard')
     expect(submitIdeaWithAssessment).toHaveBeenCalledTimes(1)
   })

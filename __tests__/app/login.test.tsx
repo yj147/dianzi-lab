@@ -26,7 +26,7 @@ describe('Login Page', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByLabelText('Password')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '登录' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '注册' })).toHaveAttribute('href', '/register')
+    expect(screen.getByRole('link', { name: '立即注册' })).toHaveAttribute('href', '/register')
   })
 
   it('shows validation errors for invalid input', async () => {

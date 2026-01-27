@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react'
-import { redirect, usePathname } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 import { getSession } from '@/lib/auth'
 import AdminLayout from '@/app/admin/layout'
@@ -10,7 +10,7 @@ jest.mock('next/navigation', () => ({
     ;(error as any).digest = `NEXT_REDIRECT;${url}`
     throw error
   }),
-  usePathname: jest.fn(),
+  usePathname: jest.fn(() => '/admin'),
 }))
 
 jest.mock('@/lib/auth', () => ({
@@ -37,7 +37,6 @@ describe('Admin Layout', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    ;(usePathname as jest.Mock).mockReturnValue('/admin')
   })
 
   it('redirects to /dashboard if no session', async () => {
@@ -68,32 +67,14 @@ describe('Admin Layout', () => {
     expect(redirect).toHaveBeenCalledWith('/dashboard')
   })
 
-  it('renders AdminNav links and children for ADMIN session', async () => {
+  it('renders navbar/footer and children for ADMIN session', async () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
 
     const LayoutContent = await AdminLayout({ children: <div>Admin Content</div> })
     render(LayoutContent)
 
-    const nav = screen.getByRole('navigation', { name: '管理员导航' })
-    expect(nav).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '仪表板' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '梦境管理' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '用户管理' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '回收站' })).toBeInTheDocument()
+    expect(screen.getByTestId('navbar')).toBeInTheDocument()
+    expect(screen.getByTestId('footer')).toBeInTheDocument()
     expect(screen.getByText('Admin Content')).toBeInTheDocument()
-
-    // Active state on /admin
-    expect(screen.getByRole('link', { name: '仪表板' })).toHaveClass('bg-brand-dark')
-  })
-
-  it('highlights active link for /admin/ideas', async () => {
-    ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
-    ;(usePathname as jest.Mock).mockReturnValue('/admin/ideas')
-
-    const LayoutContent = await AdminLayout({ children: <div>Ideas Page</div> })
-    render(LayoutContent)
-
-    expect(screen.getByRole('link', { name: '梦境管理' })).toHaveClass('bg-brand-dark')
   })
 })
-

@@ -71,6 +71,7 @@ describe('Dashboard Page', () => {
         id: 'idea-1',
         title: '测试点子',
         description: '这是一个测试点子的描述',
+        tags: [],
         status: 'PENDING',
         createdAt: new Date('2025-01-20'),
         assessment: null,
@@ -85,6 +86,6 @@ describe('Dashboard Page', () => {
 
     expect(screen.getByText('测试点子')).toBeInTheDocument()
     expect(screen.getByText('这是一个测试点子的描述')).toBeInTheDocument()
-    expect(screen.getByText('待审核')).toBeInTheDocument()
+    expect(screen.getByText('审核中')).toBeInTheDocument()
   })
 })

@@ -1,27 +1,22 @@
 import { render, screen } from '@testing-library/react'
+import { redirect } from 'next/navigation'
 
 import { prisma } from '@/lib/db'
 import AdminDashboardPage from '@/app/admin/page'
 
-jest.mock('@/lib/db', () => ({
-  prisma: {
-    $transaction: jest.fn(),
-    idea: {
-      count: jest.fn(),
-    },
-    user: {
-      count: jest.fn(),
-      findMany: jest.fn(),
-    },
-  },
+jest.mock('next/navigation', () => ({
+  redirect: jest.fn().mockImplementation((url: string) => {
+    const error = new Error('NEXT_REDIRECT')
+    ;(error as any).digest = `NEXT_REDIRECT;${url}`
+    throw error
+  }),
 }))
 
-jest.mock('@/lib/auth', () => ({
-  getSession: jest.fn().mockResolvedValue({
-    sub: 'user-1',
-    email: 'admin@example.com',
-    role: 'ADMIN',
-  }),
+jest.mock('@/lib/db', () => ({
+  prisma: {
+    idea: { count: jest.fn() },
+    user: { findMany: jest.fn() },
+  },
 }))
 
 describe('Admin: Dashboard + Users', () => {
@@ -29,64 +24,14 @@ describe('Admin: Dashboard + Users', () => {
     jest.clearAllMocks()
   })
 
-  it('渲染统计卡片，并使用 prisma.$transaction 聚合查询', async () => {
-    ;(prisma.$transaction as jest.Mock).mockResolvedValue([10, 2, 3, 4, 1, 5])
+  it('redirects /admin to /admin/ideas', async () => {
+    try {
+      await AdminDashboardPage()
+    } catch (e: any) {
+      expect(e.message).toBe('NEXT_REDIRECT')
+    }
 
-    const element = await AdminDashboardPage()
-    render(element)
-
-    expect(screen.getByRole('heading', { level: 1, name: '仪表板' })).toBeInTheDocument()
-    expect(screen.getByText('总点子数')).toBeInTheDocument()
-    expect(screen.getByText('待审核')).toBeInTheDocument()
-    expect(screen.getByText('已采纳')).toBeInTheDocument()
-    expect(screen.getByText('开发中')).toBeInTheDocument()
-    expect(screen.getByText('已完成')).toBeInTheDocument()
-    expect(screen.getByText('总用户数')).toBeInTheDocument()
-
-    expect(screen.getByText('10')).toBeInTheDocument()
-    expect(screen.getByText('2')).toBeInTheDocument()
-    expect(screen.getByText('3')).toBeInTheDocument()
-    expect(screen.getByText('4')).toBeInTheDocument()
-    expect(screen.getByText('1')).toBeInTheDocument()
-    expect(screen.getByText('5')).toBeInTheDocument()
-
-    // Verify operator card shows admin email
-    expect(screen.getByText('快捷操作')).toBeInTheDocument()
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument()
-
-    // Verify quick actions
-    expect(screen.getByText('梦境管理')).toBeInTheDocument()
-    expect(screen.getByText('用户管理')).toBeInTheDocument()
-    expect(screen.getByText('回收站')).toBeInTheDocument()
-
-    expect(prisma.$transaction).toHaveBeenCalledTimes(1)
-    expect(prisma.idea.count).toHaveBeenCalledWith({ where: { isDeleted: false } })
-    expect(prisma.idea.count).toHaveBeenCalledWith({
-      where: { status: 'PENDING', isDeleted: false },
-    })
-    expect(prisma.idea.count).toHaveBeenCalledWith({
-      where: { status: 'APPROVED', isDeleted: false },
-    })
-    expect(prisma.idea.count).toHaveBeenCalledWith({
-      where: { status: 'IN_PROGRESS', isDeleted: false },
-    })
-    expect(prisma.idea.count).toHaveBeenCalledWith({
-      where: { status: 'COMPLETED', isDeleted: false },
-    })
-    expect(prisma.user.count).toHaveBeenCalledTimes(1)
-  })
-
-  it('当 session 为 null 时，显示默认头像字母和管理员文本', async () => {
-    const { getSession } = await import('@/lib/auth')
-    ;(getSession as jest.Mock).mockResolvedValueOnce(null)
-    ;(prisma.$transaction as jest.Mock).mockResolvedValue([0, 0, 0, 0, 0, 0])
-
-    const element = await AdminDashboardPage()
-    render(element)
-
-    // Verify fallback avatar letter 'A' and fallback text '管理员'
-    expect(screen.getByText('A')).toBeInTheDocument()
-    expect(screen.getByText('管理员')).toBeInTheDocument()
+    expect(redirect).toHaveBeenCalledWith('/admin/ideas')
   })
 
   it('渲染用户列表，并查询点子数量', async () => {
@@ -106,28 +51,33 @@ describe('Admin: Dashboard + Users', () => {
         _count: { ideas: 0 },
       },
     ])
+    ;(prisma.idea.count as jest.Mock).mockResolvedValue(2)
 
     const { default: AdminUsersPage } = await import('@/app/admin/users/page')
     const element = await AdminUsersPage()
     render(element)
 
-    expect(screen.getByRole('heading', { level: 1, name: '用户管理' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: '主控制台' })).toBeInTheDocument()
+    expect(screen.getByText('管理实验室成员及其权限。')).toBeInTheDocument()
 
-    // Desktop table headers
-    expect(screen.getByText('邮箱')).toBeInTheDocument()
+    // Header tabs
+    expect(screen.getByRole('link', { name: '项目管理' })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: '用户管理' })).toHaveClass('bg-brand-dark')
+    expect(screen.getByRole('link', { name: /回收站/ })).toBeInTheDocument()
+
+    // Table headers
+    expect(screen.getByText('用户')).toBeInTheDocument()
     expect(screen.getByText('角色')).toBeInTheDocument()
-    expect(screen.getByText('注册时间')).toBeInTheDocument()
-    expect(screen.getByText('提交点子数')).toBeInTheDocument()
+    expect(screen.getByText('状态')).toBeInTheDocument()
+    expect(screen.getByText('管理')).toBeInTheDocument()
 
-    // User data appears in both desktop and mobile views, so use getAllByText
-    expect(screen.getAllByText('admin@example.com').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('user@example.com').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('管理员').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('用户').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('2025-01-20').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('2025-01-19').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('3').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('0').length).toBeGreaterThan(0)
+    // User data (display names are local-part of email)
+    expect(screen.getByText('admin')).toBeInTheDocument()
+    expect(screen.getByText('user')).toBeInTheDocument()
+    expect(screen.getAllByText('ADMIN').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('USER').length).toBeGreaterThan(0)
+    expect(screen.getByText(/3 个项目/)).toBeInTheDocument()
+    expect(screen.getByText(/0 个项目/)).toBeInTheDocument()
 
     expect(prisma.user.findMany).toHaveBeenCalledWith({
       orderBy: { createdAt: 'desc' },
@@ -139,5 +89,6 @@ describe('Admin: Dashboard + Users', () => {
         _count: { select: { ideas: true } },
       },
     })
+    expect(prisma.idea.count).toHaveBeenCalledWith({ where: { isDeleted: true } })
   })
 })

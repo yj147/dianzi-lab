@@ -66,6 +66,7 @@ describe('Admin Trash Page + Table', () => {
       select: {
         id: true,
         title: true,
+        description: true,
         updatedAt: true,
         user: { select: { email: true } },
       },
@@ -100,7 +101,7 @@ describe('Admin Trash Page + Table', () => {
 
     // Data appears in both desktop and mobile views
     expect(screen.getAllByText('Idea 1').length).toBeGreaterThan(0)
-    expect(screen.getAllByText('u1@example.com').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Test description').length).toBeGreaterThan(0)
   })
 
   it('restore button calls restoreIdea + refresh', async () => {

@@ -71,24 +71,26 @@ export default function ValidatorClient() {
         </p>
       </header>
 
-      {view === "form" ? (
-        <ValidatorForm
-          onSubmit={handleSubmit}
-          initialValues={lastScores.length > 0 ? lastScores : undefined}
-          isLoading={isLoading}
-        />
-      ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
-          <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
-            <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
-            <RadarChart scores={result?.scores ?? []} className="mt-4" />
-          </section>
-          <section>
-            <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
-            <ResultPanel result={result} onReset={handleReset} />
-          </section>
-        </div>
-      )}
+      <div key={view} className="animate-fade-in-up motion-reduce:animate-none">
+        {view === "form" ? (
+          <ValidatorForm
+            onSubmit={handleSubmit}
+            initialValues={lastScores.length > 0 ? lastScores : undefined}
+            isLoading={isLoading}
+          />
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-2">
+            <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
+              <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
+              <RadarChart scores={result?.scores ?? []} className="mt-4" />
+            </section>
+            <section>
+              <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
+              <ResultPanel result={result} onReset={handleReset} />
+            </section>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

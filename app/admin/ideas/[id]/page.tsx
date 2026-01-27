@@ -63,7 +63,7 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
         className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 underline-offset-4 hover:text-brand-dark hover:underline"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
-        返回梦境列表
+        返回项目管理
       </Link>
 
       <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-8 shadow-solid-sm">
@@ -123,11 +123,10 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
         <section className="rounded-xl border-2 border-dashed border-brand-dark/40 bg-brand-surface p-12 text-center shadow-solid-sm">
           <h2 className="text-balance font-heading text-2xl font-bold text-brand-dark">暂无评估数据</h2>
           <p className="text-pretty mx-auto mt-3 max-w-xl text-sm text-gray-600">
-            该点子尚未进行创业可行性评估。
+            该项目尚未进行创业可行性评估。
           </p>
         </section>
       )}
     </div>
   )
 }
-

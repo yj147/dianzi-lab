@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-点子 Lab 是一个创意孵化平台：用户提交点子 → 管理员审核 → 推进开发 → 首页展示已完成工具。
+点子 Lab 是一个创意实现平台：用户提交点子 → 管理员审核 → 推进开发 → 首页展示已完成工具。
 
 **技术栈**: Next.js 14 (App Router) + Prisma + Supabase (PostgreSQL) + Tailwind CSS + shadcn/ui
 

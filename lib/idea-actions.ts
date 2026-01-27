@@ -1,5 +1,6 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
@@ -98,6 +99,9 @@ export async function submitIdeaWithAssessment(
 
     return idea
   })
+
+  // 提交点子后，用户中心列表需要刷新（Next Router Cache 可能复用旧的 RSC 结果）
+  revalidatePath('/dashboard')
 
   return {
     success: true,

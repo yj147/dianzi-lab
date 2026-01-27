@@ -5,14 +5,14 @@ import { Button } from '@/components/ui/button'
 
 export default function InboxPage() {
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10">
+    <div className="container mx-auto px-4 py-12">
       <div className="rounded-xl border-2 border-brand-dark bg-brand-surface p-10 text-center shadow-solid-sm">
         <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-solid-sm">
           <Inbox className="size-6" aria-hidden="true" />
         </div>
-        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">星际信箱</h1>
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">消息中心</h1>
         <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
-          这里会收到来自其他造梦者和管理员的星光来信。现在还在编织中。
+          消息功能正在建设中。
         </p>
         <div className="mt-8 flex justify-center">
           <Button asChild variant="secondary">

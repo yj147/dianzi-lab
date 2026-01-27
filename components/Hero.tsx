@@ -1,126 +1,124 @@
+'use client'
+
+import * as React from 'react'
 import Link from 'next/link'
-import { Eye, ScrollText } from 'lucide-react'
+import { HardHat, ScrollText } from 'lucide-react'
 
+import PulseDot from '@/components/PulseDot'
 import { Button } from '@/components/ui/button'
-
-const PAIN_POINTS = [
-  {
-    title: '技术门槛',
-    description: '不懂编程，配置环境就劝退，服务器维护更是噩梦。',
-  },
-  {
-    title: '设计苦手',
-    description: '脑子里画面很美，做出来却像上个世纪的软件。',
-  },
-  {
-    title: '时间碎片化',
-    description: '全职工作之余，根本没有整块时间推进项目。',
-  },
-] as const
-
-const PROCESS_STEPS = [
-  {
-    step: '01',
-    title: '提交点子',
-    description: '不需要长篇大论的商业计划书。只需要清晰描述你的痛点和解决方案。',
-  },
-  {
-    step: '02',
-    title: '可行性评估',
-    description: '社区投票筛选，管理员评估技术实现难度和潜在价值。',
-  },
-  {
-    step: '03',
-    title: '设计与开发',
-    description: '实验室的工程师和设计师接手项目。你只需要参与核心决策。',
-  },
-  {
-    step: '04',
-    title: '发布上线',
-    description: '部署到生产环境，发布到 Product Hunt，让世界看到你的创意。',
-  },
-] as const
+import { useInView } from '@/lib/use-in-view'
+import { usePrefersReducedMotion } from '@/lib/use-prefers-reduced-motion'
 
 export default function Hero() {
+  const reducedMotion = usePrefersReducedMotion()
+  const sectionRef = React.useRef<HTMLElement>(null)
+  const inView = useInView(sectionRef, { rootMargin: '200px 0px' })
+  const pauseLoops = reducedMotion || !inView
+
   return (
-    <div className="relative z-10">
-      <section className="pb-20 pt-24 md:pt-28">
-        <div className="container mx-auto max-w-7xl px-4">
-          <p className="font-mono text-sm text-gray-500">99% 的点子死于“没时间做”</p>
+    <section
+      ref={sectionRef}
+      className="relative z-10 flex flex-col justify-center border-b-4 border-brand-dark bg-brand-bg/90 pb-20 pt-24 backdrop-blur-sm md:min-h-dvh"
+    >
+      <div className="container mx-auto max-w-7xl px-4">
+        <div className="grid items-center gap-16 lg:grid-cols-2">
+          <div className="animate-fade-in-left motion-reduce:animate-none">
+            <div className="mb-8 inline-flex items-center gap-2 bg-brand-dark px-4 py-1.5 font-mono text-sm font-bold text-white shadow-solid-sm">
+              <PulseDot className="bg-yellow-400" paused={pauseLoops} />
+              筹备中 // COMING SOON
+            </div>
 
-          <h1 className="mt-6 text-balance font-heading text-6xl font-bold leading-[0.95] text-brand-dark md:text-7xl">
-            让好点子 <span className="text-brand-primary">不再只是想法</span>
-          </h1>
+            <h1 className="mb-8 font-heading text-6xl font-bold leading-[0.95] tracking-tight text-brand-dark md:text-7xl">
+              您的专属 <br />
+              <span className="bg-brand-accent/20 px-2 text-brand-primary lg:-ml-2">技术合伙人</span> <br />
+              (As A Service)
+            </h1>
 
-          <p className="mt-6 max-w-2xl border-l-4 border-brand-primary py-2 pl-6 text-pretty text-lg font-medium leading-relaxed text-gray-700 md:text-xl">
-            点子 Lab 是一个创意孵化器。你负责提供灵感，我们提供
-            <br className="hidden sm:block" />
-            设计、代码和运营，把它们变成真实可用的产品。
-          </p>
+            <p className="mb-10 max-w-lg border-l-4 border-brand-primary py-2 pl-6 text-pretty text-xl font-medium leading-relaxed text-brand-dark/80 md:text-2xl">
+              您提供商业愿景，我们提供成建制的工程团队、技术路线图和交付代码。无需出让任何股权。
+            </p>
 
-          <div className="mt-10 flex flex-col gap-5 sm:flex-row">
-            <Button asChild size="lg">
-              <Link href="/submit">
-                <ScrollText size={18} className="mr-3" aria-hidden="true" />
-                提交我的点子
-              </Link>
-            </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link href="/#tools">
-                <Eye size={18} className="mr-3" aria-hidden="true" />
-                看看大家的作品
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t-2 border-brand-dark/10 py-20">
-        <div className="container mx-auto max-w-7xl px-4">
-          <h2 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
-            为什么你的想法总是无法落地？
-          </h2>
-          <p className="mt-3 text-pretty text-lg text-gray-600">因为创造一个产品比想象中难得多。</p>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-3">
-            {PAIN_POINTS.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid-sm"
+            <div className="flex flex-col gap-5 sm:flex-row">
+              <Button
+                asChild
+                className="group h-16 bg-brand-primary px-8 text-xl uppercase tracking-wider hover:-translate-y-1 hover:bg-brand-primary/90"
               >
-                <h3 className="font-heading text-xl font-bold text-brand-dark">{item.title}</h3>
-                <p className="mt-3 text-pretty text-sm leading-relaxed text-gray-600">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+                <Link href="/submit">
+                  <ScrollText
+                    className="mr-3 transition-transform group-hover:rotate-12"
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                  加入等待名单
+                </Link>
+              </Button>
 
-      <section className="border-t-2 border-brand-dark/10 py-20">
-        <div className="container mx-auto max-w-7xl px-4">
-          <p className="font-mono text-xs text-gray-500">PROCESS</p>
-          <h2 className="mt-3 text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
-            孵化四部曲
-          </h2>
-          <p className="mt-3 text-pretty text-lg text-gray-600">从想法到产品，只需要简单的四步</p>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {PROCESS_STEPS.map((item) => (
-              <div
-                key={item.step}
-                className="rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid-sm"
+              <Button
+                asChild
+                variant="secondary"
+                className="h-16 px-8 text-xl uppercase tracking-wider hover:-translate-y-1"
               >
-                <p className="font-mono text-xl font-bold text-brand-primary tabular-nums">{item.step}</p>
-                <h3 className="mt-3 font-heading text-xl font-bold text-brand-dark">{item.title}</h3>
-                <p className="mt-3 text-pretty text-sm leading-relaxed text-gray-600">{item.description}</p>
-              </div>
-            ))}
+                <Link href="/#capabilities">查看服务能力</Link>
+              </Button>
+            </div>
           </div>
 
-          <p className="mt-8 font-mono text-xs text-gray-500">滚动查看更多流程</p>
+          <div className="relative hidden h-[500px] lg:block animate-fade-in-right motion-reduce:animate-none">
+            <div className="absolute right-10 top-0 z-20">
+              <div
+                className="animate-float motion-reduce:animate-none"
+                style={pauseLoops ? { animationPlayState: 'paused' } : undefined}
+              >
+                <div className="w-80 rotate-2 border-4 border-brand-dark bg-white p-8 shadow-solid-lg">
+                  <div className="mb-6 flex items-center justify-between border-b-4 border-brand-dark pb-4">
+                    <span className="font-heading text-2xl font-bold">技术服务协议</span>
+                  </div>
+
+                  <div className="space-y-4 font-mono text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">甲方:</span>
+                      <span className="bg-brand-accent px-1 font-bold">您</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">乙方:</span>
+                      <span className="font-bold">点子 Lab</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">交付物:</span>
+                      <span className="font-bold">MVP v1.0</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">知识产权:</span>
+                      <span className="font-bold">100% 归您所有</span>
+                    </div>
+                  </div>
+
+                  <div className="mt-8 border-t-2 border-dashed border-gray-300 pt-4">
+                    <div className="-rotate-6 font-heading text-3xl font-bold text-brand-primary opacity-80">
+                      协议已签署
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="absolute bottom-10 left-0 z-10">
+              <div
+                className="animate-float-slow motion-reduce:animate-none"
+                style={pauseLoops ? { animationPlayState: 'paused' } : undefined}
+              >
+                <div className="w-64 -rotate-3 border-4 border-brand-dark bg-brand-primary p-6 text-white shadow-solid">
+                  <HardHat size={48} className="mb-4 text-brand-accent" aria-hidden="true" />
+                  <div className="mb-2 font-heading text-2xl font-bold leading-none">脏活累活我们干</div>
+                  <p className="font-mono text-xs opacity-80">
+                    我们处理架构、安全、部署和扩展性问题，您只需专注于业务增长。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   )
 }
-

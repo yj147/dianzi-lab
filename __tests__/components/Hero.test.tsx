@@ -6,30 +6,30 @@ describe('Hero', () => {
   it('显示主标题', () => {
     render(<Hero />)
     expect(
-      screen.getByRole('heading', { level: 1, name: /让好点子.*想法/ }),
+      screen.getByRole('heading', { level: 1, name: /技术合伙人/ }),
     ).toBeInTheDocument()
   })
 
   it('显示副文案', () => {
     render(<Hero />)
     expect(
-      screen.getByText(/点子 Lab 是一个创意孵化器/),
+      screen.getByText(/您提供商业愿景/),
     ).toBeInTheDocument()
   })
 
   it('CTA 按钮1 指向 /submit', () => {
     render(<Hero />)
-    expect(screen.getByRole('link', { name: '提交我的点子' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '加入等待名单' })).toHaveAttribute(
       'href',
       '/submit',
     )
   })
 
-  it('CTA 按钮2 指向 /#tools', () => {
+  it('CTA 按钮2 指向 /#capabilities', () => {
     render(<Hero />)
-    expect(screen.getByRole('link', { name: '看看大家的作品' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: '查看服务能力' })).toHaveAttribute(
       'href',
-      '/#tools',
+      '/#capabilities',
     )
   })
 })
