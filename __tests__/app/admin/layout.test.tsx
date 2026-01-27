@@ -13,6 +13,15 @@ jest.mock('next/navigation', () => ({
   usePathname: jest.fn(() => '/admin'),
 }))
 
+// Mock motion/react to avoid issues with useReducedMotion and AnimatePresence
+jest.mock('motion/react', () => ({
+  motion: {
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  },
+  AnimatePresence: ({ children }: any) => <>{children}</>,
+  useReducedMotion: jest.fn(() => false),
+}))
+
 jest.mock('@/lib/auth', () => ({
   getSession: jest.fn(),
 }))

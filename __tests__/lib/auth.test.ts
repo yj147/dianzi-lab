@@ -4,7 +4,9 @@
 
 import { SignJWT } from 'jose'
 
-jest.mock('next/headers', () => ({ cookies: jest.fn() }))
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => ({ set: jest.fn(), get: jest.fn() })),
+}))
 
 jest.mock('@/lib/db', () => ({
   prisma: {

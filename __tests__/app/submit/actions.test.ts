@@ -36,16 +36,18 @@ function getIdeaCreateMock(): jest.Mock {
 describe('app/submit/actions.submitIdea', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    // next/navigation.redirect 在 Next.js 中会通过抛错终止执行
+    // next/navigation.redirect 在 Next.js 14+ 中通过抛错终止执行，错误消息为 NEXT_REDIRECT
     getRedirectMock().mockImplementation((url: string) => {
-      throw new Error(`REDIRECT:${url}`)
+      const error = new Error('NEXT_REDIRECT')
+      ;(error as any).digest = `NEXT_REDIRECT;${url}`
+      throw error
     })
   })
 
   it('未登录时 redirect("/login")', async () => {
     getSessionMock().mockResolvedValue(null)
 
-    await expect(submitIdea(new FormData())).rejects.toThrow('REDIRECT:/login')
+    await expect(submitIdea(new FormData())).rejects.toThrow('NEXT_REDIRECT')
     expect(getRedirectMock()).toHaveBeenCalledWith('/login')
   })
 
