@@ -46,3 +46,9 @@ dashboard-final.png
 # local production verification artifacts (do not commit)
 tests/dianzi-production-test-*.md
 .worktrees/
+
+# UI prototype reference (local only)
+ui-prototype/
+
+# Windows download metadata noise
+*:Zone.Identifier
