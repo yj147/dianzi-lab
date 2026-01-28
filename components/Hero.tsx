@@ -64,7 +64,11 @@ export default function Hero() {
 
           <div className="relative hidden h-[500px] lg:block animate-fade-in-right motion-reduce:animate-none">
             <div className="absolute right-10 top-0 z-20">
-              <div className="w-80 border-4 border-foreground bg-surface p-8 shadow-solid-lg dark:border-border">
+              <div
+                className={`w-80 border-4 border-foreground bg-surface p-8 shadow-solid-lg motion-reduce:animate-none dark:border-border ${
+                  shouldAnimate ? 'animate-float-offset' : ''
+                }`}
+              >
                 <div className="mb-6 flex items-center justify-between border-b-4 border-foreground pb-4 dark:border-border">
                   <span className="font-heading text-2xl font-bold text-foreground">技术服务协议</span>
                 </div>
@@ -97,7 +101,11 @@ export default function Hero() {
             </div>
 
             <div className="absolute bottom-10 left-0 z-10">
-              <div className="w-64 border-4 border-foreground bg-brand-primary p-6 text-white shadow-solid dark:border-border">
+              <div
+                className={`w-64 border-4 border-foreground bg-brand-primary p-6 text-white shadow-solid motion-reduce:animate-none dark:border-border ${
+                  shouldAnimate ? 'animate-float-offset-slow' : ''
+                }`}
+              >
                 <HardHat size={48} className="mb-4 text-brand-accent" aria-hidden="true" />
                 <div className="mb-2 font-heading text-2xl font-bold leading-none">脏活累活我们干</div>
                 <p className="font-mono text-xs opacity-80">
