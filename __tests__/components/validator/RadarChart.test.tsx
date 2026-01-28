@@ -2,11 +2,13 @@ import { render, screen } from "@testing-library/react";
 import RadarChart from "@/components/validator/RadarChart";
 import { DIMENSIONS } from "@/components/validator/constants";
 
+// Mock next/dynamic
 jest.mock("next/dynamic", () => {
   return function dynamic(
     loader: () => Promise<{ default: React.ComponentType }>,
     options: { loading?: () => JSX.Element }
   ) {
+    // 返回一个简单的占位组件用于测试
     const MockComponent = ({ data }: { data: unknown[] }) => (
       <div data-testid="mock-radar-chart" data-items={data.length}>
         Mock Radar Chart
@@ -33,7 +35,7 @@ describe("RadarChart Component", () => {
     render(<RadarChart scores={mockScores} />);
 
     const chart = screen.getByTestId("mock-radar-chart");
-    expect(chart).toHaveAttribute("data-items", "5");
+    expect(chart).toHaveAttribute("data-items", "9");
   });
 
   it("applies custom className", () => {
@@ -63,10 +65,11 @@ describe("RadarChart Component", () => {
   });
 
   it("handles partial scores", () => {
-    const partialScores = [{ key: "clarity", value: 8 }];
+    const partialScores = [{ key: "targetUser", value: 8 }];
     render(<RadarChart scores={partialScores} />);
 
+    // 应该仍然渲染 9 个维度（缺失的默认为 0）
     const chart = screen.getByTestId("mock-radar-chart");
-    expect(chart).toHaveAttribute("data-items", "5");
+    expect(chart).toHaveAttribute("data-items", "9");
   });
 });

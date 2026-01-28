@@ -3,11 +3,15 @@ import rules from '@/rules/validator_v1.rules.json'
 
 // Types
 export type AssessmentInput = {
-  clarity: number
+  targetUser: number
+  channel: number
+  market: number
   tech: number
   budget: number
-  urgency: number
-  value: number
+  businessModel: number
+  team: number
+  risk: number
+  traffic: number
 }
 
 export type RuleFeedback = {
@@ -22,23 +26,31 @@ export type RuleFeedback = {
 // Zod Schema
 const dimSchema = z.number().int().min(0).max(10)
 export const assessmentInputSchema = z.object({
-  clarity: dimSchema,
+  targetUser: dimSchema,
+  channel: dimSchema,
+  market: dimSchema,
   tech: dimSchema,
   budget: dimSchema,
-  urgency: dimSchema,
-  value: dimSchema,
+  businessModel: dimSchema,
+  team: dimSchema,
+  risk: dimSchema,
+  traffic: dimSchema,
 })
 
 // Scoring constants
 const WEIGHTS: Record<keyof AssessmentInput, number> = {
-  clarity: 0.25,
-  tech: 0.2,
-  budget: 0.2,
-  urgency: 0.15,
-  value: 0.2,
+  targetUser: 0.15,
+  channel: 0.1,
+  market: 0.15,
+  tech: 0.1,
+  budget: 0.1,
+  businessModel: 0.15,
+  team: 0.1,
+  risk: 0.1,
+  traffic: 0.05,
 }
 
-const MULTIPLIERS: (keyof AssessmentInput)[] = ['clarity', 'tech', 'budget']
+const MULTIPLIERS: (keyof AssessmentInput)[] = ['market', 'team', 'tech']
 const KILL_THRESHOLD = 3
 const KILL_POWER = 2
 

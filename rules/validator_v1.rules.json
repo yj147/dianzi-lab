@@ -5,13 +5,13 @@
     "severity": 1,
     "category": "overall",
     "when": { "all": [{ "metric": "finalScore", "op": ">=", "value": 80 }] },
-    "advice": "整体评分很强（≥80）：项目具备良好的实施条件，建议尽快启动开发。",
+    "advice": "整体评分很强（≥80）：可以进入“加速验证/扩大样本”的阶段，而不是继续在脑内打磨。",
     "actions": [
-      "确认项目需求和技术方案",
-      "制定详细的开发计划和时间表",
-      "开始项目实施"
+      "用 7-14 天做一次可量化增长实验（渠道/转化率/留资/付费意向）",
+      "做一个“可收费”的最小版本（哪怕是服务化/手动交付）",
+      "建立每周 KPI：访谈数、获客成本、转化、留存/复购或续费意向"
     ],
-    "tags": ["总评", "优秀"]
+    "tags": ["总评", "加速"]
   },
   {
     "id": "overall_yellow_60_79",
@@ -24,13 +24,13 @@
         { "metric": "finalScore", "op": "<", "value": 80 }
       ]
     },
-    "advice": "整体评分中等偏上（60-79）：项目可行，但存在1-2个需要优化的方面。",
+    "advice": "整体评分中等偏上（60-79）：方向可行，但存在 1-2 个明显短板。优先补短板再扩张。",
     "actions": [
-      "识别并优化评分最低的维度",
-      "与客户进一步沟通确认需求",
-      "制定风险缓解方案"
+      "选出最低的 2 个维度做定向实验（每个实验 7 天内必须出结论）",
+      "避免大规模开发：用 MVP + 人工流程先跑通闭环",
+      "把目标从“做产品”切换成“验证假设”"
     ],
-    "tags": ["总评", "良好"]
+    "tags": ["总评", "迭代"]
   },
   {
     "id": "overall_red_lt60",
@@ -38,220 +38,835 @@
     "severity": 3,
     "category": "overall",
     "when": { "all": [{ "metric": "finalScore", "op": "<", "value": 60 }] },
-    "advice": "整体评分偏低（<60）：项目存在较大风险，建议谨慎评估或暂缓实施。",
+    "advice": "整体评分偏低（<60）：不建议立刻投入大量开发/成本。先修复致命项或重构定位。",
     "actions": [
-      "详细分析低分维度的具体问题",
-      "与客户深入沟通澄清需求",
-      "考虑调整项目范围或实施方案"
+      "先检查是否命中 Killer Flag（market/team/channel/targetUser/risk<3）",
+      "若命中：先解决致命项；若未命中：找出最低两项，做验证实验",
+      "把“功能清单”删到只剩能验证核心假设的 1-2 个动作"
     ],
-    "tags": ["总评", "风险"]
+    "tags": ["总评", "止损"]
   },
 
   {
-    "id": "killer_clarity_lt3",
+    "id": "killer_market_lt3",
     "priority": 100,
     "severity": 3,
     "category": "killer",
-    "when": { "all": [{ "dim": "clarity", "op": "<", "value": 3 }] },
-    "advice": "【关键问题】需求清晰度过低（<3）：需求不明确会导致项目失败或大幅超期。",
+    "when": { "all": [{ "dim": "market", "op": "<", "value": 3 }] },
+    "advice": "【Killer Flag】市场（market）<3：天花板/刚需不足会导致“做出来也做不大”。优先重定义市场或换赛道。",
     "actions": [
-      "安排需求澄清会议，详细了解客户期望",
-      "制作原型或线框图确认功能需求",
-      "明确项目边界和验收标准"
+      "把目标市场缩到一个“刚需+高频+可付费”的细分人群/场景",
+      "验证 TAM/SAM/SOM：至少能讲清“为什么这个细分能扩张”",
+      "找到 3-5 个可对标的付费竞品或替代方案，确认用户确实在花钱解决"
     ],
-    "tags": ["关键问题", "需求"]
+    "tags": ["KillerFlag", "市场"]
   },
   {
-    "id": "killer_tech_lt3",
+    "id": "killer_team_lt3",
     "priority": 100,
     "severity": 3,
     "category": "killer",
-    "when": { "all": [{ "dim": "tech", "op": "<", "value": 3 }] },
-    "advice": "【关键问题】技术可行性过低（<3）：技术实现存在重大困难，可能无法按期交付。",
+    "when": { "all": [{ "dim": "team", "op": "<", "value": 3 }] },
+    "advice": "【Killer Flag】团队（team）<3：执行与补位能力不足会让项目在“实现/增长/融资”上连锁失败。",
     "actions": [
-      "进行技术可行性调研和POC验证",
-      "评估是否需要调整技术方案",
-      "考虑分阶段实施降低技术风险"
+      "明确缺口：技术/产品/增长/行业资源里最关键的 1 个",
+      "找联合创始人或核心合伙人（或先降级到更容易交付的版本）",
+      "把里程碑拆到 2 周可交付，避免长期空转"
     ],
-    "tags": ["关键问题", "技术"]
+    "tags": ["KillerFlag", "团队"]
   },
   {
-    "id": "killer_budget_lt3",
+    "id": "killer_channel_lt3",
     "priority": 100,
     "severity": 3,
     "category": "killer",
-    "when": { "all": [{ "dim": "budget", "op": "<", "value": 3 }] },
-    "advice": "【关键问题】预算充足度过低（<3）：预算不足会影响项目质量和交付时间。",
+    "when": { "all": [{ "dim": "channel", "op": "<", "value": 3 }] },
+    "advice": "【Killer Flag】渠道（channel）<3：获客路径不成立，产品即便好也无法增长。",
     "actions": [
-      "重新评估项目成本和客户预算",
-      "考虑调整项目范围以匹配预算",
-      "与客户讨论分期付款或阶段性交付"
+      "先选一个最可能成功的单一渠道（SEO/内容/社群/投放/BD/平台上架）",
+      "定义漏斗：曝光→点击→留资→试用→付费，给出每一步目标转化率",
+      "用 7 天验证：能不能以可接受成本拿到第一批有效线索"
     ],
-    "tags": ["关键问题", "预算"]
+    "tags": ["KillerFlag", "渠道"]
+  },
+  {
+    "id": "killer_targetUser_lt3",
+    "priority": 98,
+    "severity": 3,
+    "category": "killer",
+    "when": { "all": [{ "dim": "targetUser", "op": "<", "value": 3 }] },
+    "advice": "【Killer Flag】目标用户（targetUser）<3：用户画像/痛点不清，后续渠道、产品、商业模式都会漂。",
+    "actions": [
+      "做 10 次同类用户深访（同岗位/同场景），提炼共同痛点与触发时刻",
+      "写出一句话定位：谁 + 在什么场景 + 为何痛 + 为什么现在要解决",
+      "用 Landing Page 测试：用户是否愿意留资/预约/付费意向"
+    ],
+    "tags": ["KillerFlag", "用户"]
+  },
+  {
+    "id": "killer_risk_lt3",
+    "priority": 99,
+    "severity": 3,
+    "category": "killer",
+    "when": { "all": [{ "dim": "risk", "op": "<", "value": 3 }] },
+    "advice": "【Killer Flag】风险可控（risk）<3：合规/平台依赖/供应链/政策等不可控因素可能直接把项目打断。",
+    "actions": [
+      "把风险拆成类型：合规/数据安全/平台政策/供应链/强监管行业",
+      "给出“解除路径”：替代方案、合规咨询、去平台化、数据最小化",
+      "在投入开发前先拿到关键的“可行性确认”证据"
+    ],
+    "tags": ["KillerFlag", "风险"]
   },
 
   {
-    "id": "single_clarity_3_4",
+    "id": "single_market_3_4",
     "priority": 70,
     "severity": 2,
-    "category": "clarity",
+    "category": "market",
     "when": {
       "all": [
-        { "dim": "clarity", "op": ">=", "value": 3 },
-        { "dim": "clarity", "op": "<", "value": 5 }
+        { "dim": "market", "op": ">=", "value": 3 },
+        { "dim": "market", "op": "<", "value": 5 }
       ]
     },
-    "advice": "需求清晰度偏弱（3-4）：需求理解存在模糊地带，需要进一步澄清。",
+    "advice": "市场偏弱（3-4）：可能是市场规模小/增长慢/需求不刚。需要更锋利的切入点或更大的扩张叙事。",
     "actions": [
-      "制作详细的需求文档供客户确认",
-      "使用原型或mockup帮助客户表达需求",
-      "定期与客户沟通确认理解正确"
+      "用“高频刚需场景”替代泛场景",
+      "用“先从一个细分垂直打穿”再扩张的路径讲清楚",
+      "验证：用户是否已经为替代方案付费（时间/金钱/流程成本）"
     ],
-    "tags": ["需求", "沟通"]
+    "tags": ["市场", "定位"]
   },
   {
-    "id": "single_tech_3_4",
+    "id": "single_channel_3_4",
     "priority": 68,
     "severity": 2,
-    "category": "tech",
+    "category": "distribution",
     "when": {
       "all": [
-        { "dim": "tech", "op": ">=", "value": 3 },
-        { "dim": "tech", "op": "<", "value": 5 }
+        { "dim": "channel", "op": ">=", "value": 3 },
+        { "dim": "channel", "op": "<", "value": 5 }
       ]
     },
-    "advice": "技术可行性偏弱（3-4）：技术实现有一定难度，需要制定详细的技术方案。",
+    "advice": "渠道偏弱（3-4）：你可能知道“用户在哪”，但不知道“怎么稳定触达并转化”。",
     "actions": [
-      "进行技术预研和方案设计",
-      "识别技术风险点并制定应对措施",
-      "考虑使用成熟的技术栈降低风险"
+      "明确渠道策略：1 个主渠道 + 1 个备选渠道",
+      "写出可复制打法：内容主题/投放素材/BD话术/上架关键词",
+      "跑一个最小可行漏斗，拿到真实 CAC 与转化数据"
     ],
-    "tags": ["技术", "风险"]
+    "tags": ["渠道", "增长"]
   },
   {
-    "id": "single_budget_3_4",
+    "id": "single_traffic_lt4",
     "priority": 66,
     "severity": 2,
-    "category": "budget",
-    "when": {
-      "all": [
-        { "dim": "budget", "op": ">=", "value": 3 },
-        { "dim": "budget", "op": "<", "value": 5 }
-      ]
-    },
-    "advice": "预算充足度偏弱（3-4）：预算可能偏紧，需要精确控制项目成本。",
+    "category": "demand",
+    "when": { "all": [{ "dim": "traffic", "op": "<", "value": 4 }] },
+    "advice": "流量/需求信号偏弱（traffic<4）：可能是需求不显性，或者你选错了信号来源。",
     "actions": [
-      "制定详细的成本预算和控制计划",
-      "优先实现核心功能，次要功能可选实现",
-      "与客户明确变更管理流程"
+      "做关键词/竞品流量调研：用户用什么词表达需求？",
+      "在 2 个渠道做小样本试投放/内容测试，找出最强信号点",
+      "用“手动交付/服务化”先验证是否愿意付费或强烈使用"
     ],
-    "tags": ["预算", "成本控制"]
+    "tags": ["需求", "信号"]
   },
   {
-    "id": "single_urgency_lt4",
-    "priority": 64,
+    "id": "single_businessModel_lt4",
+    "priority": 67,
     "severity": 2,
-    "category": "urgency",
-    "when": { "all": [{ "dim": "urgency", "op": "<", "value": 4 }] },
-    "advice": "时间紧迫度偏低（<4）：项目时间要求不紧急，可以更注重质量。",
+    "category": "monetization",
+    "when": { "all": [{ "dim": "businessModel", "op": "<", "value": 4 }] },
+    "advice": "商业模式偏弱（businessModel<4）：可能是付费方不明确、定价锚点缺失、或毛利结构不成立。",
     "actions": [
-      "制定合理的开发计划，确保代码质量",
-      "充分进行测试和优化",
-      "考虑采用更稳健的技术方案"
+      "明确：谁付钱？为什么现在付？付多少才划算？",
+      "做 3 档定价（入门/标准/旗舰），用预售/试点测试支付意愿",
+      "优先找“可立即付费”的场景（节省成本/增收/合规/效率）"
     ],
-    "tags": ["时间", "质量"]
+    "tags": ["商业模式", "定价"]
   },
   {
-    "id": "single_value_lt4",
+    "id": "single_tech_lt4",
+    "priority": 65,
+    "severity": 2,
+    "category": "execution",
+    "when": { "all": [{ "dim": "tech", "op": "<", "value": 4 }] },
+    "advice": "技术可行性偏弱（tech<4）：实现难度/不确定性高，建议先做降级路线，保证能交付验证闭环。",
+    "actions": [
+      "把技术拆成：必须自研 vs 可外包/可用第三方",
+      "先交付“可用但不完美”的版本，优先验证需求与付费",
+      "列出最大技术风险点，做 48 小时 POC（Proof of Concept）"
+    ],
+    "tags": ["技术", "可行性"]
+  },
+  {
+    "id": "single_budget_lt4",
     "priority": 62,
     "severity": 2,
-    "category": "value",
-    "when": { "all": [{ "dim": "value", "op": "<", "value": 4 }] },
-    "advice": "商业价值偏低（<4）：项目的商业意义不够明确，需要重新评估价值。",
+    "category": "capital",
+    "when": { "all": [{ "dim": "budget", "op": "<", "value": 4 }] },
+    "advice": "预算/资本效率偏弱（budget<4）：说明你当前资源不足以支撑该想法的验证路径。",
     "actions": [
-      "与客户深入讨论项目的商业目标",
-      "明确项目预期带来的收益",
-      "考虑调整项目定位提升价值"
+      "缩小范围：先做一个可在 2-4 周验证的版本",
+      "用预售/咨询/项目制先产生现金流，反哺产品化",
+      "尽量避免高固定成本：服务器、重人力、长周期研发"
     ],
-    "tags": ["价值", "商业目标"]
+    "tags": ["预算", "资本效率"]
+  },
+  {
+    "id": "single_team_3_4",
+    "priority": 69,
+    "severity": 2,
+    "category": "team",
+    "when": {
+      "all": [
+        { "dim": "team", "op": ">=", "value": 3 },
+        { "dim": "team", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "团队能力偏弱（3-4）：可能是缺关键角色/执行节奏松/对行业不熟。",
+    "actions": [
+      "明确“最关键缺口”的岗位与责任：技术/增长/行业BD/产品",
+      "用小里程碑强约束：两周必须交付可验证结果",
+      "补位方式：联合创始人 > 全职关键员工 > 外包（按关键程度排序）"
+    ],
+    "tags": ["团队", "执行力"]
+  },
+  {
+    "id": "single_risk_3_4",
+    "priority": 72,
+    "severity": 2,
+    "category": "risk",
+    "when": {
+      "all": [
+        { "dim": "risk", "op": ">=", "value": 3 },
+        { "dim": "risk", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "风险可控性偏弱（3-4）：存在被政策/平台/合规打断的可能，需要提前做“解除方案”。",
+    "actions": [
+      "列出 TOP3 风险与触发条件（发生会造成什么后果）",
+      "针对每个风险给一个替代方案（数据最小化/去平台化/合规流程）",
+      "在投入大规模开发前拿到关键可行性确认"
+    ],
+    "tags": ["风险", "预案"]
   },
 
   {
-    "id": "exec_clarity_tech_low",
+    "id": "exec_fail_tech_budget_low",
     "priority": 92,
     "severity": 3,
     "category": "execution",
     "when": {
       "all": [
-        { "dim": "clarity", "op": "<", "value": 4 },
-        { "dim": "tech", "op": "<", "value": 4 }
+        { "dim": "tech", "op": "<", "value": 4 },
+        { "dim": "budget", "op": "<", "value": 4 }
       ]
     },
-    "advice": "高风险组合：需求不清晰且技术难度高，极易导致项目失败。",
+    "advice": "高风险执行失败：技术难度/不确定性高 + 预算不足，最容易“做不出来或做不完”。",
     "actions": [
-      "暂停项目启动，优先解决需求澄清问题",
-      "进行技术可行性验证",
-      "考虑分阶段实施降低风险"
+      "强制降级：删功能到只剩能验证核心假设的一条路径",
+      "用第三方/开源/外包替代自研，先拿到可运行闭环",
+      "先做 POC 再做产品：48-72 小时验证关键技术点"
     ],
-    "tags": ["需求", "技术", "高风险"]
+    "tags": ["技术", "预算", "执行风险"]
   },
   {
-    "id": "exec_budget_urgency_conflict",
+    "id": "exec_gap_tech_team_low",
+    "priority": 91,
+    "severity": 3,
+    "category": "execution",
+    "when": {
+      "all": [
+        { "dim": "tech", "op": "<", "value": 4 },
+        { "dim": "team", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "能力缺口：技术可行性低且团队能力低，属于“想法正确也落不了地”的典型组合。",
+    "actions": [
+      "先换更容易交付的 MVP 路线（手动/半自动/服务化）",
+      "补关键角色：技术负责人或能交付的工程资源",
+      "把交付目标拆到两周内可验证，避免长期开发黑洞"
+    ],
+    "tags": ["团队", "技术", "落地"]
+  },
+  {
+    "id": "exec_deeptech_budget_low",
     "priority": 90,
     "severity": 3,
     "category": "execution",
     "when": {
       "all": [
-        { "dim": "budget", "op": "<", "value": 4 },
-        { "dim": "urgency", "op": ">=", "value": 7 }
+        { "dim": "tech", "op": ">=", "value": 7 },
+        { "dim": "budget", "op": "<", "value": 4 }
       ]
     },
-    "advice": "矛盾组合：预算不足但时间紧急，需要在质量、时间、成本间做权衡。",
+    "advice": "深技术/高复杂度但预算不足：容易卡在研发与试错成本上。",
     "actions": [
-      "与客户明确优先级：时间优先还是成本优先",
-      "制定最小可行产品(MVP)方案",
-      "考虑增加资源投入或延长交付时间"
+      "先锁定一个可商业化的最小功能点（先卖再做强）",
+      "用“高价小单/企业试点”覆盖研发成本",
+      "优先做技术 POC + 需求验证的双验证，而不是直接做完整产品"
     ],
-    "tags": ["预算", "时间", "权衡"]
+    "tags": ["深科技", "预算", "试点"]
+  },
+  {
+    "id": "exec_deeptech_team_weak",
+    "priority": 89,
+    "severity": 3,
+    "category": "execution",
+    "when": {
+      "all": [
+        { "dim": "tech", "op": ">=", "value": 7 },
+        { "dim": "team", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "技术挑战高但团队支撑不足：高概率在质量/速度/稳定性上掉链子。",
+    "actions": [
+      "补齐关键能力：架构/算法/工程化/交付中的最薄弱环节",
+      "先把范围压到 1 个场景 1 条链路",
+      "用里程碑约束：每两周交付可用版本并收集反馈"
+    ],
+    "tags": ["团队", "技术挑战"]
+  },
+  {
+    "id": "exec_overbuild_tech_high_user_low",
+    "priority": 78,
+    "severity": 2,
+    "category": "execution",
+    "when": {
+      "all": [
+        { "dim": "tech", "op": ">=", "value": 7 },
+        { "dim": "targetUser", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "可能存在“过度工程化”：技术做得很炫，但用户与痛点不够清晰，会导致做错方向。",
+    "actions": [
+      "先把用户与核心任务写清楚（Job-to-be-done）",
+      "先做可点击原型/手动交付验证价值，再决定技术投入",
+      "把技术亮点转化成用户价值表述：省钱/省时/降风险/增收入"
+    ],
+    "tags": ["过度开发", "用户价值"]
+  },
+  {
+    "id": "exec_budget_high_tech_low",
+    "priority": 76,
+    "severity": 2,
+    "category": "execution",
+    "when": {
+      "all": [
+        { "dim": "budget", "op": ">=", "value": 7 },
+        { "dim": "tech", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "预算充足但技术可行性低：不要盲目堆人堆钱，先明确技术路线与关键风险点。",
+    "actions": [
+      "做技术尽调/POC：把不确定性在一周内降下来",
+      "必要时引入顾问/专家评审架构与可行性",
+      "优先选择成熟方案/第三方服务，降低研发风险"
+    ],
+    "tags": ["预算", "技术尽调"]
   },
 
   {
-    "id": "strength_high_clarity_tech",
+    "id": "demand_user_low_and_traffic_low",
+    "priority": 88,
+    "severity": 3,
+    "category": "demand",
+    "when": {
+      "all": [
+        { "dim": "targetUser", "op": "<", "value": 4 },
+        { "dim": "traffic", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "需求信号弱且用户画像不清：需要先证明“真的有人痛”。",
+    "actions": [
+      "做 10 次深访：同类角色/同类场景/同类预算",
+      "做 Landing Page + 小额投放/社群验证留资",
+      "用“愿意付费/愿意迁移/愿意推荐”作为强信号"
+    ],
+    "tags": ["需求验证", "用户画像"]
+  },
+  {
+    "id": "demand_traffic_high_target_low_mismatch",
+    "priority": 80,
+    "severity": 2,
+    "category": "demand",
+    "when": {
+      "all": [
+        { "dim": "traffic", "op": ">=", "value": 7 },
+        { "dim": "targetUser", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "热度/流量高但目标用户评分偏低：你看到的是“话题”，但可能没抓到“愿意付费的人”。",
+    "actions": [
+      "把流量拆层：围观人群 vs 付费人群（谁真正有预算/权限/痛点）",
+      "重新定义 ICP（理想客户画像）：岗位/规模/行业/触发事件",
+      "用付费意向问卷/预约试点筛选真正用户"
+    ],
+    "tags": ["人群错配", "信号噪声"]
+  },
+  {
+    "id": "demand_target_high_traffic_low",
+    "priority": 75,
+    "severity": 2,
+    "category": "demand",
+    "when": {
+      "all": [
+        { "dim": "targetUser", "op": ">=", "value": 7 },
+        { "dim": "traffic", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "用户痛点强但外部信号弱：可能是隐性需求或分散在私域。更适合用定向触达/BD/社群，而不是等自然流量。",
+    "actions": [
+      "用“名单式获客”：找到 50 个目标用户逐个触达",
+      "用内容/案例驱动（而非泛流量）：展示前后对比收益",
+      "把核心价值压缩成 1 句话 + 1 个量化指标"
+    ],
+    "tags": ["隐性需求", "定向触达"]
+  },
+
+  {
+    "id": "distribution_market_high_channel_low",
+    "priority": 87,
+    "severity": 3,
+    "category": "distribution",
+    "when": {
+      "all": [
+        { "dim": "market", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "大市场但渠道弱：典型“机会大但拿不到用户”。需要先解决获客闭环。",
+    "actions": [
+      "选 1 个可验证渠道先跑通（不要同时做 5 个）",
+      "先拿到 10 个有效线索或 3 个付费试点",
+      "建立渠道打法资产：素材库/话术库/关键词库/BD名单"
+    ],
+    "tags": ["大市场", "渠道闭环"]
+  },
+  {
+    "id": "distribution_target_high_channel_low",
+    "priority": 82,
+    "severity": 2,
+    "category": "distribution",
+    "when": {
+      "all": [
+        { "dim": "targetUser", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "用户痛点清晰但渠道不清：优先选择“最短路径”触达（社群/BD/内容/平台）。",
+    "actions": [
+      "把用户聚集地写清楚（平台/社区/线下场景/工具链）",
+      "设计一个“可转发”的钩子（模板/清单/测评/案例）",
+      "先跑通 10→100 的增长，再谈规模化"
+    ],
+    "tags": ["用户明确", "渠道打法"]
+  },
+  {
+    "id": "distribution_channel_high_traffic_low",
+    "priority": 79,
+    "severity": 2,
+    "category": "distribution",
+    "when": {
+      "all": [
+        { "dim": "channel", "op": ">=", "value": 7 },
+        { "dim": "traffic", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "你“知道怎么触达”，但当前需求信号弱：更适合用渠道优势去做“更刚需的切入场景”。",
+    "actions": [
+      "复盘你能触达的人群里：谁最痛、谁有预算、谁决策快",
+      "把产品切到那个场景（先做窄、再扩张）",
+      "用渠道做需求测试：同一渠道测试 3 个定位，选转化最高的"
+    ],
+    "tags": ["渠道优势", "重新定位"]
+  },
+  {
+    "id": "distribution_traffic_high_channel_low",
+    "priority": 78,
+    "severity": 2,
+    "category": "distribution",
+    "when": {
+      "all": [
+        { "dim": "traffic", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "需求信号强但渠道能力不足：先把“流量 → 转化”路径补齐，否则会浪费窗口期。",
+    "actions": [
+      "建立最小漏斗：落地页→留资→私域/试用→付费",
+      "确定一个主策略：SEO（内容/关键词）或投放（素材/落地页）或平台上架",
+      "用数据迭代：每周优化一个转化环节"
+    ],
+    "tags": ["流量", "转化"]
+  },
+  {
+    "id": "distribution_channel_low_budget_low",
+    "priority": 84,
+    "severity": 3,
+    "category": "distribution",
+    "when": {
+      "all": [
+        { "dim": "channel", "op": "<", "value": 4 },
+        { "dim": "budget", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "渠道弱且预算低：不适合走“烧钱获客”。需要选择低成本渠道（内容/社群/合作/冷启动BD）。",
+    "actions": [
+      "优先做内容/SEO/社群，形成可复用增长资产",
+      "做合作/联名/分销：借别人的流量和信任",
+      "用手动交付换案例，再用案例换增长"
+    ],
+    "tags": ["低成本增长", "冷启动"]
+  },
+
+  {
+    "id": "monetization_market_high_model_low",
+    "priority": 83,
+    "severity": 3,
+    "category": "monetization",
+    "when": {
+      "all": [
+        { "dim": "market", "op": ">=", "value": 7 },
+        { "dim": "businessModel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "市场大但变现弱：这是“看起来很大，但赚不到钱”的危险组合。",
+    "actions": [
+      "先定义付费方与决策链（谁拍板、谁使用、谁预算）",
+      "用付费试点验证定价：哪怕 1-3 个付费客户也比 1 万注册强",
+      "优先选择高付费意愿场景：省钱/增收/合规/刚性效率"
+    ],
+    "tags": ["变现", "大市场陷阱"]
+  },
+  {
+    "id": "monetization_target_high_model_low",
+    "priority": 81,
+    "severity": 2,
+    "category": "monetization",
+    "when": {
+      "all": [
+        { "dim": "targetUser", "op": ">=", "value": 7 },
+        { "dim": "businessModel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "用户痛点清晰但变现弱：通常是“价值很大但收费位置不对”。",
+    "actions": [
+      "换收费对象（从用户→老板/企业/平台）或换收费方式（订阅→按效果/按席位）",
+      "用“替代成本”定价：你帮他省了多少时间/钱，就敢收多少",
+      "做 3 个付费包测试：入门/标准/高端"
+    ],
+    "tags": ["收费对象", "定价"]
+  },
+  {
+    "id": "monetization_traffic_high_model_low",
+    "priority": 74,
+    "severity": 2,
+    "category": "monetization",
+    "when": {
+      "all": [
+        { "dim": "traffic", "op": ">=", "value": 7 },
+        { "dim": "businessModel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "流量强但商业模式弱：容易变成“只会涨用户不会赚钱”。必须尽早验证付费。",
+    "actions": [
+      "把流量做分层：愿付费的人是谁？在哪个场景愿意付？",
+      "尽快推出付费功能（哪怕很小）验证支付意愿",
+      "如果走广告/导流：确认流量质量与转化链条"
+    ],
+    "tags": ["流量变现", "付费验证"]
+  },
+  {
+    "id": "monetization_model_high_market_low",
+    "priority": 73,
+    "severity": 2,
+    "category": "monetization",
+    "when": {
+      "all": [
+        { "dim": "businessModel", "op": ">=", "value": 7 },
+        { "dim": "market", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "商业模式强但市场偏小：这不是坏事，可能适合做“高客单价/高毛利的精品业务”。",
+    "actions": [
+      "把定位写成“高端细分”而不是“泛市场产品”",
+      "强化复购/续费/转介绍机制，提高 LTV",
+      "后续扩张路径：从相邻人群/相邻行业复制"
+    ],
+    "tags": ["精品赛道", "高毛利"]
+  },
+  {
+    "id": "monetization_model_high_channel_low",
+    "priority": 72,
+    "severity": 2,
+    "category": "monetization",
+    "when": {
+      "all": [
+        { "dim": "businessModel", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "商业模式不错但渠道弱：你知道怎么赚钱，但还不知道怎么规模化获取客户。",
+    "actions": [
+      "优先做可复制获客：内容/SEO/投放/渠道合作",
+      "做案例驱动销售：用 ROI 证明购买价值",
+      "把销售流程产品化：标准报价/标准交付/标准成功指标"
+    ],
+    "tags": ["获客", "规模化"]
+  },
+  {
+    "id": "capital_budget_low_model_high_bootstrap",
+    "priority": 71,
+    "severity": 2,
+    "category": "capital",
+    "when": {
+      "all": [
+        { "dim": "budget", "op": "<", "value": 4 },
+        { "dim": "businessModel", "op": ">=", "value": 7 }
+      ]
+    },
+    "advice": "预算不足但商业模式强：非常适合走“先赚钱再产品化”的 Bootstrap 路线。",
+    "actions": [
+      "用咨询/项目制/定制交付先拿现金流与案例",
+      "把交付过程逐步产品化（把重复部分做成工具）",
+      "先服务 3-5 个高价值客户，再做可复制产品"
+    ],
+    "tags": ["Bootstrap", "现金流"]
+  },
+
+  {
+    "id": "team_low_market_high_recruit",
+    "priority": 86,
+    "severity": 3,
+    "category": "team",
+    "when": {
+      "all": [
+        { "dim": "team", "op": "<", "value": 5 },
+        { "dim": "market", "op": ">=", "value": 7 }
+      ]
+    },
+    "advice": "市场机会大但团队偏弱：这是“可投但不敢投”的典型。先补核心角色再冲刺。",
+    "actions": [
+      "优先补 1 个能改变战局的角色（技术/增长/行业BD）",
+      "把项目拆成清晰的 2-4 周可交付里程碑，用结果吸引人才",
+      "降低复杂度：先用更简单路线跑通需求与获客"
+    ],
+    "tags": ["补团队", "机会窗口"]
+  },
+  {
+    "id": "team_high_market_low_pivot",
+    "priority": 74,
+    "severity": 2,
+    "category": "team",
+    "when": {
+      "all": [
+        { "dim": "team", "op": ">=", "value": 7 },
+        { "dim": "market", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "团队强但市场弱：建议把团队优势迁移到更大的市场（pivot 市场/人群/场景）。",
+    "actions": [
+      "列出你们的“独特能力/资源/经验”，寻找更大市场的应用",
+      "保留现有产品资产，换一个更刚需的切入场景",
+      "用 2 周做 3 个新定位测试，选转化/付费意向最高的"
+    ],
+    "tags": ["Pivot", "团队优势"]
+  },
+
+  {
+    "id": "risk_regulated_deeptech",
+    "priority": 90,
+    "severity": 3,
+    "category": "risk",
+    "when": {
+      "all": [
+        { "dim": "tech", "op": ">=", "value": 7 },
+        { "dim": "risk", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "技术挑战高且风险可控性偏弱：可能涉及合规/数据/安全/监管，必须先把风险解除再扩张。",
+    "actions": [
+      "做合规与数据最小化设计（只采必要数据、可审计、可删除）",
+      "优先面向低监管或可合规落地的行业/地区",
+      "在产品路线中加入“合规护栏”与风险监控指标"
+    ],
+    "tags": ["合规", "监管", "风险"]
+  },
+  {
+    "id": "risk_platform_dependency",
+    "priority": 82,
+    "severity": 2,
+    "category": "risk",
+    "when": {
+      "all": [
+        { "dim": "channel", "op": ">=", "value": 7 },
+        { "dim": "risk", "op": "<", "value": 5 }
+      ]
+    },
+    "advice": "渠道强但风险可控性弱：可能过度依赖单一平台/单一流量来源，平台规则变化会致命。",
+    "actions": [
+      "做渠道多样化：至少 1 个备份渠道",
+      "把用户沉淀到私域/自有资产（邮箱/社群/CRM）",
+      "设计“去平台化”的长期路线"
+    ],
+    "tags": ["平台依赖", "渠道风险"]
+  },
+  {
+    "id": "risk_low_blocks_good_opportunity",
+    "priority": 81,
+    "severity": 3,
+    "category": "risk",
+    "when": {
+      "all": [
+        { "dim": "market", "op": ">=", "value": 7 },
+        { "dim": "targetUser", "op": ">=", "value": 7 },
+        { "dim": "risk", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "机会看起来很好（市场/用户高），但风险不可控会直接堵死落地：优先解决风险，不要硬推进产品。",
+    "actions": [
+      "明确是哪类风险：合规/数据/平台/政策/供应链",
+      "做最小合规闭环：先做不触发红线的版本",
+      "必要时选择“风险更低”的目标行业/地区先落地"
+    ],
+    "tags": ["风险优先", "止损"]
+  },
+
+  {
+    "id": "market_big_signal_low",
+    "priority": 76,
+    "severity": 2,
+    "category": "market",
+    "when": {
+      "all": [
+        { "dim": "market", "op": ">=", "value": 7 },
+        { "dim": "traffic", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "市场看起来大，但外部信号弱：可能是“市场叙事大”但真实需求没那么强，或者需求很分散/隐性。",
+    "actions": [
+      "用竞品验证：是否存在明确付费竞品或替代方案？",
+      "用样本验证：你能否在 7 天内找到并触达 50 个目标用户？",
+      "把“市场大”落到“谁先买单”的细分上"
+    ],
+    "tags": ["市场验证", "信号不足"]
+  },
+  {
+    "id": "market_small_signal_high_niche",
+    "priority": 72,
+    "severity": 2,
+    "category": "market",
+    "when": {
+      "all": [
+        { "dim": "market", "op": "<", "value": 5 },
+        { "dim": "traffic", "op": ">=", "value": 7 }
+      ]
+    },
+    "advice": "市场偏小但信号强：可能是高意向细分（适合先做“细分冠军/高客单”）。",
+    "actions": [
+      "提高客单价与毛利（服务+工具、捆绑交付、结果付费）",
+      "强化转介绍/复购机制，最大化 LTV",
+      "验证扩张路径：相邻细分/相邻岗位/相邻行业"
+    ],
+    "tags": ["细分市场", "高意向"]
+  },
+
+  {
+    "id": "capital_budget_high_channel_low",
+    "priority": 70,
+    "severity": 2,
+    "category": "capital",
+    "when": {
+      "all": [
+        { "dim": "budget", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": "<", "value": 4 }
+      ]
+    },
+    "advice": "预算充足但渠道弱：不要先把钱花在开发或品牌上，先把获客漏斗跑通再加大投入。",
+    "actions": [
+      "先用预算做渠道实验（投放/内容/BD）而不是堆功能",
+      "搭建数据看板：CAC、转化率、留存/复购、销售周期",
+      "找到一个 ROI 正的渠道后再扩大投放或招聘增长"
+    ],
+    "tags": ["预算", "渠道实验"]
+  },
+  {
+    "id": "capital_budget_low_channel_high",
+    "priority": 69,
+    "severity": 2,
+    "category": "capital",
+    "when": {
+      "all": [
+        { "dim": "budget", "op": "<", "value": 4 },
+        { "dim": "channel", "op": ">=", "value": 7 }
+      ]
+    },
+    "advice": "预算不足但渠道强：是好组合。先用渠道优势拿到付费/试点，靠现金流滚起来。",
+    "actions": [
+      "用预售/试点合同提前锁收入",
+      "把交付过程标准化，减少单位成本",
+      "先做可收费版本，再逐步产品化"
+    ],
+    "tags": ["渠道优势", "现金流"]
+  },
+
+  {
+    "id": "strength_high_triangle_market_team_channel",
     "priority": 55,
     "severity": 1,
     "category": "strength",
     "when": {
       "all": [
-        { "dim": "clarity", "op": ">=", "value": 7 },
-        { "dim": "tech", "op": ">=", "value": 7 }
+        { "dim": "market", "op": ">=", "value": 8 },
+        { "dim": "team", "op": ">=", "value": 7 },
+        { "dim": "channel", "op": ">=", "value": 6 }
       ]
     },
-    "advice": "优势组合：需求清晰且技术可行性高，项目成功概率很大。",
+    "advice": "强信号组合：市场大 + 团队强 + 渠道不错。建议从“验证”快速进入“规模化路径验证”。",
     "actions": [
-      "制定积极的项目计划",
-      "考虑提前交付或增加功能",
-      "建立项目最佳实践案例"
+      "制定 30 天增长目标（线索/试点/收入三选一做主目标）",
+      "把产品做成可重复交付（标准 onboarding + 标准成功指标）",
+      "开始准备融资/合作材料：案例、指标、增长曲线"
     ],
-    "tags": ["优势", "高成功率"]
+    "tags": ["强信号", "加速"]
   },
   {
-    "id": "strength_balanced_good",
+    "id": "strength_profit_ready",
     "priority": 52,
     "severity": 1,
     "category": "strength",
     "when": {
       "all": [
-        { "dim": "clarity", "op": ">=", "value": 6 },
-        { "dim": "tech", "op": ">=", "value": 6 },
-        { "dim": "budget", "op": ">=", "value": 6 }
+        { "dim": "businessModel", "op": ">=", "value": 7 },
+        { "dim": "targetUser", "op": ">=", "value": 7 }
       ]
     },
-    "advice": "均衡发展：各维度表现良好，项目具备成功的基础条件。",
+    "advice": "价值捕获信号强：用户痛点清晰且商业模式可行。优先冲“付费验证”与“复购/续费信号”。",
     "actions": [
-      "按标准流程推进项目",
-      "保持与客户的良好沟通",
-      "定期监控项目进展和风险"
+      "做 3 个付费试点（哪怕低价）验证付费链路",
+      "把交付结果量化成 ROI（节省多少/增收多少）",
+      "为续费设计价值：持续收益、持续节省、持续合规"
     ],
-    "tags": ["均衡", "标准流程"]
+    "tags": ["付费", "复购"]
+  },
+  {
+    "id": "strength_low_risk_high_feasibility",
+    "priority": 50,
+    "severity": 1,
+    "category": "strength",
+    "when": {
+      "all": [
+        { "dim": "risk", "op": ">=", "value": 8 },
+        { "dim": "tech", "op": ">=", "value": 6 }
+      ]
+    },
+    "advice": "风险可控且技术可行：落地阻力小，适合快速迭代并尽早推向真实用户。",
+    "actions": [
+      "缩短发布周期（每周交付一次）",
+      "把反馈闭环做强：每次迭代只验证一个关键假设",
+      "尽快建立真实用户数据（留存/转化/付费）"
+    ],
+    "tags": ["低风险", "快迭代"]
   }
 ]

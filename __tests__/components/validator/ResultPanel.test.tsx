@@ -6,16 +6,13 @@ describe("ResultPanel Component", () => {
   const mockResult: ValidationResult = {
     overallScore: 72,
     feedback: [
-      { type: "success", message: "需求清晰度高" },
-      { type: "warning", message: "紧迫性较低，建议评估优先级" },
+      { type: "success", message: "目标用户定位清晰" },
+      { type: "warning", message: "市场竞争较为激烈，建议进一步差异化" },
       { type: "error", message: "预算不足，可能影响项目启动" },
     ],
     scores: [
-      { key: "clarity", value: 9 },
-      { key: "tech", value: 7 },
-      { key: "budget", value: 5 },
-      { key: "urgency", value: 6 },
-      { key: "value", value: 8 },
+      { key: "targetUser", value: 9 },
+      { key: "market", value: 6 },
     ],
   };
 
@@ -42,7 +39,7 @@ describe("ResultPanel Component", () => {
   it("renders success feedback with correct styling", () => {
     const { container } = render(<ResultPanel result={mockResult} />);
 
-    expect(screen.getByText("需求清晰度高")).toBeInTheDocument();
+    expect(screen.getByText("目标用户定位清晰")).toBeInTheDocument();
     expect(container.querySelector('svg[data-lucide="CheckCircle2"]')).toBeInTheDocument();
   });
 
@@ -50,7 +47,7 @@ describe("ResultPanel Component", () => {
     const { container } = render(<ResultPanel result={mockResult} />);
 
     expect(
-      screen.getByText(/紧迫性较低/)
+      screen.getByText(/市场竞争较为激烈/)
     ).toBeInTheDocument();
     expect(container.querySelector('svg[data-lucide="AlertTriangle"]')).toBeInTheDocument();
   });
@@ -94,6 +91,7 @@ describe("ResultPanel Component", () => {
       <ResultPanel result={mockResult} onReset={mockOnReset} isLoading={true} />
     );
 
+    // 加载状态下显示骨架屏，不显示按钮
     expect(screen.queryByRole("button", { name: /重新评估/i })).not.toBeInTheDocument();
   });
 

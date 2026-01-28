@@ -2,6 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import ValidatorForm from "@/components/validator/ValidatorForm";
 import { DIMENSIONS } from "@/components/validator/constants";
 
+// Mock Slider 组件
 jest.mock("@/components/ui/slider", () => ({
   Slider: ({
     value,
@@ -35,7 +36,7 @@ describe("ValidatorForm Component", () => {
     mockOnSubmit.mockClear();
   });
 
-  it("renders 5 sliders for all dimensions", () => {
+  it("renders 9 sliders for all dimensions", () => {
     render(<ValidatorForm onSubmit={mockOnSubmit} />);
 
     for (const dim of DIMENSIONS) {
@@ -55,14 +56,16 @@ describe("ValidatorForm Component", () => {
   it("initializes sliders with default value 0", () => {
     render(<ValidatorForm onSubmit={mockOnSubmit} />);
 
+    // 检查所有显示的分数值
     const scoreDisplays = screen.getAllByText("0");
-    expect(scoreDisplays.length).toBeGreaterThanOrEqual(5);
+    // 每个维度有一个分数显示，加上两个范围标签（0-10），所以 9 + 9 = 18
+    expect(scoreDisplays.length).toBeGreaterThanOrEqual(9);
   });
 
   it("updates score display when slider value changes", () => {
     render(<ValidatorForm onSubmit={mockOnSubmit} />);
 
-    const firstSlider = screen.getByTestId("slider-slider-clarity");
+    const firstSlider = screen.getByTestId("slider-slider-targetUser");
     fireEvent.change(firstSlider, { target: { value: "7" } });
 
     expect(screen.getByText("7")).toBeInTheDocument();
@@ -77,7 +80,7 @@ describe("ValidatorForm Component", () => {
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
     expect(mockOnSubmit).toHaveBeenCalledWith({
       scores: expect.arrayContaining([
-        expect.objectContaining({ key: "clarity", value: expect.any(Number) }),
+        expect.objectContaining({ key: "targetUser", value: expect.any(Number) }),
       ]),
     });
   });
@@ -96,7 +99,7 @@ describe("ValidatorForm Component", () => {
   });
 
   it("accepts initial values through props", () => {
-    const initialValues = [{ key: "clarity", value: 8 }];
+    const initialValues = [{ key: "targetUser", value: 8 }];
     render(
       <ValidatorForm onSubmit={mockOnSubmit} initialValues={initialValues} />
     );

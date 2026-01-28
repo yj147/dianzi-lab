@@ -16,29 +16,28 @@ html {
   color-scheme: light;
 
   /* Design Tokens (SSOT): docs/ui-style-guide.md */
-  /* RGB values for Tailwind opacity modifier support */
-  --background: 242 242 238;
-  --foreground: 26 26 26;
-  --surface: 255 255 255;
+  --background: #F2F2EE;
+  --foreground: #1A1A1A;
+  --surface: #FFFFFF;
 
-  --muted: 243 244 246;
-  --muted-foreground: 75 85 99;
+  --muted: #F3F4F6;
+  --muted-foreground: #4B5563;
 
-  --border: 229 229 229;
-  --input: 229 229 229;
-  --ring: 43 76 126;
+  --border: #E5E5E5;
+  --input: #E5E5E5;
+  --ring: #2B4C7E;
 
-  --primary: 43 76 126;
-  --primary-foreground: 255 255 255;
+  --primary: #2B4C7E;
+  --primary-foreground: #FFFFFF;
 
-  --secondary: 255 255 255;
-  --secondary-foreground: 26 26 26;
+  --secondary: #FFFFFF;
+  --secondary-foreground: #1A1A1A;
 
-  --accent: 249 250 251;
-  --accent-foreground: 26 26 26;
+  --accent: #F9FAFB;
+  --accent-foreground: #1A1A1A;
 
-  --destructive: 239 68 68;
-  --destructive-foreground: 255 255 255;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
 
   --radius: 0.5rem;
 
@@ -51,30 +50,30 @@ html {
 .dark {
   color-scheme: dark;
 
-  --background: 15 23 42;
-  --foreground: 249 250 251;
-  --surface: 17 24 39;
+  --background: #0F172A;
+  --foreground: #F9FAFB;
+  --surface: #111827;
 
-  --muted: 17 24 39;
-  --muted-foreground: 156 163 175;
+  --muted: #111827;
+  --muted-foreground: #9CA3AF;
 
-  --border: 55 65 81;
-  --input: 55 65 81;
-  --ring: 147 197 253;
+  --border: #374151;
+  --input: #374151;
+  --ring: #93C5FD;
 
-  --primary: 147 197 253;
-  --primary-foreground: 15 23 42;
+  --primary: #93C5FD;
+  --primary-foreground: #0F172A;
 
-  --secondary: 17 24 39;
-  --secondary-foreground: 249 250 251;
+  --secondary: #111827;
+  --secondary-foreground: #F9FAFB;
 
-  --accent: 17 24 39;
-  --accent-foreground: 249 250 251;
+  --accent: #111827;
+  --accent-foreground: #F9FAFB;
 }
 
 body {
-  color: rgb(var(--foreground));
-  background: rgb(var(--background));
+  color: var(--foreground);
+  background: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

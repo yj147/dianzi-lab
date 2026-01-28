@@ -22,8 +22,6 @@ export async function submitIdea(formData: FormData): Promise<ActionResult> {
 
   const title = readFormString(formData, "title");
   const description = readFormString(formData, "description");
-  const budgetRange = readFormString(formData, "budgetRange");
-  const contact = readFormString(formData, "contact");
   const tagsRaw = formData.getAll("tags");
 
   const tags = tagsRaw
@@ -32,7 +30,7 @@ export async function submitIdea(formData: FormData): Promise<ActionResult> {
       TAGS.includes(t as (typeof TAGS)[number]),
     );
 
-  const parsed = submitIdeaSchema.safeParse({ title, description, budgetRange, contact, tags });
+  const parsed = submitIdeaSchema.safeParse({ title, description, tags });
   if (!parsed.success) {
     const firstError = parsed.error.issues[0];
     return {
@@ -47,8 +45,6 @@ export async function submitIdea(formData: FormData): Promise<ActionResult> {
     data: {
       title: parsed.data.title,
       description: parsed.data.description,
-      budgetRange: parsed.data.budgetRange,
-      contact: parsed.data.contact,
       tags: parsed.data.tags,
       userId: session.sub,
       status: "PENDING",
