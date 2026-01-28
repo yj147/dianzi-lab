@@ -27,13 +27,13 @@ const config: Config = {
         destructive: "rgb(var(--destructive) / <alpha-value>)",
         "destructive-foreground": "rgb(var(--destructive-foreground) / <alpha-value>)",
         brand: {
-          bg: "#F2F2EE",
-          dark: "#1A1A1A",
+          bg: "rgb(var(--background) / <alpha-value>)",
+          dark: "rgb(var(--foreground) / <alpha-value>)",
           primary: "#2B4C7E",
           accent: "#E07A5F",
           success: "#81B29A",
-          surface: "#FFFFFF",
-          border: "#E5E5E5",
+          surface: "rgb(var(--surface) / <alpha-value>)",
+          border: "rgb(var(--border) / <alpha-value>)",
         },
       },
       fontFamily: {
@@ -67,6 +67,10 @@ const config: Config = {
           "0%,100%": { transform: "translateY(0)" },
           "50%": { transform: "translateY(-10px)" },
         },
+        "float-offset": {
+          "0%,100%": { marginTop: "0px" },
+          "50%": { marginTop: "-10px" },
+        },
         marquee: {
           "0%": { transform: "translateX(0)" },
           "100%": { transform: "translateX(-50%)" },
@@ -83,6 +87,8 @@ const config: Config = {
         "fade-in-up": "fade-in-up 300ms ease-out both",
         float: "float-y 6s ease-in-out infinite",
         "float-slow": "float-y 7s ease-in-out infinite",
+        "float-offset": "float-offset 6s ease-in-out infinite",
+        "float-offset-slow": "float-offset 7s ease-in-out infinite",
         marquee: "marquee 30s linear infinite",
         "marquee-reverse": "marquee-reverse 30s linear infinite",
       },

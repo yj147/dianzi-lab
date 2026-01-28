@@ -1,12 +1,20 @@
 import type { Dimension } from "./types";
 
-// 5 个核心评估维度
+// 9 个评估维度
 export const DIMENSIONS: Dimension[] = [
-  { key: "clarity", label: "需求清晰度", description: "对想要的功能有多明确？" },
-  { key: "tech", label: "技术可行性", description: "技术实现的复杂度和可行性" },
-  { key: "budget", label: "预算充足度", description: "资源是否充足" },
-  { key: "urgency", label: "时间紧迫度", description: "项目的时间要求" },
-  { key: "value", label: "商业价值", description: "项目的商业意义和价值" },
+  { key: "targetUser", label: "目标用户", description: "痛点紧迫性、可验证性" },
+  { key: "channel", label: "渠道", description: "获客渠道清晰度" },
+  { key: "market", label: "市场", description: "规模、增长、竞争" },
+  { key: "tech", label: "技术", description: "可行性、复杂度" },
+  { key: "budget", label: "预算", description: "资源充足度" },
+  {
+    key: "businessModel",
+    label: "商业模式",
+    description: "收入、定价、毛利",
+  },
+  { key: "team", label: "团队", description: "执行力、经验" },
+  { key: "risk", label: "风险", description: "政策、合规、供应链" },
+  { key: "traffic", label: "流量", description: "需求信号、种子用户" },
 ];
 
 // 滑块默认值

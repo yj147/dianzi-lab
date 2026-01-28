@@ -30,11 +30,15 @@ jest.mock('@/components/validator/ValidatorForm', () => {
   const React = require('react')
 
   const makeScores = (value: number) => [
-    { key: 'clarity', value },
+    { key: 'targetUser', value },
+    { key: 'channel', value },
+    { key: 'market', value },
     { key: 'tech', value },
     { key: 'budget', value },
-    { key: 'urgency', value },
-    { key: 'value', value },
+    { key: 'businessModel', value },
+    { key: 'team', value },
+    { key: 'risk', value },
+    { key: 'traffic', value },
   ]
 
   return {
@@ -92,8 +96,6 @@ async function fillIdeaBasics() {
     target: { value: '测试点子' },
   })
   fireEvent.change(screen.getByLabelText(/核心描述/), { target: { value: '这是一个测试描述' } })
-  fireEvent.change(screen.getByLabelText(/预算范围/), { target: { value: '1万以内' } })
-  fireEvent.change(screen.getByLabelText(/联系方式/), { target: { value: 'test@test.com' } })
 }
 
 describe('Submit Page (3-step)', () => {
@@ -121,6 +123,7 @@ describe('Submit Page (3-step)', () => {
     const loginLink = screen.getByRole('link', { name: '立即登录' })
     expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
 
+    // SubmitForm 不应渲染
     expect(screen.queryByRole('heading', { level: 1, name: '绘制蓝图' })).not.toBeInTheDocument()
   })
 

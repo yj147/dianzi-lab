@@ -168,8 +168,6 @@ describe('app/submit/actions.submitIdea', () => {
     const formData = new FormData()
     formData.set('title', 't')
     formData.set('description', 'd')
-    formData.set('budgetRange', '1万以内')
-    formData.set('contact', 'test@test.com')
     formData.append('tags', '工具')
     formData.append('tags', new Blob([''], { type: 'text/plain' }) as any)
     formData.append('tags', 'INVALID')
@@ -183,8 +181,6 @@ describe('app/submit/actions.submitIdea', () => {
       data: {
         title: 't',
         description: 'd',
-        budgetRange: '1万以内',
-        contact: 'test@test.com',
         tags: ['工具'],
         userId: 'u1',
         status: 'PENDING',
