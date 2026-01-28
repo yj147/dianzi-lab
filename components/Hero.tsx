@@ -58,7 +58,7 @@ export default function Hero() {
             <div className="flex flex-col gap-5 sm:flex-row">
               <Button
                 asChild
-                className="group h-16 bg-brand-primary px-8 text-xl uppercase tracking-wider hover:-translate-y-1 hover:bg-brand-accent hover:text-foreground active:bg-brand-accent/90 active:text-foreground"
+                className="group h-16 bg-brand-primary px-8 text-xl uppercase tracking-wider hover:-translate-y-1 hover:bg-brand-accent hover:text-foreground dark:hover:text-background active:bg-brand-accent/90 active:text-foreground"
               >
                 <Link href="/submit">
                   <ScrollText
@@ -94,7 +94,7 @@ export default function Hero() {
                   <div className="space-y-4 font-mono text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">甲方:</span>
-                      <span className="bg-brand-accent px-1 font-bold text-foreground">您</span>
+                      <span className="bg-brand-accent px-1 font-bold text-foreground dark:text-background">您</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">乙方:</span>

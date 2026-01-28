@@ -97,7 +97,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                       <div className="mb-1 font-bold text-brand-dark text-lg">
                         <Link
                           href={`/admin/ideas/${idea.id}`}
-                          className="hover:underline hover:underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                          className="hover:underline hover:underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                         >
                           {idea.title}
                         </Link>

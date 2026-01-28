@@ -5,18 +5,18 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap font-heading font-bold transition-[transform,box-shadow,background-color,color,border-color] duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center whitespace-nowrap font-heading font-bold transition-[transform,box-shadow,background-color,color,border-color] duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
     {
         variants: {
             variant: {
                 default:
-                    "bg-foreground text-background border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none",
+                    "bg-foreground text-background border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground dark:hover:text-background hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none",
                 destructive:
                     "bg-destructive text-destructive-foreground border-2 border-destructive shadow-solid hover:bg-destructive/90 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
                 outline:
                     "bg-transparent text-foreground border-2 border-foreground hover:bg-foreground hover:text-background",
                 secondary:
-                    "bg-surface text-foreground border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:translate-y-0 active:shadow-none",
+                    "bg-surface text-foreground border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground dark:hover:text-background hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:translate-y-0 active:shadow-none",
                 ghost: "bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
                 link: "text-brand-primary underline-offset-4 hover:underline",
             },

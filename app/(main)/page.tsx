@@ -44,7 +44,7 @@ export default async function Home() {
 
       {shipments.length > 0 ? (
         <section className="relative overflow-hidden border-b-2 border-border bg-brand-dark py-16">
-          <div className="absolute left-0 top-0 z-10 bg-brand-accent px-4 py-1 font-mono text-xs font-bold text-brand-dark">
+          <div className="absolute left-0 top-0 z-10 bg-brand-accent px-4 py-1 font-mono text-xs font-bold text-brand-dark dark:text-background">
             RECENT SHIPMENTS // 最新交付
           </div>
 

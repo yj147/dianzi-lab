@@ -81,7 +81,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    'text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                    'text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
                     isActive ? 'text-brand-primary' : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -155,7 +155,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                 <>
                   <Link
                     href="/login"
-                    className="text-base font-bold text-foreground transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    className="text-base font-bold text-foreground transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     登录
                   </Link>
@@ -172,7 +172,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   <button
                     type="button"
                     aria-label={isNavMenuOpen ? '关闭菜单' : '打开菜单'}
-                    className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+                    className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
                   >
                     {isNavMenuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
                   </button>

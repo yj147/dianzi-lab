@@ -255,7 +255,7 @@ export default function SubmitForm() {
       <div>
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-muted-foreground hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-muted-foreground hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
           &larr; 返回首页
         </Link>
@@ -281,7 +281,7 @@ export default function SubmitForm() {
                   placeholder="给你的项目起个响亮的名字"
                   aria-invalid={!!errors.title}
                   aria-describedby={errors.title ? "title-error" : undefined}
-                  className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-ring focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
                 <div className="mt-1 text-right font-mono text-xs text-muted-foreground tabular-nums">
                   {title.length}/50
@@ -308,7 +308,7 @@ export default function SubmitForm() {
                   placeholder="解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景..."
                   aria-invalid={!!errors.description}
                   aria-describedby={errors.description ? "description-error" : undefined}
-                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-border bg-muted px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-border bg-muted px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-ring focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
                 <div className="mt-1 text-right font-mono text-xs text-muted-foreground tabular-nums">
                   {description.length}/1000
@@ -329,7 +329,7 @@ export default function SubmitForm() {
                   <input
                     type="text"
                     placeholder="工具, AI, 效率 (用逗号分隔)"
-                    className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                    className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-ring focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 motion-reduce:transition-none"
                     value={tagsText}
                     onChange={(e) => handleTagsTextChange(e.target.value)}
                   />

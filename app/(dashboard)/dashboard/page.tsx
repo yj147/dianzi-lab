@@ -204,7 +204,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
               name="q"
               defaultValue={q ?? ''}
               placeholder="搜索标题或描述…"
-              className="w-full pl-10 px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors text-sm"
+              className="w-full pl-10 px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:border-ring focus:ring-1 focus:ring-ring transition-colors text-sm"
             />
           </div>
           <Button type="submit" variant="secondary" className="shrink-0">
