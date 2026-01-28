@@ -93,7 +93,7 @@ export default function Hero() {
                 </div>
 
                 <div className="mt-8 border-t-2 border-dashed border-border pt-4">
-                  <div className="-rotate-6 font-heading text-3xl font-bold text-brand-primary opacity-80">
+                  <div className="font-heading text-3xl font-bold text-brand-primary opacity-80">
                     协议已签署
                   </div>
                 </div>
