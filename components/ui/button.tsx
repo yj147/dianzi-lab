@@ -10,14 +10,14 @@ const buttonVariants = cva(
         variants: {
             variant: {
                 default:
-                    "bg-brand-dark text-white border-2 border-brand-dark shadow-solid hover:bg-brand-accent hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
+                    "bg-foreground text-background border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none",
                 destructive:
-                    "bg-red-600 text-white border-2 border-brand-dark shadow-solid hover:bg-red-700 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
+                    "bg-destructive text-destructive-foreground border-2 border-destructive shadow-solid hover:bg-destructive/90 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
                 outline:
-                    "bg-transparent text-brand-dark border-2 border-brand-dark hover:bg-brand-dark hover:text-white",
+                    "bg-transparent text-foreground border-2 border-foreground hover:bg-foreground hover:text-background",
                 secondary:
-                    "bg-white text-brand-dark border-2 border-brand-dark shadow-solid hover:bg-gray-50 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
-                ghost: "bg-transparent text-gray-600 hover:text-brand-primary hover:bg-gray-100",
+                    "bg-surface text-foreground border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:translate-y-0 active:shadow-none",
+                ghost: "bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
                 link: "text-brand-primary underline-offset-4 hover:underline",
             },
             size: {

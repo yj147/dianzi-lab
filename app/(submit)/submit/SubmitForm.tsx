@@ -216,14 +216,14 @@ export default function SubmitForm() {
             className={cn(
               "flex items-center gap-2 rounded-full border-2 px-3 py-1.5 font-heading text-sm font-bold transition-colors duration-200 motion-reduce:transition-none",
               step === s.key
-                ? "border-brand-dark bg-brand-dark text-white"
-                : "border-gray-200 bg-gray-100 text-gray-600"
+                ? "border-brand-dark bg-brand-dark text-background"
+                : "border-border bg-muted text-muted-foreground"
             )}
           >
             <span
               className={cn(
                 "flex size-5 items-center justify-center rounded-full text-xs font-mono",
-                step === s.key ? "bg-white/15 text-white" : "bg-white text-gray-500"
+                step === s.key ? "bg-surface/15 text-background" : "bg-surface text-muted-foreground"
               )}
             >
               {i + 1}
@@ -255,7 +255,7 @@ export default function SubmitForm() {
       <div>
         <Link
           href="/"
-          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-gray-500 hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+          className="mb-6 inline-flex items-center gap-1 text-sm font-bold text-muted-foreground hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
         >
           &larr; 返回首页
         </Link>
@@ -263,11 +263,11 @@ export default function SubmitForm() {
         <div className="grid items-start gap-8 md:gap-12 lg:grid-cols-2">
           <div className="animate-fade-in-left motion-reduce:animate-none">
             <h1 className="mb-2 font-heading text-3xl font-bold text-brand-dark md:text-4xl">绘制蓝图</h1>
-            <p className="mb-8 text-lg text-gray-600">清晰的描述是落地的第一步。</p>
+            <p className="mb-8 text-lg text-muted-foreground">清晰的描述是落地的第一步。</p>
 
             <form
               onSubmit={handleSubmit(onIdeaSubmit)}
-              className="space-y-6 rounded-xl border-2 border-brand-dark bg-white p-6 shadow-solid md:p-8"
+              className="space-y-6 rounded-xl border-2 border-brand-dark bg-surface p-6 shadow-solid md:p-8"
             >
               <div>
                 <label htmlFor="title" className="mb-2 block font-heading text-lg font-bold text-brand-dark">
@@ -281,9 +281,9 @@ export default function SubmitForm() {
                   placeholder="给你的项目起个响亮的名字"
                   aria-invalid={!!errors.title}
                   aria-describedby={errors.title ? "title-error" : undefined}
-                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
-                <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
+                <div className="mt-1 text-right font-mono text-xs text-muted-foreground tabular-nums">
                   {title.length}/50
                 </div>
                 {errors.title ? (
@@ -308,9 +308,9 @@ export default function SubmitForm() {
                   placeholder="解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景..."
                   aria-invalid={!!errors.description}
                   aria-describedby={errors.description ? "description-error" : undefined}
-                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                  className="min-h-[240px] w-full resize-y rounded-lg border-2 border-border bg-muted px-4 py-3 text-base leading-relaxed text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                 />
-                <div className="mt-1 text-right font-mono text-xs text-gray-400 tabular-nums">
+                <div className="mt-1 text-right font-mono text-xs text-muted-foreground tabular-nums">
                   {description.length}/1000
                 </div>
                 {errors.description ? (
@@ -323,20 +323,20 @@ export default function SubmitForm() {
               <div>
                 <label className="mb-2 block font-heading text-lg font-bold text-brand-dark">标签</label>
                 <div className="relative">
-                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                  <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
                     <Palette size={18} aria-hidden="true" />
                   </div>
                   <input
                     type="text"
                     placeholder="工具, AI, 效率 (用逗号分隔)"
-                    className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                    className="w-full rounded-lg border-2 border-border bg-muted px-4 py-3 pl-10 font-mono text-sm text-brand-dark transition-colors focus:border-brand-primary focus:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
                     value={tagsText}
                     onChange={(e) => handleTagsTextChange(e.target.value)}
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-4 border-t border-gray-100 pt-6">
+              <div className="flex justify-end gap-4 border-t border-border pt-6">
                 <Button variant="ghost" asChild>
                   <Link href="/">取消</Link>
                 </Button>
@@ -348,21 +348,21 @@ export default function SubmitForm() {
           </div>
 
           <div className="sticky top-28 hidden lg:block animate-fade-in-right motion-reduce:animate-none">
-            <div className="mb-4 flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-wider text-gray-500">
+            <div className="mb-4 flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-wider text-muted-foreground">
               <Eye size={16} aria-hidden="true" /> 实时预览
             </div>
 
-            <div className="rounded-2xl border-2 border-brand-dark/10 bg-[#E5E5E5] p-8">
+            <div className="rounded-2xl border-2 border-brand-dark/10 bg-muted p-8">
               <IdeaCard idea={previewIdea} className="pointer-events-none transform scale-105" />
 
               <div className="mt-8 space-y-4">
-                <div className="h-2 w-3/4 rounded-full bg-gray-300 opacity-50" />
-                <div className="h-2 w-1/2 rounded-full bg-gray-300 opacity-50" />
-                <div className="h-2 w-5/6 rounded-full bg-gray-300 opacity-50" />
+                <div className="h-2 w-3/4 rounded-full bg-border opacity-50" />
+                <div className="h-2 w-1/2 rounded-full bg-border opacity-50" />
+                <div className="h-2 w-5/6 rounded-full bg-border opacity-50" />
               </div>
             </div>
 
-            <div className="mt-6 flex gap-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+            <div className="mt-6 flex gap-3 rounded-lg border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800 dark:border-yellow-900/60 dark:bg-yellow-950/40 dark:text-yellow-200">
               <Lightbulb className="flex-shrink-0" size={20} aria-hidden="true" />
               <p>
                 提示：好的创意通常包含具体的应用场景。例如“一个专门给设计师用的番茄钟”，比“做一个好用的倒计时”更具吸引力。
@@ -375,7 +375,7 @@ export default function SubmitForm() {
   }
 
   return (
-    <div className="w-full max-w-6xl overflow-hidden rounded-2xl border-2 border-brand-dark bg-white p-8 shadow-solid-lg">
+    <div className="w-full max-w-6xl overflow-hidden rounded-2xl border-2 border-brand-dark bg-surface p-8 shadow-solid-lg">
       {stepIndicator}
 
       <div key={step} className="animate-fade-in-up motion-reduce:animate-none">
@@ -385,7 +385,7 @@ export default function SubmitForm() {
             <div className="mb-6 flex items-start justify-between gap-6">
               <div>
                 <h1 className="font-heading text-2xl font-bold text-brand-dark">创意评估</h1>
-                <p className="mt-1 text-sm text-gray-600">对「{ideaData?.title}」进行 9 维度打分</p>
+                <p className="mt-1 text-sm text-muted-foreground">对「{ideaData?.title}」进行 9 维度打分</p>
               </div>
               <BarChart3 size={24} className="text-brand-primary" aria-hidden="true" />
             </div>
@@ -405,7 +405,7 @@ export default function SubmitForm() {
           <>
             <div className="mb-6 text-center">
               <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark">{ideaData?.title}</h1>
-              <p className="mt-2 text-sm text-gray-600">创业项目评估结果</p>
+              <p className="mt-2 text-sm text-muted-foreground">创业项目评估结果</p>
             </div>
 
             {!result.submitted ? (

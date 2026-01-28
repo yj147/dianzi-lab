@@ -8,6 +8,9 @@ const customJestConfig = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
   },
+  modulePathIgnorePatterns: ['<rootDir>/.worktrees/'],
+  testPathIgnorePatterns: ['<rootDir>/.worktrees/'],
+  watchPathIgnorePatterns: ['<rootDir>/.worktrees/'],
   collectCoverageFrom: [
     '<rootDir>/components/**/*.{ts,tsx}',
     '!<rootDir>/components/**/*.stories.tsx',

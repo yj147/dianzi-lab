@@ -59,10 +59,10 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border-2 border-brand-dark bg-white shadow-solid">
+    <div className="overflow-hidden rounded-xl border-2 border-brand-dark bg-surface shadow-solid">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 text-xs font-bold uppercase tracking-wider text-gray-500">
+          <thead className="bg-muted text-xs font-bold uppercase tracking-wider text-muted-foreground">
             <tr className="border-b-2 border-brand-dark">
               <th scope="col" className="px-6 py-4">
                 点子详情
@@ -78,10 +78,10 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-border">
             {ideas.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-gray-400">
+                <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
                   没有找到符合条件的项目
                 </td>
               </tr>
@@ -92,7 +92,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                 const avatarText = authorName.slice(0, 1).toUpperCase()
 
                 return (
-                  <tr key={idea.id} className="group hover:bg-gray-50 transition-colors">
+                  <tr key={idea.id} className="group hover:bg-muted transition-colors">
                     <td className="max-w-xs px-6 py-4 md:max-w-md">
                       <div className="mb-1 font-bold text-brand-dark text-lg">
                         <Link
@@ -102,13 +102,13 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                           {idea.title}
                         </Link>
                       </div>
-                      <div className="line-clamp-2 text-sm text-gray-600">{idea.description}</div>
+                      <div className="line-clamp-2 text-sm text-muted-foreground">{idea.description}</div>
                       {idea.tags.length > 0 ? (
                         <div className="mt-2 flex gap-2">
                           {idea.tags.map((tag) => (
                             <span
                               key={tag}
-                              className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px] text-gray-500"
+                              className="rounded bg-muted px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground"
                             >
                               {tag}
                             </span>
@@ -122,7 +122,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                         <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-xs font-bold text-brand-primary">
                           {avatarText}
                         </div>
-                        <span className="text-sm font-medium text-gray-700">{authorName}</span>
+                        <span className="text-sm font-medium text-foreground">{authorName}</span>
                       </div>
                     </td>
 
@@ -150,7 +150,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             type="button"
                             size="sm"
                             disabled={isBusy}
-                            className="h-9 border-orange-600 bg-orange-500 px-4 text-xs hover:bg-orange-600"
+                            className="h-9 border-brand-accent bg-brand-accent px-4 text-xs text-white hover:bg-brand-accent/90"
                             onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'IN_PROGRESS'))}
                           >
                             <Hammer size={14} className="mr-1" aria-hidden="true" />
@@ -163,7 +163,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             type="button"
                             size="sm"
                             disabled={isBusy}
-                            className="h-9 border-green-700 bg-green-600 px-4 text-xs hover:bg-green-700"
+                            className="h-9 border-brand-success bg-brand-success px-4 text-xs text-white hover:bg-brand-success/90"
                             onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'COMPLETED'))}
                           >
                             <Rocket size={14} className="mr-1" aria-hidden="true" />
@@ -176,7 +176,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             type="button"
                             size="sm"
                             disabled={isBusy}
-                            className="h-9 border-orange-600 bg-orange-500 px-4 text-xs hover:bg-orange-600"
+                            className="h-9 border-brand-accent bg-brand-accent px-4 text-xs text-white hover:bg-brand-accent/90"
                             onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'IN_PROGRESS'))}
                           >
                             <RotateCcw size={14} className="mr-1" aria-hidden="true" />
@@ -191,7 +191,7 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                               aria-label="移至回收站"
                               title="移至回收站"
                               disabled={isBusy}
-                              className="flex h-9 w-9 items-center justify-center rounded-lg border border-transparent text-gray-400 transition-colors hover:border-red-100 hover:bg-red-50 hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
+                              className="flex h-9 w-9 items-center justify-center rounded-lg border border-transparent text-muted-foreground transition-colors hover:border-destructive/20 hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50"
                             >
                               <Trash2 size={16} aria-hidden="true" />
                             </button>

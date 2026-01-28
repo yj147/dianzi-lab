@@ -11,7 +11,7 @@ export default function FavoritesPage() {
           <Heart className="size-6" aria-hidden="true" />
         </div>
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">灵感收藏</h1>
-        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
+        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-muted-foreground">
           收藏功能正在建设中。
         </p>
         <div className="mt-8 flex justify-center">

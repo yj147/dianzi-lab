@@ -38,10 +38,10 @@ export default function AdminHeader({
     <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
         <h1 className="mb-2 font-heading text-3xl font-bold text-brand-dark md:text-4xl">主控制台</h1>
-        <p className="text-lg text-gray-500">{description}</p>
+        <p className="text-lg text-muted-foreground">{description}</p>
       </div>
 
-      <div className="flex rounded-lg border border-brand-dark/10 bg-white p-1 shadow-sm">
+      <div className="flex rounded-lg border border-brand-dark/10 bg-surface p-1 shadow-sm">
         {(
           [
             { key: 'IDEAS', ...TAB_CONFIG.IDEAS },
@@ -57,7 +57,7 @@ export default function AdminHeader({
               href={tab.href}
               className={cn(
                 'rounded-md px-4 py-2 text-sm font-bold transition-all',
-                active ? 'bg-brand-dark text-white' : 'text-gray-600 hover:bg-gray-100'
+                active ? 'bg-brand-dark text-background' : 'text-muted-foreground hover:bg-muted'
               )}
             >
               {tab.label}

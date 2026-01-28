@@ -45,10 +45,10 @@ function normalizeStatus(value: string | undefined): StatusFilterKey {
 }
 
 const STATUS_CARD_STYLE: Record<IdeaStatus, { icon: LucideIcon; color: string }> = {
-  PENDING: { icon: Clock, color: 'text-gray-500 bg-gray-100 border-gray-200' },
-  APPROVED: { icon: CheckCircle2, color: 'text-brand-primary bg-blue-50 border-blue-200' },
-  IN_PROGRESS: { icon: Beaker, color: 'text-orange-600 bg-orange-50 border-orange-200' },
-  COMPLETED: { icon: Rocket, color: 'text-brand-success bg-green-50 border-green-200' },
+  PENDING: { icon: Clock, color: 'text-muted-foreground bg-muted border-border' },
+  APPROVED: { icon: CheckCircle2, color: 'text-primary bg-primary/10 border-primary/30' },
+  IN_PROGRESS: { icon: Beaker, color: 'text-brand-accent bg-brand-accent/15 border-brand-accent/30' },
+  COMPLETED: { icon: Rocket, color: 'text-brand-success bg-brand-success/15 border-brand-success/30' },
 }
 
 export default async function DashboardPage({ searchParams }: DashboardPageProps) {
@@ -121,7 +121,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       <header className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h1 className="font-heading font-bold text-3xl md:text-4xl text-brand-dark mb-2">我的点子</h1>
-          <p className="text-gray-500 text-lg">查看你提交的项目进度。</p>
+          <p className="text-muted-foreground text-lg">查看你提交的项目进度。</p>
         </div>
         <Button asChild>
           <Link href="/submit">
@@ -131,31 +131,31 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       </header>
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
+        <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
           <div className="w-12 h-12 bg-blue-100 text-brand-primary rounded-full flex items-center justify-center">
             <FileText size={24} aria-hidden="true" />
           </div>
           <div>
             <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{totalCount}</div>
-            <div className="text-sm text-gray-500 font-bold">提交总数</div>
+            <div className="text-sm text-muted-foreground font-bold">提交总数</div>
           </div>
         </div>
-        <div className="bg-white border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
+        <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
           <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center">
             <Trophy size={24} aria-hidden="true" />
           </div>
           <div>
             <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{approvedCount}</div>
-            <div className="text-sm text-gray-500 font-bold">已被采纳</div>
+            <div className="text-sm text-muted-foreground font-bold">已被采纳</div>
           </div>
         </div>
-        <div className="bg-white border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
+        <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
           <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center">
             <ThumbsUp size={24} aria-hidden="true" />
           </div>
           <div>
             <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{completedCount}</div>
-            <div className="text-sm text-gray-500 font-bold">已上线</div>
+            <div className="text-sm text-muted-foreground font-bold">已上线</div>
           </div>
         </div>
       </section>
@@ -167,7 +167,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
       <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="flex bg-white rounded-lg p-1 border border-brand-dark/10 shadow-sm">
+          <div className="flex bg-surface rounded-lg p-1 border border-brand-dark/10 shadow-sm">
             {filters.map((filter) => {
               const active = status === filter.key
               return (
@@ -176,7 +176,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   href={buildDashboardHref(filter.key)}
                   className={cn(
                     'px-4 py-2 rounded-md text-sm font-bold transition-colors',
-                    active ? 'bg-brand-dark text-white' : 'text-gray-600 hover:bg-gray-100'
+                    active ? 'bg-brand-dark text-background' : 'text-muted-foreground hover:bg-muted'
                   )}
                 >
                   {filter.label}
@@ -186,7 +186,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </div>
 
           {hasFilters ? (
-            <Link href="/dashboard" className="text-sm font-bold text-gray-500 hover:text-brand-dark hover:underline">
+            <Link href="/dashboard" className="text-sm font-bold text-muted-foreground hover:text-brand-dark hover:underline">
               清除筛选
             </Link>
           ) : null}
@@ -198,13 +198,13 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             搜索
           </label>
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <input
               id="dashboard-search"
               name="q"
               defaultValue={q ?? ''}
               placeholder="搜索标题或描述…"
-              className="w-full pl-10 px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors text-sm"
+              className="w-full pl-10 px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary transition-colors text-sm"
             />
           </div>
           <Button type="submit" variant="secondary" className="shrink-0">
@@ -214,14 +214,14 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       </div>
 
       {ideas.length === 0 ? (
-        <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-16 text-center">
-          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-400">
+        <div className="bg-surface border-2 border-dashed border-border rounded-xl p-16 text-center">
+          <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mx-auto mb-6 text-muted-foreground">
             <Lightbulb size={40} aria-hidden="true" />
           </div>
-          <h3 className="font-heading font-bold text-2xl text-gray-700 mb-2">
+          <h3 className="font-heading font-bold text-2xl text-foreground mb-2">
             {hasFilters ? '没有匹配的项目' : '暂无点子'}
           </h3>
-          <p className="text-gray-500 mb-8 max-w-md mx-auto">
+          <p className="text-muted-foreground mb-8 max-w-md mx-auto">
             {hasFilters
               ? '换个关键词或筛选条件试试，或者清除筛选返回全部列表。'
               : '每一个改变世界的产品都始于一个简单的想法。现在就开始你的第一个创作吧。'}
@@ -246,23 +246,23 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             return (
               <div
                 key={idea.id}
-                className="group bg-white border border-gray-200 hover:border-brand-dark rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start shadow-sm hover:shadow-md transition-all"
+                className="group bg-surface border border-border hover:border-brand-dark rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start shadow-sm hover:shadow-md transition-all"
               >
                 <div className="flex-grow">
                   <div className="flex items-center gap-3 mb-3">
                     <h3 className="font-heading font-bold text-xl text-brand-dark">{idea.title}</h3>
-                    <div className="hidden md:block w-px h-4 bg-gray-300" aria-hidden="true" />
-                    <span className="text-xs font-mono text-gray-400">
+                    <div className="hidden md:block w-px h-4 bg-border" aria-hidden="true" />
+                    <span className="text-xs font-mono text-muted-foreground">
                       Created: {format(new Date(idea.createdAt), 'yyyy-MM-dd')}
                     </span>
                   </div>
 
-                  <p className="text-gray-600 mb-4 leading-relaxed max-w-3xl">{idea.description}</p>
+                  <p className="text-muted-foreground mb-4 leading-relaxed max-w-3xl">{idea.description}</p>
 
                   {idea.tags.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {idea.tags.map((tag) => (
-                        <span key={tag} className="px-2 py-1 bg-gray-100 rounded text-xs text-gray-500 font-mono">
+                        <span key={tag} className="px-2 py-1 bg-muted rounded text-xs text-muted-foreground font-mono">
                           #{tag}
                         </span>
                       ))}
@@ -270,7 +270,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   ) : null}
                 </div>
 
-                <div className="w-full md:w-64 flex-shrink-0 bg-gray-50 rounded-lg p-4 border border-gray-100 group-hover:bg-white group-hover:shadow-inner transition-colors">
+                <div className="w-full md:w-64 flex-shrink-0 bg-muted rounded-lg p-4 border border-border group-hover:bg-surface group-hover:shadow-inner transition-colors">
                   <div className="flex items-center gap-3 mb-2">
                     <div className={cn('p-2 rounded-lg border', statusMeta.color)}>
                       <StatusIcon size={20} aria-hidden="true" />
@@ -278,7 +278,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                     <span className="font-bold text-sm text-brand-dark">{STATUS_CONFIG[idea.status].label}</span>
                   </div>
 
-                  <div className="text-xs text-gray-500 leading-snug">{STATUS_CONFIG[idea.status].description}</div>
+                  <div className="text-xs text-muted-foreground leading-snug">{STATUS_CONFIG[idea.status].description}</div>
 
                   {idea.assessment ? (
                     <div className="mt-3">

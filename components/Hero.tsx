@@ -3,11 +3,29 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { HardHat, ScrollText } from 'lucide-react'
-import { useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 
 import PulseDot from '@/components/PulseDot'
 import { Button } from '@/components/ui/button'
 import { useInView } from '@/lib/use-in-view'
+
+const floatAnimation = {
+  y: [0, -16, 0],
+  transition: {
+    duration: 4,
+    repeat: Infinity,
+    ease: 'easeInOut' as const,
+  },
+}
+
+const floatSlowAnimation = {
+  y: [0, -14, 0],
+  transition: {
+    duration: 5,
+    repeat: Infinity,
+    ease: 'easeInOut' as const,
+  },
+}
 
 export default function Hero() {
   const reducedMotion = useReducedMotion()
@@ -17,7 +35,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative z-10 flex flex-col justify-center border-b-4 border-foreground bg-background/90 pb-20 pt-24 backdrop-blur-sm dark:border-border md:min-h-dvh"
+      className="relative z-10 flex flex-col justify-center border-b-2 border-border bg-background/90 pb-20 pt-24 backdrop-blur-sm md:min-h-dvh"
     >
       <div className="container mx-auto max-w-7xl px-4">
         <div className="grid items-center gap-16 lg:grid-cols-2">
@@ -40,7 +58,7 @@ export default function Hero() {
             <div className="flex flex-col gap-5 sm:flex-row">
               <Button
                 asChild
-                className="group h-16 bg-brand-primary px-8 text-xl uppercase tracking-wider hover:-translate-y-1 hover:bg-brand-primary/90"
+                className="group h-16 bg-brand-primary px-8 text-xl uppercase tracking-wider hover:-translate-y-1 hover:bg-brand-accent hover:text-foreground active:bg-brand-accent/90 active:text-foreground"
               >
                 <Link href="/submit">
                   <ScrollText
@@ -63,13 +81,12 @@ export default function Hero() {
           </div>
 
           <div className="relative hidden h-[500px] lg:block animate-fade-in-right motion-reduce:animate-none">
-            <div className="absolute right-10 top-0 z-20">
+            <motion.div
+              className="absolute right-10 top-0 z-20"
+              animate={shouldAnimate ? floatAnimation : undefined}
+            >
               <div className="rotate-2">
-                <div
-                  className={`w-80 border-4 border-foreground bg-surface p-8 shadow-solid-lg motion-reduce:animate-none dark:border-border ${
-                    shouldAnimate ? 'animate-float-offset' : ''
-                  }`}
-                >
+                <div className="w-80 border-4 border-foreground bg-surface p-8 shadow-solid-lg dark:border-border">
                   <div className="mb-6 flex items-center justify-between border-b-4 border-foreground pb-4 dark:border-border">
                     <span className="font-heading text-2xl font-bold text-foreground">技术服务协议</span>
                   </div>
@@ -100,15 +117,14 @@ export default function Hero() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="absolute bottom-10 left-0 z-10">
+            <motion.div
+              className="absolute bottom-10 left-0 z-10"
+              animate={shouldAnimate ? floatSlowAnimation : undefined}
+            >
               <div className="-rotate-3">
-                <div
-                  className={`w-64 border-4 border-foreground bg-brand-primary p-6 text-white shadow-solid motion-reduce:animate-none dark:border-border ${
-                    shouldAnimate ? 'animate-float-offset-slow' : ''
-                  }`}
-                >
+                <div className="w-64 border-4 border-foreground bg-brand-primary p-6 text-white shadow-solid dark:border-border">
                   <HardHat size={48} className="mb-4 text-brand-accent" aria-hidden="true" />
                   <div className="mb-2 font-heading text-2xl font-bold leading-none">脏活累活我们干</div>
                   <p className="font-mono text-xs opacity-80">
@@ -116,7 +132,7 @@ export default function Hero() {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

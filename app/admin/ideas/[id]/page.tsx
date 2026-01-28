@@ -60,7 +60,7 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
     <div className="space-y-8">
       <Link
         href="/admin/ideas"
-        className="inline-flex items-center gap-2 text-sm font-bold text-gray-600 underline-offset-4 hover:text-brand-dark hover:underline"
+        className="inline-flex items-center gap-2 text-sm font-bold text-muted-foreground underline-offset-4 hover:text-brand-dark hover:underline"
       >
         <ArrowLeft className="size-4" aria-hidden="true" />
         返回项目管理
@@ -72,16 +72,16 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
             <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
               {idea.title}
             </h1>
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
               <span className="flex items-center gap-2">
-                <User className="size-4 text-gray-400" aria-hidden="true" />
-                <span className="font-mono text-xs text-gray-500">用户</span>
+                <User className="size-4 text-muted-foreground" aria-hidden="true" />
+                <span className="font-mono text-xs text-muted-foreground">用户</span>
                 <span className="max-w-[360px] truncate font-bold text-brand-dark">{idea.user.email}</span>
               </span>
               <span className="flex items-center gap-2">
-                <Calendar className="size-4 text-gray-400" aria-hidden="true" />
-                <span className="font-mono text-xs text-gray-500">提交</span>
-                <span className="font-mono text-xs text-gray-500">
+                <Calendar className="size-4 text-muted-foreground" aria-hidden="true" />
+                <span className="font-mono text-xs text-muted-foreground">提交</span>
+                <span className="font-mono text-xs text-muted-foreground">
                   {new Date(idea.createdAt).toLocaleDateString('zh-CN')}
                 </span>
               </span>
@@ -92,14 +92,14 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
           </div>
         </div>
 
-        <p className="text-pretty mt-6 leading-relaxed text-gray-700">{idea.description}</p>
+        <p className="text-pretty mt-6 leading-relaxed text-foreground">{idea.description}</p>
 
         {idea.tags.length > 0 ? (
           <div className="mt-6 flex flex-wrap gap-2">
             {idea.tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-gray-100 px-3 py-1 font-mono text-xs font-medium text-gray-600"
+                className="rounded-full bg-muted px-3 py-1 font-mono text-xs font-medium text-muted-foreground"
               >
                 #{tag}
               </span>
@@ -122,7 +122,7 @@ export default async function AdminIdeaDetailPage({ params }: { params: { id: st
       ) : (
         <section className="rounded-xl border-2 border-dashed border-brand-dark/40 bg-brand-surface p-12 text-center shadow-solid-sm">
           <h2 className="text-balance font-heading text-2xl font-bold text-brand-dark">暂无评估数据</h2>
-          <p className="text-pretty mx-auto mt-3 max-w-xl text-sm text-gray-600">
+          <p className="text-pretty mx-auto mt-3 max-w-xl text-sm text-muted-foreground">
             该项目尚未进行创业可行性评估。
           </p>
         </section>

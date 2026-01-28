@@ -11,7 +11,7 @@ export default function SettingsPage() {
           <Settings className="size-6" aria-hidden="true" />
         </div>
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">账号设置</h1>
-        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
+        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-muted-foreground">
           账号偏好与安全设置正在建设中。
         </p>
         <div className="mt-8 flex justify-center">

@@ -73,7 +73,7 @@ export default function ValidatorForm({
             </div>
 
             {/* 描述 */}
-            <p className="text-pretty text-sm text-gray-600">{dim.description}</p>
+            <p className="text-pretty text-sm text-muted-foreground">{dim.description}</p>
 
             {/* 滑块 */}
             <Slider
@@ -88,7 +88,7 @@ export default function ValidatorForm({
             />
 
             {/* 范围标签 */}
-            <div className="flex justify-between text-xs tabular-nums text-gray-500">
+            <div className="flex justify-between text-xs tabular-nums text-muted-foreground">
               <span>{MIN_SCORE}</span>
               <span>{MAX_SCORE}</span>
             </div>

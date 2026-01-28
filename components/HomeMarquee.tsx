@@ -22,18 +22,18 @@ function ShipmentCard({ idea }: { idea: Shipment }) {
   const typeLabel = getTypeLabel(idea.tags)
 
   return (
-    <div className="group relative mx-4 flex h-80 w-72 shrink-0 cursor-pointer flex-col border-2 border-transparent bg-white transition-transform duration-200 hover:-translate-y-1 motion-reduce:transition-none">
-      <div className="relative z-10 flex items-center gap-3 border-b-2 border-gray-100 bg-white p-5">
-        <div className="flex size-10 items-center justify-center rounded-full bg-brand-dark font-heading font-bold text-white">
+    <div className="group relative mx-4 flex h-80 w-72 shrink-0 cursor-pointer flex-col border-2 border-transparent bg-surface transition-transform duration-200 hover:-translate-y-1 motion-reduce:transition-none">
+      <div className="relative z-10 flex items-center gap-3 border-b-2 border-border bg-surface p-5">
+        <div className="flex size-10 items-center justify-center rounded-full bg-brand-dark font-heading font-bold text-background">
           {name.slice(0, 1)}
         </div>
         <div className="min-w-0">
           <div className="truncate font-bold text-brand-dark">{name}</div>
-          <div className="text-xs text-gray-400">需求方</div>
+          <div className="text-xs text-muted-foreground">需求方</div>
         </div>
       </div>
 
-      <div className="relative flex flex-1 overflow-hidden bg-gray-50 transition-colors duration-200 group-hover:bg-blue-50/30 motion-reduce:transition-none">
+      <div className="relative flex flex-1 overflow-hidden bg-muted transition-colors duration-200 group-hover:bg-primary/10 motion-reduce:transition-none">
         <div className="flex h-full w-full items-end gap-1 p-4">
           <div className="h-10 w-1/4 rounded-t bg-brand-primary/20 transition-all duration-300 group-hover:h-14 motion-reduce:transition-none" aria-hidden="true" />
           <div className="h-20 w-1/4 rounded-t bg-brand-primary/40 transition-all duration-300 group-hover:h-24 motion-reduce:transition-none" aria-hidden="true" />
@@ -42,7 +42,7 @@ function ShipmentCard({ idea }: { idea: Shipment }) {
         </div>
 
         <div className="absolute bottom-4 left-4 right-4">
-          <div className="inline-block rounded border border-gray-200 bg-white px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-gray-500">
+          <div className="inline-block rounded border border-border bg-surface px-2 py-1 font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
             {typeLabel}
           </div>
           <div className="mt-1 line-clamp-2 font-heading text-lg font-bold text-brand-dark">{idea.title}</div>

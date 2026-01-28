@@ -16,9 +16,9 @@ describe('Toast', () => {
     render(<Toaster />)
 
     const cases = [
-      { variant: 'success' as const, className: 'bg-green-50' },
-      { variant: 'destructive' as const, className: 'bg-red-50' },
-      { variant: 'info' as const, className: 'bg-blue-50' },
+      { variant: 'success' as const, className: 'bg-brand-success/15' },
+      { variant: 'destructive' as const, className: 'bg-destructive/10' },
+      { variant: 'info' as const, className: 'bg-primary/10' },
     ]
 
     for (const { variant, className } of cases) {

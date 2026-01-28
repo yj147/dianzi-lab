@@ -62,7 +62,7 @@ describe("ResultPanel Component", () => {
   it("shows skeleton when isLoading is true", () => {
     const { container } = render(<ResultPanel result={null} isLoading={true} />);
 
-    expect(container.querySelector(".bg-gray-200")).toBeTruthy();
+    expect(container.querySelector(".bg-muted")).toBeTruthy();
   });
 
   it("renders reset button when onReset is provided", () => {

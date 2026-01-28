@@ -44,10 +44,10 @@ export default function ResultPanel({
           className
         )}
       >
-        <div className="h-16 rounded-lg bg-gray-200" />
+        <div className="h-16 rounded-lg bg-muted" />
         <div className="space-y-2">
-          <div className="h-12 rounded-lg bg-gray-100" />
-          <div className="h-12 rounded-lg bg-gray-100" />
+          <div className="h-12 rounded-lg bg-muted" />
+          <div className="h-12 rounded-lg bg-muted" />
         </div>
       </div>
     );
@@ -62,7 +62,7 @@ export default function ResultPanel({
           className
         )}
       >
-        <p className="text-pretty text-sm text-gray-600">完成评估后，结果将在此展示</p>
+        <p className="text-pretty text-sm text-muted-foreground">完成评估后，结果将在此展示</p>
       </div>
     );
   }
@@ -83,11 +83,11 @@ export default function ResultPanel({
     >
       {/* 总分展示 */}
       <div className="text-center">
-        <p className="mb-2 text-sm font-bold text-gray-600">综合评分</p>
+        <p className="mb-2 text-sm font-bold text-muted-foreground">综合评分</p>
         <div className={cn("text-6xl font-heading font-bold tabular-nums", scoreClassName)}>
           {result.overallScore}
         </div>
-        <p className="mt-1 text-xs text-gray-500">满分 100</p>
+        <p className="mt-1 text-xs text-muted-foreground">满分 100</p>
       </div>
 
       {/* 反馈列表 */}

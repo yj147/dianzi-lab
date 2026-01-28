@@ -64,8 +64,8 @@ export default async function AdminIdeasPage({
       <AdminHeader activeTab="IDEAS" trashCount={stats.trashCount} />
 
       <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-        <div className="rounded-xl bg-brand-dark p-5 text-white shadow-solid-sm">
-          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-white/50">待审核</div>
+        <div className="rounded-xl bg-brand-dark p-5 text-background shadow-solid-sm">
+          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-background/50">待审核</div>
           <div className="flex items-center gap-2 font-heading text-3xl font-bold tabular-nums">
             {stats.pendingCount}
             {stats.pendingCount > 0 ? (
@@ -74,13 +74,13 @@ export default async function AdminIdeasPage({
           </div>
         </div>
 
-        <div className="rounded-xl border-2 border-brand-dark bg-white p-5 shadow-solid-sm">
-          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-gray-500">开发中</div>
+        <div className="rounded-xl border-2 border-brand-dark bg-surface p-5 shadow-solid-sm">
+          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">开发中</div>
           <div className="font-heading text-3xl font-bold tabular-nums text-orange-600">{stats.buildingCount}</div>
         </div>
       </section>
 
-      <div className="mb-6 inline-flex flex-wrap gap-2 rounded-xl bg-gray-100 p-1.5">
+      <div className="mb-6 inline-flex flex-wrap gap-2 rounded-xl bg-muted p-1.5">
         {filters.map((filter) => {
           const active = filter.key === 'ALL' ? !status : status === filter.key
           return (
@@ -89,8 +89,8 @@ export default async function AdminIdeasPage({
               href={filter.href}
               className={
                 active
-                  ? 'rounded-lg bg-white px-4 py-2 text-sm font-bold text-brand-dark shadow-sm'
-                  : 'rounded-lg px-4 py-2 text-sm font-bold text-gray-500 transition-all hover:bg-gray-200 hover:text-brand-dark'
+                  ? 'rounded-lg bg-surface px-4 py-2 text-sm font-bold text-brand-dark shadow-sm'
+                  : 'rounded-lg px-4 py-2 text-sm font-bold text-muted-foreground transition-all hover:bg-muted hover:text-brand-dark'
               }
             >
               {filter.label}

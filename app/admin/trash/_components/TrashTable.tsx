@@ -46,34 +46,34 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
 
   if (ideas.length === 0) {
     return (
-      <div className="bg-white border-2 border-brand-dark rounded-xl p-12 text-center">
-        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400">
+      <div className="bg-surface border-2 border-brand-dark rounded-xl p-12 text-center">
+        <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4 text-muted-foreground">
           <Trash2 size={32} aria-hidden="true" />
         </div>
-        <h3 className="font-heading font-bold text-xl text-gray-700 mb-2">回收站为空</h3>
-        <p className="text-gray-500">这里很干净。</p>
+        <h3 className="font-heading font-bold text-xl text-foreground mb-2">回收站为空</h3>
+        <p className="text-muted-foreground">这里很干净。</p>
       </div>
     )
   }
 
   return (
-    <div className="bg-white border-2 border-brand-dark rounded-xl shadow-solid overflow-hidden">
+    <div className="bg-surface border-2 border-brand-dark rounded-xl shadow-solid overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
-          <thead className="bg-gray-50 border-b-2 border-brand-dark text-xs uppercase text-gray-500 font-bold tracking-wider">
+          <thead className="bg-muted border-b-2 border-brand-dark text-xs uppercase text-muted-foreground font-bold tracking-wider">
             <tr>
               <th className="px-6 py-4">已删项目</th>
               <th className="px-6 py-4 text-right">操作</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border">
             {ideas.map((idea) => (
               <tr key={idea.id} className="hover:bg-red-50/30 transition-colors">
                 <td className="px-6 py-4">
-                  <div className="font-bold text-gray-600 text-lg mb-1 line-through decoration-2 decoration-gray-300">
+                  <div className="font-bold text-muted-foreground text-lg mb-1 line-through decoration-2 decoration-border">
                     {idea.title}
                   </div>
-                  <div className="text-sm text-gray-400">{snippet(idea.description)}</div>
+                  <div className="text-sm text-muted-foreground">{snippet(idea.description)}</div>
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-3">

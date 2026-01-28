@@ -66,7 +66,7 @@ export default function ValidatorClient() {
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
           创业想法验证器
         </h1>
-        <p className="text-pretty mt-2 text-sm text-gray-600">
+        <p className="text-pretty mt-2 text-sm text-muted-foreground">
           这是一页内部工具，用于快速跑一遍评估器输出。
         </p>
       </header>

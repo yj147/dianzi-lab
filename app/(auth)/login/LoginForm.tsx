@@ -74,12 +74,12 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
       <div>
         <label
           htmlFor="email"
-          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
+          className="mb-1.5 block text-xs font-bold text-foreground uppercase tracking-wider"
         >
           Email
         </label>
         <div className="relative">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
             <Mail size={16} aria-hidden="true" />
           </div>
           <Input
@@ -105,12 +105,12 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
       <div>
         <label
           htmlFor="password"
-          className="mb-1.5 block text-xs font-bold text-gray-700 uppercase tracking-wider"
+          className="mb-1.5 block text-xs font-bold text-foreground uppercase tracking-wider"
         >
           Password
         </label>
         <div className="relative">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted-foreground">
             <KeyRound size={16} aria-hidden="true" />
           </div>
           <Input

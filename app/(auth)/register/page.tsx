@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function RegisterPage() {
   return (
     <div className="w-full max-w-5xl">
-      <div className="grid overflow-hidden rounded-2xl border-2 border-brand-dark bg-white shadow-solid-lg animate-fade-in-up motion-reduce:animate-none lg:grid-cols-2">
+      <div className="grid overflow-hidden rounded-2xl border-2 border-brand-dark bg-surface shadow-solid-lg animate-fade-in-up motion-reduce:animate-none lg:grid-cols-2">
         <div className="hidden bg-brand-accent p-10 lg:block">
           <div className="flex h-full flex-col justify-between text-white">
             <div>
@@ -26,7 +26,7 @@ export default function RegisterPage() {
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
                 style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}
               >
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Sparkles size={20} aria-hidden="true" />
                 </div>
                 <div>
@@ -39,7 +39,7 @@ export default function RegisterPage() {
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
                 style={{ animationDelay: '350ms', animationFillMode: 'backwards' }}
               >
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Target size={20} aria-hidden="true" />
                 </div>
                 <div>
@@ -52,7 +52,7 @@ export default function RegisterPage() {
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
                 style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}
               >
-                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-white/20">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Code size={20} aria-hidden="true" />
                 </div>
                 <div>
@@ -79,14 +79,14 @@ export default function RegisterPage() {
             <h1 className="mb-2 text-center font-heading text-3xl font-bold text-brand-dark lg:text-left">
               创建账号
             </h1>
-            <p className="mb-10 text-center text-base text-gray-500 lg:text-left">
+            <p className="mb-10 text-center text-base text-muted-foreground lg:text-left">
               提交你的第一个伟大想法
             </p>
 
             <RegisterForm />
           </div>
 
-          <div className="border-t border-gray-100 bg-gray-50 p-5 text-center text-sm text-gray-600">
+          <div className="border-t border-border bg-muted p-5 text-center text-sm text-muted-foreground">
             已经有账号？{' '}
             <Link href="/login" className="font-bold text-brand-primary hover:underline">
               直接登录

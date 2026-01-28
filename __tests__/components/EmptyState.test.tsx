@@ -16,7 +16,7 @@ describe('EmptyState Component', () => {
     render(<EmptyState message={defaultMessage} />);
     const messageElement = screen.getByText(defaultMessage);
     expect(messageElement).toBeInTheDocument();
-    expect(messageElement).toHaveClass('text-gray-500');
+    expect(messageElement).toHaveClass('text-muted-foreground');
   });
 
   it('renders the default SparklesIcon when no icon is provided', () => {
@@ -27,7 +27,7 @@ describe('EmptyState Component', () => {
     
     // Check icon container classes
     const iconContainer = icon.parentElement;
-    expect(iconContainer).toHaveClass('text-gray-400 mb-4 w-12 h-12 mx-auto');
+    expect(iconContainer).toHaveClass('text-muted-foreground mb-4 w-12 h-12 mx-auto');
   });
 
   it('renders a custom icon when provided', () => {
