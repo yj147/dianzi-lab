@@ -46,7 +46,7 @@ export default async function IdeaResultPage({ params }: Props) {
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
           {idea.title}
         </h1>
-        <p className="text-pretty mt-2 text-sm text-gray-600">创业项目评估结果</p>
+        <p className="text-pretty mt-2 text-sm text-gray-600">项目可行性评估结果</p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">

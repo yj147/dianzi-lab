@@ -61,13 +61,13 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
       ]
 
   return (
-    <nav className="sticky top-0 z-50 w-full border-b-2 border-brand-dark/10 bg-brand-bg/90 backdrop-blur-md">
+    <nav className="sticky top-0 z-50 w-full border-b-2 border-border bg-background/90 backdrop-blur-md">
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-3">
           <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary text-white shadow-solid-sm transition-colors hover:bg-brand-accent">
             <Lightbulb size={20} strokeWidth={2.5} aria-hidden="true" />
           </div>
-          <span className="font-heading text-2xl font-bold text-brand-dark">
+          <span className="font-heading text-2xl font-bold text-foreground">
             Bambi<span className="text-brand-primary"> Lab Idea</span>
           </span>
         </Link>
@@ -81,7 +81,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                 href={link.href}
                 className={cn(
                   'text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                  isActive ? 'text-brand-primary' : 'text-gray-500 hover:text-brand-dark'
+                  isActive ? 'text-brand-primary' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 {link.name}
@@ -100,26 +100,26 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   <button
                     type="button"
                     aria-label="用户菜单"
-                    className="flex items-center gap-3 rounded-full bg-white px-3 py-2 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-solid motion-reduce:transition-none"
+                    className="flex items-center gap-3 rounded-full bg-background px-3 py-2 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-solid motion-reduce:transition-none"
                   >
                     <div className="flex size-9 items-center justify-center rounded-full bg-brand-dark text-sm font-heading font-bold text-white">
                       {initial}
                     </div>
-                    <span className="max-w-[160px] truncate text-sm font-bold text-brand-dark">{displayName}</span>
+                    <span className="max-w-[160px] truncate text-sm font-bold text-foreground">{displayName}</span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
                   sideOffset={12}
-                  className="w-72 rounded-xl border-2 border-brand-dark bg-white p-2 shadow-solid"
+                  className="w-72 rounded-xl border-2 border-border bg-background p-2 shadow-solid"
                 >
                   <DropdownMenuLabel className="px-3 py-2">
                     <div className="flex items-center gap-2">
-                      <User size={16} className="text-gray-500" aria-hidden="true" />
-                      <p className="text-sm font-bold text-brand-dark">{displayName}</p>
+                      <User size={16} className="text-muted-foreground" aria-hidden="true" />
+                      <p className="text-sm font-bold text-foreground">{displayName}</p>
                     </div>
                     {userEmail ? (
-                      <p className="mt-1 truncate font-mono text-xs text-gray-400">{userEmail}</p>
+                      <p className="mt-1 truncate font-mono text-xs text-muted-foreground">{userEmail}</p>
                     ) : null}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -154,7 +154,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
               <>
                 <Link
                   href="/login"
-                  className="text-base font-bold text-brand-dark transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  className="text-base font-bold text-foreground transition-colors hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
                   登录
                 </Link>
@@ -171,7 +171,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                 <button
                   type="button"
                   aria-label={isNavMenuOpen ? '关闭菜单' : '打开菜单'}
-                  className="inline-flex size-9 items-center justify-center rounded-full bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+                  className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
                 >
                   {isNavMenuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
                 </button>
@@ -179,7 +179,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
               <DropdownMenuContent
                 align="end"
                 sideOffset={12}
-                className="w-64 rounded-xl border-2 border-brand-dark bg-white p-2 shadow-solid"
+                className="w-64 rounded-xl border-2 border-border bg-background p-2 shadow-solid"
               >
                 {isLoggedIn ? (
                   <>
@@ -189,9 +189,9 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                           {initial}
                         </div>
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-bold text-brand-dark">{displayName}</p>
+                          <p className="truncate text-sm font-bold text-foreground">{displayName}</p>
                           {userEmail ? (
-                            <p className="truncate font-mono text-xs text-gray-400">{userEmail}</p>
+                            <p className="truncate font-mono text-xs text-muted-foreground">{userEmail}</p>
                           ) : null}
                         </div>
                       </div>

@@ -35,7 +35,6 @@ function getAssessmentCreateMock(): jest.Mock {
 describe('lib/validator-actions.submitAssessment', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    // next/navigation.redirect 在 Next.js 14+ 中通过抛错终止执行，错误消息为 NEXT_REDIRECT
     getRedirectMock().mockImplementation((url: string) => {
       const error = new Error('NEXT_REDIRECT')
       ;(error as any).digest = `NEXT_REDIRECT;${url}`
@@ -57,7 +56,7 @@ describe('lib/validator-actions.submitAssessment', () => {
       role: 'USER',
     })
 
-    const result = await submitAssessment({ targetUser: 'invalid' })
+    const result = await submitAssessment({ clarity: 'invalid' })
 
     expect(result.success).toBe(false)
     if (!result.success) {
@@ -74,9 +73,8 @@ describe('lib/validator-actions.submitAssessment', () => {
     })
 
     const result = await submitAssessment({
-      targetUser: 5,
-      channel: 5,
-      // 缺少其他字段
+      clarity: 5,
+      tech: 5,
     })
 
     expect(result.success).toBe(false)
@@ -94,20 +92,16 @@ describe('lib/validator-actions.submitAssessment', () => {
     })
 
     const result = await submitAssessment({
-      targetUser: 15,
-      channel: 5,
-      market: 5,
+      clarity: 15,
       tech: 5,
       budget: 5,
-      businessModel: 5,
-      team: 5,
-      risk: 5,
-      traffic: 5,
+      urgency: 5,
+      value: 5,
     })
 
     expect(result.success).toBe(false)
     if (!result.success) {
-      expect(result.field).toBe('targetUser')
+      expect(result.field).toBe('clarity')
     }
     expect(getAssessmentCreateMock()).not.toHaveBeenCalled()
   })
@@ -121,15 +115,11 @@ describe('lib/validator-actions.submitAssessment', () => {
     getAssessmentCreateMock().mockResolvedValue({ id: 'assessment_1' })
 
     const validInput = {
-      targetUser: 5,
-      channel: 5,
-      market: 5,
+      clarity: 5,
       tech: 5,
       budget: 5,
-      businessModel: 5,
-      team: 5,
-      risk: 5,
-      traffic: 5,
+      urgency: 5,
+      value: 5,
     }
 
     const result = await submitAssessment(validInput)
@@ -160,15 +150,11 @@ describe('lib/validator-actions.submitAssessment', () => {
     getAssessmentCreateMock().mockResolvedValue({ id: 'assessment_2' })
 
     const highInput = {
-      targetUser: 10,
-      channel: 10,
-      market: 10,
+      clarity: 10,
       tech: 10,
       budget: 10,
-      businessModel: 10,
-      team: 10,
-      risk: 10,
-      traffic: 10,
+      urgency: 10,
+      value: 10,
     }
 
     const result = await submitAssessment(highInput)
@@ -176,7 +162,6 @@ describe('lib/validator-actions.submitAssessment', () => {
     expect(result.success).toBe(true)
     if (result.success) {
       expect(result.finalScore).toBe(100)
-      // 高分应该触发 overall_green_80 规则
       expect(result.feedback.some((f) => f.includes('整体评分很强'))).toBe(true)
     }
   })
@@ -189,24 +174,19 @@ describe('lib/validator-actions.submitAssessment', () => {
     })
     getAssessmentCreateMock().mockResolvedValue({ id: 'assessment_3' })
 
-    const lowMarketInput = {
-      targetUser: 10,
-      channel: 10,
-      market: 2,
+    const lowClarityInput = {
+      clarity: 2,
       tech: 10,
       budget: 10,
-      businessModel: 10,
-      team: 10,
-      risk: 10,
-      traffic: 10,
+      urgency: 10,
+      value: 10,
     }
 
-    const result = await submitAssessment(lowMarketInput)
+    const result = await submitAssessment(lowClarityInput)
 
     expect(result.success).toBe(true)
     if (result.success) {
-      // market < 3 应该触发 Killer Flag 反馈
-      expect(result.feedback.some((f) => f.includes('Killer Flag'))).toBe(true)
+      expect(result.feedback.some((f) => f.includes('关键问题'))).toBe(true)
     }
   })
 })

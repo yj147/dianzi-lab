@@ -54,11 +54,11 @@ export default async function Home() {
         </section>
       ) : null}
 
-      <section id="capabilities" className="relative z-10 bg-white py-24">
+      <section id="capabilities" className="relative z-10 bg-background py-24">
         <div className="container mx-auto px-4">
           <div className="mb-16 text-center">
             <h2 className="font-heading text-4xl font-bold md:text-5xl">为什么选择我们？</h2>
-            <p className="mt-4 font-mono text-gray-600">在混乱的外包市场中，提供标准化的工程可靠性。</p>
+            <p className="mt-4 font-mono text-muted-foreground">在混乱的外包市场中，提供标准化的工程可靠性。</p>
           </div>
 
           <div className="grid gap-8 md:grid-cols-3">
@@ -81,13 +81,13 @@ export default async function Home() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="border-2 border-brand-dark bg-brand-bg p-8 shadow-solid transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-solid-lg motion-reduce:transition-none"
+                className="border-2 border-border bg-surface p-8 shadow-solid transition-[transform,box-shadow] duration-200 hover:-translate-y-1 hover:shadow-solid-lg motion-reduce:transition-none"
               >
-                <div className="mb-6 flex size-14 items-center justify-center border-2 border-brand-dark bg-white shadow-solid-sm">
+                <div className="mb-6 flex size-14 items-center justify-center border-2 border-border bg-background shadow-solid-sm">
                   <item.icon size={28} className="text-brand-primary" aria-hidden="true" />
                 </div>
                 <h3 className="mb-3 font-heading text-xl font-bold">{item.title}</h3>
-                <p className="text-pretty font-sans leading-relaxed text-gray-600">{item.desc}</p>
+                <p className="text-pretty font-sans leading-relaxed text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -130,7 +130,7 @@ export default async function Home() {
                     </div>
                     <div className="flex-1 text-center md:text-left">
                       <h3 className="font-heading text-xl font-bold">{item.title}</h3>
-                      <p className="text-sm text-gray-400">{item.desc}</p>
+                      <p className="text-sm text-muted-foreground">{item.desc}</p>
                     </div>
                     <div className="rounded border border-white/20 bg-white/10 px-3 py-1 font-mono text-xs">
                       {item.status}
@@ -143,9 +143,9 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="showcase" className="bg-brand-bg py-24">
+      <section id="showcase" className="bg-surface py-24">
         <div className="container mx-auto px-4">
-          <div className="mb-12 flex items-end justify-between border-b-2 border-brand-dark pb-4">
+          <div className="mb-12 flex items-end justify-between border-b-2 border-border pb-4">
             <h2 className="font-heading text-4xl font-bold">客户案例库</h2>
             <div className="font-mono text-sm">PROUDLY BUILT BY 点子 LAB</div>
           </div>
@@ -155,22 +155,22 @@ export default async function Home() {
               {completedIdeas.map((idea) => (
                 <div
                   key={idea.id}
-                  className="group cursor-pointer border-2 border-brand-dark bg-white shadow-solid transition-[transform] duration-200 hover:-translate-y-1 motion-reduce:transition-none"
+                  className="group cursor-pointer border-2 border-border bg-background shadow-solid transition-[transform] duration-200 hover:-translate-y-1 motion-reduce:transition-none"
                 >
-                  <div className="relative flex h-48 items-center justify-center overflow-hidden border-b-2 border-brand-dark bg-gray-100">
-                    <div className="h-3/4 w-3/4 rounded border-2 border-gray-200 bg-white shadow-sm transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none" />
+                  <div className="relative flex h-48 items-center justify-center overflow-hidden border-b-2 border-border bg-muted">
+                    <div className="h-3/4 w-3/4 rounded border-2 border-border bg-background shadow-sm transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none" />
                     <div className="absolute inset-0 bg-brand-primary/0 transition-colors duration-200 group-hover:bg-brand-primary/10 motion-reduce:transition-none" />
                   </div>
                   <div className="p-6">
                     <div className="mb-3 flex items-start justify-between gap-4">
                       <h3 className="font-heading text-xl font-bold">{idea.title}</h3>
                       <ArrowRight
-                        className="text-brand-dark transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
+                        className="text-foreground transition-transform duration-200 group-hover:translate-x-1 motion-reduce:transition-none"
                         aria-hidden="true"
                       />
                     </div>
-                    <p className="mb-4 line-clamp-2 font-mono text-xs text-gray-500">{idea.description}</p>
-                    <span className="inline-block border border-brand-dark/20 bg-brand-accent/20 px-2 py-1 text-xs font-bold uppercase text-brand-dark">
+                    <p className="mb-4 line-clamp-2 font-mono text-xs text-muted-foreground">{idea.description}</p>
+                    <span className="inline-block border border-foreground/20 bg-brand-accent/20 px-2 py-1 text-xs font-bold uppercase text-foreground">
                       已交付
                     </span>
                   </div>
@@ -178,9 +178,9 @@ export default async function Home() {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border-2 border-dashed border-gray-300 bg-white p-12 text-center shadow-solid-sm">
-              <h3 className="font-heading text-2xl font-bold text-brand-dark">暂无已交付案例</h3>
-              <p className="mt-2 text-pretty text-gray-600">成为第一个提交需求的人。</p>
+            <div className="rounded-xl border-2 border-dashed border-border bg-background p-12 text-center shadow-solid-sm">
+              <h3 className="font-heading text-2xl font-bold text-foreground">暂无已交付案例</h3>
+              <p className="mt-2 text-pretty text-muted-foreground">成为第一个提交需求的人。</p>
               <div className="mt-8">
                 <Button asChild size="lg">
                   <Link href="/submit">加入等待名单</Link>
@@ -191,10 +191,10 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="border-t-4 border-brand-dark bg-white py-24">
+      <section className="border-t-4 border-border bg-background py-24">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="mb-8 font-heading text-5xl font-bold">服务正在筹备中</h2>
-          <p className="mb-10 text-xl text-gray-600">为了呈现最完美的交付体验，我们正在打磨最后的细节。</p>
+          <p className="mb-10 text-xl text-muted-foreground">为了呈现最完美的交付体验，我们正在打磨最后的细节。</p>
           <Button
             asChild
             size="lg"

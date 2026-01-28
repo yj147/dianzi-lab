@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { AlertTriangle, BarChart3, Eye, Lightbulb, Palette, RotateCcw } from "lucide-react";
-import { submitIdeaSchema, SubmitIdeaInput, TAGS } from "./schema";
+import { submitIdeaSchema, SubmitIdeaInput, TAGS, BUDGET_RANGES } from "./schema";
 import { useToast } from "@/components/ui/use-toast";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -47,6 +47,8 @@ export default function SubmitForm() {
     defaultValues: {
       title: "",
       description: "",
+      budgetRange: undefined,
+      contact: "",
       tags: [],
     },
   });
@@ -92,15 +94,11 @@ export default function SubmitForm() {
       }
 
       const assessmentInput: AssessmentInput = {
-        targetUser: 0,
-        channel: 0,
-        market: 0,
+        clarity: 0,
         tech: 0,
         budget: 0,
-        businessModel: 0,
-        team: 0,
-        risk: 0,
-        traffic: 0,
+        urgency: 0,
+        value: 0,
       };
       for (const score of data.scores) {
         if (score.key in assessmentInput) {
@@ -321,6 +319,51 @@ export default function SubmitForm() {
               </div>
 
               <div>
+                <label htmlFor="budgetRange" className="mb-2 block font-heading text-lg font-bold text-brand-dark">
+                  预算范围 <span className="text-brand-accent">*</span>
+                </label>
+                <select
+                  {...register("budgetRange")}
+                  id="budgetRange"
+                  aria-invalid={!!errors.budgetRange}
+                  aria-describedby={errors.budgetRange ? "budgetRange-error" : undefined}
+                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                >
+                  <option value="">请选择预算范围</option>
+                  {BUDGET_RANGES.map((range) => (
+                    <option key={range} value={range}>
+                      {range}
+                    </option>
+                  ))}
+                </select>
+                {errors.budgetRange ? (
+                  <p id="budgetRange-error" className="mt-1 text-sm font-medium text-red-600">
+                    {errors.budgetRange.message}
+                  </p>
+                ) : null}
+              </div>
+
+              <div>
+                <label htmlFor="contact" className="mb-2 block font-heading text-lg font-bold text-brand-dark">
+                  联系方式 <span className="text-brand-accent">*</span>
+                </label>
+                <input
+                  {...register("contact")}
+                  id="contact"
+                  type="text"
+                  placeholder="微信号或手机号"
+                  aria-invalid={!!errors.contact}
+                  aria-describedby={errors.contact ? "contact-error" : undefined}
+                  className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-3 text-lg font-medium text-brand-dark transition-colors focus:border-brand-primary focus:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 motion-reduce:transition-none"
+                />
+                {errors.contact ? (
+                  <p id="contact-error" className="mt-1 text-sm font-medium text-red-600">
+                    {errors.contact.message}
+                  </p>
+                ) : null}
+              </div>
+
+              <div>
                 <label className="mb-2 block font-heading text-lg font-bold text-brand-dark">标签</label>
                 <div className="relative">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
@@ -385,7 +428,7 @@ export default function SubmitForm() {
             <div className="mb-6 flex items-start justify-between gap-6">
               <div>
                 <h1 className="font-heading text-2xl font-bold text-brand-dark">创意评估</h1>
-                <p className="mt-1 text-sm text-gray-600">对「{ideaData?.title}」进行 9 维度打分</p>
+                <p className="mt-1 text-sm text-gray-600">对「{ideaData?.title}」进行 5 维度打分</p>
               </div>
               <BarChart3 size={24} className="text-brand-primary" aria-hidden="true" />
             </div>
@@ -405,7 +448,7 @@ export default function SubmitForm() {
           <>
             <div className="mb-6 text-center">
               <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark">{ideaData?.title}</h1>
-              <p className="mt-2 text-sm text-gray-600">创业项目评估结果</p>
+              <p className="mt-2 text-sm text-gray-600">项目可行性评估结果</p>
             </div>
 
             {!result.submitted ? (

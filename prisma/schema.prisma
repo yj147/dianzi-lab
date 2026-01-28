@@ -28,6 +28,8 @@ model Idea {
   id          String      @id @default(cuid())
   title       String      @db.VarChar(50)
   description String      @db.VarChar(1000)
+  budgetRange String      @db.VarChar(20)
+  contact     String      @db.VarChar(50)
   status      IdeaStatus  @default(PENDING)
   tags        String[]
   userId      String
@@ -51,15 +53,11 @@ enum IdeaStatus {
 model Assessment {
   id            String   @id @default(cuid())
   userId        String
-  targetUser    Int      @db.SmallInt
-  channel       Int      @db.SmallInt
-  market        Int      @db.SmallInt
+  clarity       Int      @db.SmallInt
   tech          Int      @db.SmallInt
   budget        Int      @db.SmallInt
-  businessModel Int      @db.SmallInt
-  team          Int      @db.SmallInt
-  risk          Int      @db.SmallInt
-  traffic       Int      @db.SmallInt
+  urgency       Int      @db.SmallInt
+  value         Int      @db.SmallInt
   finalScore    Int      @db.SmallInt
   feedback      String[]
   createdAt     DateTime @default(now())
