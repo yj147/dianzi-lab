@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Monitor, Moon, Sun } from 'lucide-react'
+import { Moon, Sun } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -65,18 +65,20 @@ export default function ThemeToggle({ className }: { className?: string }) {
   }
 
   const labels: Record<ThemeMode, string> = {
-    light: '亮色模式（点击切换暗色）',
-    dark: '暗色模式（点击切换跟随系统）',
-    system: '跟随系统（点击切换亮色）',
+    light: '切换主题',
+    dark: '切换主题',
+    system: '切换主题',
   }
   const label = mode ? labels[mode] : '切换主题'
-  const Icon = mode === 'light' ? Sun : mode === 'dark' ? Moon : Monitor
+  const resolvedMode = mode ?? 'system'
+  const isDark = resolvedMode === 'dark' || (resolvedMode === 'system' && getSystemDark())
+  const Icon = isDark ? Moon : Sun
 
   return (
     <button
       type="button"
       aria-label={label}
-      title={label}
+      title={undefined}
       onClick={handleToggle}
       className={cn(
         'inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-200 hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',
