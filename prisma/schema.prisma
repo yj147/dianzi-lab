@@ -17,6 +17,8 @@ model User {
   createdAt DateTime @default(now())
   ideas     Idea[]
   assessments Assessment[]
+  sentMessages     Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
 }
 
 enum Role {
@@ -36,6 +38,7 @@ model Idea {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   assessment  Assessment?
+  messages    Message[]
 
   @@index([userId])
   @@index([status])
@@ -46,6 +49,24 @@ enum IdeaStatus {
   APPROVED
   IN_PROGRESS
   COMPLETED
+}
+
+model Message {
+  id         String   @id @default(cuid())
+  content    String   @db.VarChar(1000)
+  senderId   String
+  receiverId String
+  ideaId     String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  sender   User @relation("SentMessages", fields: [senderId], references: [id])
+  receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  idea     Idea @relation(fields: [ideaId], references: [id])
+
+  @@index([receiverId])
+  @@index([ideaId])
+  @@index([senderId])
 }
 
 model Assessment {
