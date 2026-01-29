@@ -47,13 +47,14 @@ function getStoredMode(): ThemeMode {
 
 export default function ThemeToggle({ className }: { className?: string }) {
   const [mode, setMode] = React.useState<ThemeMode | null>(null)
-  const [, bumpSunTimesRevision] = React.useState(0)
+  const [isDarkTime, setIsDarkTime] = React.useState<boolean | null>(null)
 
   React.useEffect(() => {
     let cancelled = false
 
     const stored = getStoredMode()
     setMode(stored)
+    setIsDarkTime(isDarkTimeSync())
 
     if (stored === 'auto' && !getCachedSunTimes()) {
       requestLocationAndCacheSunTimes().then((success) => {
@@ -61,7 +62,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
         if (cancelled) return
         if (getStoredMode() !== 'auto') return
         applyTheme('auto')
-        bumpSunTimesRevision((value) => value + 1)
+        setIsDarkTime(isDarkTimeSync())
       })
     }
 
@@ -71,7 +72,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
   }, [])
 
   const currentMode = mode ?? 'auto'
-  const autoIsDarkTime = isDarkTimeSync()
+  const autoIsDarkTime = isDarkTime ?? false
 
   const handleToggle = () => {
     if (currentMode === 'auto') {
@@ -83,7 +84,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
       // 从固定主题切换回 auto
       applyTheme('auto')
       setMode('auto')
-      bumpSunTimesRevision((value) => value + 1)
+      setIsDarkTime(isDarkTimeSync())
     }
   }
 
