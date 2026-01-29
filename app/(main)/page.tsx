@@ -245,17 +245,17 @@ export default async function Home() {
       <section className="border-t-2 border-border bg-surface py-24">
         <div className="container mx-auto max-w-3xl px-4 text-center">
           <h2 className="mb-8 font-heading text-5xl font-bold">
-            服务正在筹备中
+            准备好构建了吗？
           </h2>
           <p className="mb-10 text-xl text-muted-foreground">
-            为了呈现最完美的交付体验，我们正在打磨最后的细节。
+            从一个想法开始，让我们帮你变成现实。
           </p>
           <Button
             asChild
             size="lg"
             className="h-20 w-full px-12 text-2xl shadow-solid-lg hover:shadow-solid md:w-auto"
           >
-            <Link href="/submit">预约首批名额</Link>
+            <Link href="/submit">提交你的想法</Link>
           </Button>
         </div>
       </section>

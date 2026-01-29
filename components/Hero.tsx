@@ -44,7 +44,7 @@ export default function Hero() {
           <div className="animate-fade-in-left motion-reduce:animate-none">
             <div className="mb-8 inline-flex items-center gap-2 bg-foreground px-4 py-1.5 font-mono text-sm font-bold text-background shadow-solid-sm dark:border dark:border-border dark:bg-muted dark:text-foreground">
               <PulseDot className="bg-yellow-400" paused={!shouldAnimate} />
-              筹备中 // COMING SOON
+              开放提交 // NOW OPEN
             </div>
 
             <h1 className="mb-8 font-heading text-6xl font-bold leading-[0.95] tracking-tight text-foreground md:text-7xl">
