@@ -123,7 +123,7 @@ export default async function Home() {
                 ].map((item) => (
                   <div
                     key={item.step}
-                    className="group flex flex-col items-center gap-6 border-2 border-white/20 bg-brand-dark p-6 transition-colors duration-200 hover:border-brand-accent motion-reduce:transition-none md:flex-row"
+                    className="group flex flex-col items-center gap-6 border-2 border-white/20 bg-muted p-6 transition-colors duration-200 hover:border-brand-accent motion-reduce:transition-none md:flex-row"
                   >
                     <div className="font-mono text-3xl font-bold text-brand-accent opacity-50 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none">
                       {item.step}
