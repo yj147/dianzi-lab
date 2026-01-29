@@ -1,7 +1,13 @@
 'use client'
 
 import type { IdeaStatus } from '@prisma/client'
-import { Beaker, CheckCircle2, Clock, Rocket, type LucideIcon } from 'lucide-react'
+import {
+  Beaker,
+  CheckCircle2,
+  Clock,
+  Rocket,
+  type LucideIcon,
+} from 'lucide-react'
 import { STATUS_CONFIG } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 

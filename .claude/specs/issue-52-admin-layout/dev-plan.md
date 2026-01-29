@@ -1,11 +1,13 @@
 # Admin Layout & Navigation Optimization - Development Plan
 
 ## Overview
+
 Optimize the admin dashboard layout by adding a desktop header with breadcrumb navigation and enhancing the sidebar with branding elements, while maintaining responsive design across breakpoints.
 
 ## Task Breakdown
 
 ### Task 1: Desktop Header Implementation
+
 - **ID**: task-1
 - **type**: ui
 - **Description**: Create a desktop-only header component for the admin layout featuring a breadcrumb navigation that displays the current page name in Chinese, admin email display, and a logout button with proper focus states. The header should use glass morphism effect (bg-white/80 backdrop-blur-md) and support dark mode.
@@ -25,6 +27,7 @@ Optimize the admin dashboard layout by adding a desktop header with breadcrumb n
   - Dark mode classes are applied correctly
 
 ### Task 2: Sidebar Bottom Enhancement
+
 - **ID**: task-2
 - **type**: ui
 - **Description**: Enhance the admin sidebar by adding a "© 2026 点子 Lab" copyright notice at the bottom, hiding the account/logout section on desktop (md:hidden - since desktop header handles this), and adding focus:ring-2 focus:ring-blue-500 to the logout button for improved accessibility.
@@ -43,6 +46,7 @@ Optimize the admin dashboard layout by adding a desktop header with breadcrumb n
   - Dark mode styles are applied to copyright text
 
 ### Task 3: Unit Tests Update
+
 - **ID**: task-3
 - **type**: default
 - **Description**: Update the admin layout test suite to validate the new desktop header and sidebar enhancements. Use semantic queries (getByRole, getByLabelText, getByText) to ensure accessibility compliance. Tests should cover both mobile and desktop breakpoints.
@@ -64,6 +68,7 @@ Optimize the admin dashboard layout by adding a desktop header with breadcrumb n
   - Dark mode variants are applied correctly
 
 ## Acceptance Criteria
+
 - [ ] Desktop header displays at md+ breakpoint with glass morphism effect (bg-white/80 backdrop-blur-md)
 - [ ] Breadcrumb navigation shows Chinese page names for all admin routes
 - [ ] Admin email is visible in desktop header
@@ -77,6 +82,7 @@ Optimize the admin dashboard layout by adding a desktop header with breadcrumb n
 - [ ] npm run build completes successfully
 
 ## Technical Notes
+
 - **Responsive Design**: Use Tailwind's `hidden md:flex` pattern to toggle header visibility; use `md:hidden` to hide mobile-specific sidebar sections on desktop
 - **Breadcrumb Mapping**: Implement a simple pathname-to-label mapping object for Chinese route names; avoid over-engineering with complex routing libraries
 - **Reuse Existing Patterns**:

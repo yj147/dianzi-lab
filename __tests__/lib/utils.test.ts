@@ -5,4 +5,3 @@ describe('lib/utils', () => {
     expect(noop()).toBeUndefined()
   })
 })
-

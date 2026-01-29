@@ -2,7 +2,11 @@
  * @jest-environment node
  */
 
-import { buildTemplate, getNestedA, getNestedAOrDefault } from '@/lib/nested-access'
+import {
+  buildTemplate,
+  getNestedA,
+  getNestedAOrDefault,
+} from '@/lib/nested-access'
 
 describe('lib/nested-access', () => {
   it('buildTemplate: 生成字符串模板', () => {

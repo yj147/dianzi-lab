@@ -1,11 +1,11 @@
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
-import RouteTransition from "@/components/RouteTransition";
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
+import RouteTransition from '@/components/RouteTransition'
 
 export default function MainLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <div className="relative min-h-dvh overflow-x-hidden bg-brand-bg font-sans text-brand-dark">
@@ -18,5 +18,5 @@ export default function MainLayout({
         <Footer />
       </div>
     </div>
-  );
+  )
 }

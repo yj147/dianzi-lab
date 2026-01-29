@@ -1,64 +1,64 @@
-"use client";
+'use client'
 
-import { useState, useCallback } from "react";
-import { toast } from "@/components/ui/use-toast";
-import { ValidatorForm, ResultPanel, RadarChart } from "@/components/validator";
+import { useState, useCallback } from 'react'
+import { toast } from '@/components/ui/use-toast'
+import { ValidatorForm, ResultPanel, RadarChart } from '@/components/validator'
 import type {
   ValidatorFormData,
   ValidationResult,
   DimensionScore,
-} from "@/components/validator";
-import { submitAssessment } from "@/lib/validator-actions";
-import type { AssessmentInput } from "@/lib/validator";
+} from '@/components/validator'
+import { submitAssessment } from '@/lib/validator-actions'
+import type { AssessmentInput } from '@/lib/validator'
 
-type View = "form" | "result";
+type View = 'form' | 'result'
 
 function formDataToInput(data: ValidatorFormData): AssessmentInput {
-  const input: Record<string, number> = {};
+  const input: Record<string, number> = {}
   for (const { key, value } of data.scores) {
-    input[key] = value;
+    input[key] = value
   }
-  return input as AssessmentInput;
+  return input as AssessmentInput
 }
 
 export default function ValidatorClient() {
-  const [view, setView] = useState<View>("form");
-  const [result, setResult] = useState<ValidationResult | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [lastScores, setLastScores] = useState<DimensionScore[]>([]);
+  const [view, setView] = useState<View>('form')
+  const [result, setResult] = useState<ValidationResult | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [lastScores, setLastScores] = useState<DimensionScore[]>([])
 
   const handleSubmit = useCallback(async (data: ValidatorFormData) => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      const input = formDataToInput(data);
-      const res = await submitAssessment(input);
+      const input = formDataToInput(data)
+      const res = await submitAssessment(input)
 
       if (!res.success) {
-        toast({ variant: "destructive", description: res.error });
-        return;
+        toast({ variant: 'destructive', description: res.error })
+        return
       }
 
-      setLastScores(data.scores);
+      setLastScores(data.scores)
       setResult({
         overallScore: res.finalScore,
         feedback: res.feedback.map((msg) => ({
-          type: "warning" as const,
+          type: 'warning' as const,
           message: msg,
         })),
         scores: data.scores,
-      });
-      setView("result");
+      })
+      setView('result')
     } catch {
-      toast({ variant: "destructive", description: "提交失败，请重试" });
+      toast({ variant: 'destructive', description: '提交失败，请重试' })
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  }, []);
+  }, [])
 
   const handleReset = useCallback(() => {
-    setView("form");
-    setResult(null);
-  }, []);
+    setView('form')
+    setResult(null)
+  }, [])
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -72,7 +72,7 @@ export default function ValidatorClient() {
       </header>
 
       <div key={view} className="animate-fade-in-up motion-reduce:animate-none">
-        {view === "form" ? (
+        {view === 'form' ? (
           <ValidatorForm
             onSubmit={handleSubmit}
             initialValues={lastScores.length > 0 ? lastScores : undefined}
@@ -81,16 +81,20 @@ export default function ValidatorClient() {
         ) : (
           <div className="grid gap-6 lg:grid-cols-2">
             <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
-              <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
+              <h2 className="font-heading text-lg font-bold text-brand-dark">
+                维度分析
+              </h2>
               <RadarChart scores={result?.scores ?? []} className="mt-4" />
             </section>
             <section>
-              <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
+              <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">
+                评估结果
+              </h2>
               <ResultPanel result={result} onReset={handleReset} />
             </section>
           </div>
         )}
       </div>
     </div>
-  );
+  )
 }

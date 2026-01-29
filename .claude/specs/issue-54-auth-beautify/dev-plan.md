@@ -1,11 +1,13 @@
 # 登录/注册页面美化 - Development Plan
 
 ## Overview
+
 为登录和注册页面添加背景装饰球体、增强毛玻璃效果并引入加载状态 spinner，提升整体视觉体验。
 
 ## Task Breakdown
 
 ### Task 1: 添加背景装饰球体
+
 - **ID**: task-1
 - **type**: ui
 - **Description**: 复用 `app/(main)/submit/page.tsx` 的装饰球体结构，将相同的背景装饰元素添加到登录和注册页面，保持视觉一致性
@@ -20,6 +22,7 @@
   - 检查无 a11y 警告
 
 ### Task 2: 增强毛玻璃卡片并添加 Spinner
+
 - **ID**: task-2
 - **type**: ui
 - **Description**:
@@ -37,6 +40,7 @@
   - 验证 motion-reduce 和 aria-busy 属性存在
 
 ### Task 3: 更新测试覆盖
+
 - **ID**: task-3
 - **type**: default
 - **Description**: 更新登录页面测试用例，覆盖新增的 spinner 显示逻辑和加载状态，确保测试完整性
@@ -52,6 +56,7 @@
   - 确保代码覆盖率 ≥90%
 
 ## Acceptance Criteria
+
 - [ ] 登录和注册页面背景添加装饰球体，与 Submit 页面风格一致
 - [ ] 表单卡片应用增强的毛玻璃效果（backdrop-blur-xl、bg-white/20、shadow-2xl、ring-1）
 - [ ] 提交按钮在 loading 状态下显示 Loader2 spinner 并禁用交互
@@ -62,6 +67,7 @@
 - [ ] `npm run build` 成功
 
 ## Technical Notes
+
 - **不新增通用组件**：所有修改仅在 page.tsx 和对应的 Form.tsx 文件内完成，避免过度抽象
 - **装饰球体实现参考**：严格按照 `app/(main)/submit/page.tsx:6` 的结构复用，包括绝对定位、渐变色、模糊和动画
 - **毛玻璃最佳实践**：

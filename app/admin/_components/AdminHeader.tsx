@@ -37,7 +37,9 @@ export default function AdminHeader({
   return (
     <div className="mb-8 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
       <div>
-        <h1 className="mb-2 font-heading text-3xl font-bold text-brand-dark md:text-4xl">主控制台</h1>
+        <h1 className="mb-2 font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+          主控制台
+        </h1>
         <p className="text-lg text-muted-foreground">{description}</p>
       </div>
 
@@ -56,13 +58,15 @@ export default function AdminHeader({
               key={tab.key}
               href={tab.href}
               className={cn(
-                'rounded-md px-4 py-2 text-sm font-bold transition-all',
-                active ? 'bg-brand-dark text-background' : 'text-muted-foreground hover:bg-muted'
+                'rounded-md px-4 py-2 text-sm font-bold transition-colors',
+                active
+                  ? 'bg-brand-dark text-background dark:bg-primary dark:text-primary-foreground'
+                  : 'text-muted-foreground hover:bg-muted'
               )}
             >
               {tab.label}
               {showTrashCount ? (
-                <span className="ml-2 rounded bg-red-100 px-1.5 text-xs text-red-600">
+                <span className="ml-2 rounded bg-destructive/10 px-1.5 text-xs text-destructive">
                   {trashCount}
                 </span>
               ) : null}

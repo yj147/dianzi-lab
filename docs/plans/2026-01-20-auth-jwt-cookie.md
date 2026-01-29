@@ -13,6 +13,7 @@
 ### Task 1: 引入 jose 依赖
 
 **Files:**
+
 - Modify: `package.json`
 - Modify: `package-lock.json`
 
@@ -26,11 +27,13 @@ Expected: `added 1 package`，`package.json` 出现 `jose`
 ### Task 2: 为 auth/users 写失败测试（RED）
 
 **Files:**
+
 - Create: `__tests__/lib/auth.test.ts`
 
 **Step 1: 写失败用例（JWT / cookie / getSession / getUserByEmail）**
 
 覆盖：
+
 - sign/verify：有效 token 返回 payload；过期/篡改 token 失败
 - cookie：set/clear 的属性正确（httpOnly/sameSite/path/secure）
 - getSession：cookie 缺失/无效返回 null；有效返回 payload
@@ -46,6 +49,7 @@ Expected: FAIL（缺少 `lib/auth.ts` / 缺少 `getUserByEmail` 或断言不满�
 ### Task 3: 实现最小功能（GREEN）
 
 **Files:**
+
 - Create: `lib/auth.ts`
 - Modify: `lib/users.ts`
 - Modify: `.env.example`
@@ -53,6 +57,7 @@ Expected: FAIL（缺少 `lib/auth.ts` / 缺少 `getUserByEmail` 或断言不满�
 **Step 1: 实现 lib/auth.ts**
 
 要求：
+
 - `signJWT({ sub, email, role })` → HS256, `exp=7d`
 - `verifyJWT(token)` → 校验签名与 exp，返回 payload（包含 `sub/email/role/exp`）
 - `setSessionCookie(token)` → `session` httpOnly + sameSite=lax + path=/ + secure=prod only
@@ -62,6 +67,7 @@ Expected: FAIL（缺少 `lib/auth.ts` / 缺少 `getUserByEmail` 或断言不满�
 **Step 2: 实现 lib/users.ts 的 getUserByEmail(email)**
 
 要求：
+
 - 归一化 `email.trim().toLowerCase()`
 - `prisma.user.findUnique({ where: { email } })`
 
@@ -77,4 +83,3 @@ Expected: FAIL（缺少 `lib/auth.ts` / 缺少 `getUserByEmail` 或断言不满�
 
 Run: `npm test -- __tests__/lib/auth.test.ts --coverage`
 Expected: PASS；coverage ≥ 90%
-

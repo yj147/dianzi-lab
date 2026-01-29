@@ -29,7 +29,9 @@ const floatSlowAnimation = {
 
 export default function Hero() {
   const reducedMotion = useReducedMotion()
-  const { ref: sectionRef, inView } = useInView<HTMLElement>({ rootMargin: '200px 0px' })
+  const { ref: sectionRef, inView } = useInView<HTMLElement>({
+    rootMargin: '200px 0px',
+  })
   const shouldAnimate = !reducedMotion && inView
 
   return (
@@ -40,14 +42,17 @@ export default function Hero() {
       <div className="container mx-auto max-w-7xl px-4">
         <div className="grid items-center gap-16 lg:grid-cols-2">
           <div className="animate-fade-in-left motion-reduce:animate-none">
-            <div className="mb-8 inline-flex items-center gap-2 bg-foreground px-4 py-1.5 font-mono text-sm font-bold text-background shadow-solid-sm">
+            <div className="mb-8 inline-flex items-center gap-2 bg-foreground px-4 py-1.5 font-mono text-sm font-bold text-background shadow-solid-sm dark:border dark:border-border dark:bg-muted dark:text-foreground">
               <PulseDot className="bg-yellow-400" paused={!shouldAnimate} />
               筹备中 // COMING SOON
             </div>
 
             <h1 className="mb-8 font-heading text-6xl font-bold leading-[0.95] tracking-tight text-foreground md:text-7xl">
               您的专属 <br />
-              <span className="bg-brand-accent/20 px-2 text-brand-primary lg:-ml-2">技术合伙人</span> <br />
+              <span className="bg-brand-accent/20 px-2 text-primary lg:-ml-2">
+                技术合伙人
+              </span>{' '}
+              <br />
               (As A Service)
             </h1>
 
@@ -88,30 +93,40 @@ export default function Hero() {
               <div className="rotate-2">
                 <div className="w-80 border-4 border-foreground bg-surface p-8 shadow-solid-lg dark:border-border">
                   <div className="mb-6 flex items-center justify-between border-b-4 border-foreground pb-4 dark:border-border">
-                    <span className="font-heading text-2xl font-bold text-foreground">技术服务协议</span>
+                    <span className="font-heading text-2xl font-bold text-foreground">
+                      技术服务协议
+                    </span>
                   </div>
 
                   <div className="space-y-4 font-mono text-sm">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">甲方:</span>
-                      <span className="bg-brand-accent px-1 font-bold text-foreground dark:text-background">您</span>
+                      <span className="bg-brand-accent px-1 font-bold text-foreground dark:text-background">
+                        您
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">乙方:</span>
-                      <span className="font-bold text-foreground">Bambi Lab Idea</span>
+                      <span className="font-bold text-foreground">
+                        Bambi Lab Idea
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">交付物:</span>
-                      <span className="font-bold text-foreground">MVP v1.0</span>
+                      <span className="font-bold text-foreground">
+                        MVP v1.0
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">知识产权:</span>
-                      <span className="font-bold text-foreground">100% 归您所有</span>
+                      <span className="font-bold text-foreground">
+                        100% 归您所有
+                      </span>
                     </div>
                   </div>
 
                   <div className="mt-8 border-t-2 border-dashed border-border pt-4">
-                    <div className="-rotate-6 font-heading text-3xl font-bold text-brand-primary opacity-80">
+                    <div className="-rotate-6 font-heading text-3xl font-bold text-primary opacity-80">
                       协议已签署
                     </div>
                   </div>
@@ -125,8 +140,14 @@ export default function Hero() {
             >
               <div className="-rotate-3">
                 <div className="w-64 border-4 border-foreground bg-brand-primary p-6 text-white shadow-solid dark:border-border">
-                  <HardHat size={48} className="mb-4 text-brand-accent" aria-hidden="true" />
-                  <div className="mb-2 font-heading text-2xl font-bold leading-none">脏活累活我们干</div>
+                  <HardHat
+                    size={48}
+                    className="mb-4 text-brand-accent"
+                    aria-hidden="true"
+                  />
+                  <div className="mb-2 font-heading text-2xl font-bold leading-none">
+                    脏活累活我们干
+                  </div>
                   <p className="font-mono text-xs opacity-80">
                     我们处理架构、安全、部署和扩展性问题，您只需专注于业务增长。
                   </p>

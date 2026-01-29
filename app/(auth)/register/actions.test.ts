@@ -101,7 +101,7 @@ describe('registerUser', () => {
         email: 'bad',
         password: '123456',
         confirmPassword: '123456',
-      }),
+      })
     )
 
     expect(result).toEqual({
@@ -142,8 +142,8 @@ describe('registerUser', () => {
           email: 'TeSt@Example.Com',
           password: '123456',
           confirmPassword: '123456',
-        }),
-      ),
+        })
+      )
     ).rejects.toThrow('NEXT_REDIRECT')
 
     expect(bcryptHashMock).toHaveBeenCalledWith('123456', 10)
@@ -165,7 +165,7 @@ describe('registerUser', () => {
         email: 'test@example.com',
         password: '123456',
         confirmPassword: '123456',
-      }),
+      })
     )
 
     expect(result).toEqual({
@@ -187,8 +187,8 @@ describe('registerUser', () => {
           email: 'test@example.com',
           password: '123456',
           confirmPassword: '123456',
-        }),
-      ),
+        })
+      )
     ).rejects.toThrow('db down')
 
     expect(bcryptHashMock).toHaveBeenCalledWith('123456', 10)
@@ -204,8 +204,8 @@ describe('registerUser', () => {
           email: 'test@example.com',
           password: '123456',
           confirmPassword: '123456',
-        }),
-      ),
+        })
+      )
     ).rejects.toBeNull()
 
     expect(bcryptHashMock).toHaveBeenCalledWith('123456', 10)

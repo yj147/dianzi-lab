@@ -1,13 +1,17 @@
 const crypto = require('node:crypto')
 const path = require('node:path')
 const { createInstrumenter } = require('istanbul-lib-instrument')
-const { createTransformer: createNextSwcTransformer } = require('next/dist/build/swc/jest-transformer')
+const {
+  createTransformer: createNextSwcTransformer,
+} = require('next/dist/build/swc/jest-transformer')
 
 const TRANSFORMER_VERSION = '2'
 
 function getJestConfig(jestOptions) {
   if (!jestOptions) return {}
-  return jestOptions.config && typeof jestOptions.config === 'object' ? jestOptions.config : jestOptions
+  return jestOptions.config && typeof jestOptions.config === 'object'
+    ? jestOptions.config
+    : jestOptions
 }
 
 function createTransformer(inputOptions = {}) {
@@ -34,7 +38,12 @@ function createTransformer(inputOptions = {}) {
         .digest('hex')
     },
     process(src, filename, jestOptions, transformOptions) {
-      const result = nextTransformer.process(src, filename, jestOptions, transformOptions)
+      const result = nextTransformer.process(
+        src,
+        filename,
+        jestOptions,
+        transformOptions
+      )
       if (!result) return result
 
       const code = typeof result === 'string' ? result : result.code
@@ -42,7 +51,9 @@ function createTransformer(inputOptions = {}) {
 
       const config = getJestConfig(jestOptions)
       const rootDir = (config && config.rootDir) || process.cwd()
-      const relativeFilename = path.isAbsolute(filename) ? path.relative(rootDir, filename) : filename
+      const relativeFilename = path.isAbsolute(filename)
+        ? path.relative(rootDir, filename)
+        : filename
       const coverageFilename = relativeFilename.split(path.sep).join('/')
 
       return { code: instrumenter.instrumentSync(code, coverageFilename) }

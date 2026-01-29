@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
-import { Sparkles } from 'lucide-react';
+import { ReactNode } from 'react'
+import { Sparkles } from 'lucide-react'
 
 interface EmptyStateProps {
-  icon?: ReactNode;
-  message: string;
-  action?: ReactNode;
+  icon?: ReactNode
+  message: string
+  action?: ReactNode
 }
 
 export default function EmptyState({ icon, message, action }: EmptyStateProps) {
@@ -16,5 +16,5 @@ export default function EmptyState({ icon, message, action }: EmptyStateProps) {
       <p className="text-muted-foreground">{message}</p>
       {action && <div className="mt-6">{action}</div>}
     </div>
-  );
+  )
 }

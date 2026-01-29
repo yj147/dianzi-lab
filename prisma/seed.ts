@@ -16,12 +16,12 @@ async function main() {
   if (isHardenedDeployment) {
     if (!adminEmailRaw || !adminPasswordRaw) {
       throw new Error(
-        'Missing SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD. Refusing to seed admin in hardened deployments.',
+        'Missing SEED_ADMIN_EMAIL/SEED_ADMIN_PASSWORD. Refusing to seed admin in hardened deployments.'
       )
     }
     if (adminPasswordRaw === 'admin123') {
       throw new Error(
-        'Refusing to seed admin with default password "admin123" in hardened deployments.',
+        'Refusing to seed admin with default password "admin123" in hardened deployments.'
       )
     }
   }

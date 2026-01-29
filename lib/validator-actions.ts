@@ -10,7 +10,12 @@ import {
 } from './validator'
 
 export type SubmitAssessmentResult =
-  | { success: true; assessmentId: string; finalScore: number; feedback: string[] }
+  | {
+      success: true
+      assessmentId: string
+      finalScore: number
+      feedback: string[]
+    }
   | { success: false; error: string; field?: string }
 
 export async function submitAssessment(
@@ -27,7 +32,10 @@ export async function submitAssessment(
     return {
       success: false,
       error: firstError.message,
-      field: firstError.path[0] === undefined ? undefined : String(firstError.path[0]),
+      field:
+        firstError.path[0] === undefined
+          ? undefined
+          : String(firstError.path[0]),
     }
   }
 
