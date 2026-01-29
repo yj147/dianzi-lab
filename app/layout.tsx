@@ -30,21 +30,58 @@ export const metadata: Metadata = {
 }
 
 const themeInitScript = `
-(() => {
-  try {
-    const storageKey = 'theme';
-    const classNameDark = 'dark';
-    const root = document.documentElement;
+	(() => {
+	  try {
+	    const storageKey = 'theme';
+	    const classNameDark = 'dark';
+	    const root = document.documentElement;
+	    const SUN_TIMES_CACHE_KEY = 'sun_times';
+	    const CACHE_DURATION = 24 * 60 * 60 * 1000;
+	
+	    function getCachedSunTimes() {
+	      try {
+	        const cached = localStorage.getItem(SUN_TIMES_CACHE_KEY);
+	        if (!cached) return null;
+	        const data = JSON.parse(cached);
+	        const now = Date.now();
+	        const today = new Date().toLocaleDateString('en-CA');
+	        if (
+	          typeof data.sunriseMs !== 'number' ||
+	          typeof data.sunsetMs !== 'number' ||
+	          typeof data.timestamp !== 'number' ||
+	          typeof data.date !== 'string' ||
+	          isNaN(data.sunriseMs) ||
+	          isNaN(data.sunsetMs) ||
+	          !Number.isFinite(data.timestamp) ||
+	          now - data.timestamp > CACHE_DURATION ||
+	          data.date !== today
+	        ) {
+	          localStorage.removeItem(SUN_TIMES_CACHE_KEY);
+	          return null;
+	        }
+	        return data;
+	      } catch {
+	        return null;
+	      }
+	    }
+
+    function isDarkTime() {
+      const cached = getCachedSunTimes();
+      if (!cached) {
+        const hour = new Date().getHours();
+        return hour < 6 || hour >= 18;
+      }
+      const now = Date.now();
+      return now < cached.sunriseMs || now >= cached.sunsetMs;
+    }
 
     let stored = localStorage.getItem(storageKey);
-    // 归一化旧值（如 'system'）为 'auto'
     if (stored && stored !== 'light' && stored !== 'dark' && stored !== 'auto') {
       stored = 'auto';
       localStorage.setItem(storageKey, stored);
     }
-    const hour = new Date().getHours();
-    const timeBasedDark = hour < 6 || hour >= 18;
-    const isDark = stored === 'dark' || (stored === 'auto' && timeBasedDark) || (!stored && timeBasedDark);
+
+    const isDark = stored === 'dark' || (stored === 'auto' && isDarkTime()) || (!stored && isDarkTime());
 
     root.classList.toggle(classNameDark, isDark);
     root.style.colorScheme = isDark ? 'dark' : 'light';

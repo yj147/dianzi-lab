@@ -4,6 +4,11 @@ import * as React from 'react'
 import { Moon, Sun } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import {
+  getCachedSunTimes,
+  isDarkTimeSync,
+  requestLocationAndCacheSunTimes,
+} from '@/lib/sun-times'
 
 const STORAGE_KEY = 'theme'
 const DARK_CLASS = 'dark'
@@ -14,16 +19,11 @@ function getRoot(): HTMLElement | null {
   return typeof document === 'undefined' ? null : document.documentElement
 }
 
-function getTimeBasedDark(): boolean {
-  const hour = new Date().getHours()
-  return hour < 6 || hour >= 18
-}
-
 function applyTheme(mode: ThemeMode) {
   const root = getRoot()
   if (!root) return
 
-  const isDark = mode === 'dark' || (mode === 'auto' && getTimeBasedDark())
+  const isDark = mode === 'dark' || (mode === 'auto' && isDarkTimeSync())
   root.classList.toggle(DARK_CLASS, isDark)
   root.style.colorScheme = isDark ? 'dark' : 'light'
 
@@ -49,13 +49,18 @@ export default function ThemeToggle({ className }: { className?: string }) {
   const [mode, setMode] = React.useState<ThemeMode | null>(null)
 
   React.useEffect(() => {
-    setMode(getStoredMode())
+    const stored = getStoredMode()
+    setMode(stored)
+
+    if (stored !== 'auto') return
+    if (getCachedSunTimes()) return
+    void requestLocationAndCacheSunTimes()
   }, [])
 
   const handleToggle = () => {
     if (mode === 'auto') {
       // 从 auto 切换到相反的固定主题
-      const next: ThemeMode = getTimeBasedDark() ? 'light' : 'dark'
+      const next: ThemeMode = isDarkTimeSync() ? 'light' : 'dark'
       applyTheme(next)
       setMode(next)
     } else {
@@ -67,7 +72,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
 
   const resolvedMode = mode ?? 'auto'
   const isDark =
-    resolvedMode === 'dark' || (resolvedMode === 'auto' && getTimeBasedDark())
+    resolvedMode === 'dark' || (resolvedMode === 'auto' && isDarkTimeSync())
   const Icon = isDark ? Moon : Sun
 
   return (
