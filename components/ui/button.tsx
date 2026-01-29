@@ -1,57 +1,59 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from 'react'
+import { Slot } from '@radix-ui/react-slot'
+import { cva, type VariantProps } from 'class-variance-authority'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap font-heading font-bold transition-[transform,box-shadow,background-color,color,border-color] duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50",
-    {
-        variants: {
-            variant: {
-                default:
-                    "bg-foreground text-background border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground dark:hover:text-background hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none",
-                destructive:
-                    "bg-destructive text-destructive-foreground border-2 border-destructive shadow-solid hover:bg-destructive/90 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none",
-                outline:
-                    "bg-transparent text-foreground border-2 border-foreground hover:bg-foreground hover:text-background",
-                secondary:
-                    "bg-surface text-foreground border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground dark:hover:text-background hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:translate-y-0 active:shadow-none",
-                ghost: "bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted",
-                link: "text-brand-primary underline-offset-4 hover:underline",
-            },
-            size: {
-                default: "h-11 px-5 py-2 rounded-lg text-base",
-                sm: "h-9 px-3 py-1 rounded-md text-sm",
-                lg: "h-14 px-8 py-3 rounded-xl text-lg",
-                icon: "size-10 rounded-full",
-            },
-        },
-        defaultVariants: {
-            variant: "default",
-            size: "default",
-        },
-    }
+  'inline-flex items-center justify-center whitespace-nowrap font-heading font-bold transition-[transform,box-shadow,background-color,color,border-color] duration-200 motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+  {
+    variants: {
+      variant: {
+        default:
+          'bg-foreground text-background border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:border-brand-accent hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none dark:bg-primary dark:text-primary-foreground dark:border-primary dark:hover:bg-brand-accent dark:hover:text-background dark:hover:border-brand-accent',
+        destructive:
+          'bg-destructive text-destructive-foreground border-2 border-destructive shadow-solid hover:bg-destructive/90 hover:-translate-y-0.5 hover:shadow-solid-lg active:translate-y-0 active:shadow-none',
+        outline:
+          'bg-transparent text-foreground border-2 border-foreground hover:bg-foreground hover:text-background dark:border-border dark:hover:bg-muted dark:hover:text-foreground',
+        secondary:
+          'bg-surface text-foreground border-2 border-foreground shadow-solid hover:bg-brand-accent hover:text-foreground hover:border-brand-accent hover:-translate-y-0.5 hover:shadow-solid-lg active:bg-brand-accent/90 active:text-foreground active:translate-y-0 active:shadow-none dark:bg-surface dark:text-foreground dark:border-border dark:hover:bg-brand-accent dark:hover:text-background dark:hover:border-brand-accent',
+        ghost:
+          'bg-transparent text-muted-foreground hover:text-foreground hover:bg-muted',
+        link: 'text-primary underline-offset-4 hover:underline',
+      },
+      size: {
+        default: 'h-11 px-5 py-2 rounded-lg text-base',
+        sm: 'h-9 px-3 py-1 rounded-md text-sm',
+        lg: 'h-14 px-8 py-3 rounded-xl text-lg',
+        icon: 'size-10 rounded-full',
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+      size: 'default',
+    },
+  }
 )
 
 export interface ButtonProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-    asChild?: boolean
+  asChild?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant, size, asChild = false, ...props }, ref) => {
-        const Comp = asChild ? Slot : "button"
-        return (
-            <Comp
-                className={cn(buttonVariants({ variant, size, className }))}
-                ref={ref}
-                {...props}
-            />
-        )
-    }
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : 'button'
+    return (
+      <Comp
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...props}
+      />
+    )
+  }
 )
-Button.displayName = "Button"
+Button.displayName = 'Button'
 
 export { Button, buttonVariants }

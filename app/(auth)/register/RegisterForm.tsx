@@ -86,7 +86,11 @@ export default function RegisterForm() {
           />
         </div>
         {errors.email && (
-          <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
+          <p
+            id="email-error"
+            role="alert"
+            className="mt-2 px-2 text-sm font-medium text-red-600"
+          >
             {errors.email.message}
           </p>
         )}
@@ -115,7 +119,11 @@ export default function RegisterForm() {
           />
         </div>
         {errors.password && (
-          <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
+          <p
+            id="password-error"
+            role="alert"
+            className="mt-2 px-2 text-sm font-medium text-red-600"
+          >
             {errors.password.message}
           </p>
         )}
@@ -139,12 +147,18 @@ export default function RegisterForm() {
             autoComplete="new-password"
             placeholder="再次确认"
             aria-invalid={!!errors.confirmPassword}
-            aria-describedby={errors.confirmPassword ? 'confirmPassword-error' : undefined}
+            aria-describedby={
+              errors.confirmPassword ? 'confirmPassword-error' : undefined
+            }
             className="pl-10"
           />
         </div>
         {errors.confirmPassword && (
-          <p id="confirmPassword-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
+          <p
+            id="confirmPassword-error"
+            role="alert"
+            className="mt-2 px-2 text-sm font-medium text-red-600"
+          >
             {errors.confirmPassword.message}
           </p>
         )}
@@ -159,13 +173,16 @@ export default function RegisterForm() {
       <Button
         type="submit"
         size="lg"
-        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark"
+        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark dark:hover:bg-brand-accent"
         disabled={isSubmitting}
         aria-busy={isSubmitting}
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none" />
+            <Loader2
+              className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none"
+              aria-hidden="true"
+            />
             注册中…
           </>
         ) : (

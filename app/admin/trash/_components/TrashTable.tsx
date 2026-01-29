@@ -50,7 +50,9 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
         <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4 text-muted-foreground">
           <Trash2 size={32} aria-hidden="true" />
         </div>
-        <h3 className="font-heading font-bold text-xl text-foreground mb-2">回收站为空</h3>
+        <h3 className="font-heading font-bold text-xl text-foreground mb-2">
+          回收站为空
+        </h3>
         <p className="text-muted-foreground">这里很干净。</p>
       </div>
     )
@@ -68,19 +70,24 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
           </thead>
           <tbody className="divide-y divide-border">
             {ideas.map((idea) => (
-              <tr key={idea.id} className="hover:bg-red-50/30 transition-colors">
+              <tr
+                key={idea.id}
+                className="hover:bg-red-50/30 transition-colors"
+              >
                 <td className="px-6 py-4">
                   <div className="font-bold text-muted-foreground text-lg mb-1 line-through decoration-2 decoration-border">
                     {idea.title}
                   </div>
-                  <div className="text-sm text-muted-foreground">{snippet(idea.description)}</div>
+                  <div className="text-sm text-muted-foreground">
+                    {snippet(idea.description)}
+                  </div>
                 </td>
                 <td className="px-6 py-4 text-right">
                   <div className="flex items-center justify-end gap-3">
                     <button
                       type="button"
                       onClick={() => handleRestore(idea.id)}
-                      className="text-xs font-bold text-brand-primary hover:underline flex items-center gap-1"
+                      className="text-xs font-bold text-primary hover:underline flex items-center gap-1"
                     >
                       <Rocket size={14} aria-hidden="true" /> 恢复
                     </button>
@@ -98,11 +105,17 @@ export default function TrashTable({ ideas }: { ideas: IdeaRow[] }) {
                       <AlertDialogContent>
                         <AlertDialogHeader>
                           <AlertDialogTitle>确认永久删除？</AlertDialogTitle>
-                          <AlertDialogDescription>此操作不可撤销，是否继续？</AlertDialogDescription>
+                          <AlertDialogDescription>
+                            此操作不可撤销，是否继续？
+                          </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
                           <AlertDialogCancel>取消</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handlePermanentDelete(idea.id)}>确认删除</AlertDialogAction>
+                          <AlertDialogAction
+                            onClick={() => handlePermanentDelete(idea.id)}
+                          >
+                            确认删除
+                          </AlertDialogAction>
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>

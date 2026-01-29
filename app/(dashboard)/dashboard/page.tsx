@@ -41,17 +41,38 @@ function normalizeQuery(value: unknown): string | undefined {
 }
 
 function normalizeStatus(value: string | undefined): StatusFilterKey {
-  return value === 'completed' ? 'completed' : value === 'incubating' ? 'incubating' : 'all'
+  return value === 'completed'
+    ? 'completed'
+    : value === 'incubating'
+      ? 'incubating'
+      : 'all'
 }
 
-const STATUS_CARD_STYLE: Record<IdeaStatus, { icon: LucideIcon; color: string }> = {
-  PENDING: { icon: Clock, color: 'text-muted-foreground bg-muted border-border' },
-  APPROVED: { icon: CheckCircle2, color: 'text-primary bg-primary/10 border-primary/30' },
-  IN_PROGRESS: { icon: Beaker, color: 'text-brand-accent bg-brand-accent/15 border-brand-accent/30' },
-  COMPLETED: { icon: Rocket, color: 'text-brand-success bg-brand-success/15 border-brand-success/30' },
+const STATUS_CARD_STYLE: Record<
+  IdeaStatus,
+  { icon: LucideIcon; color: string }
+> = {
+  PENDING: {
+    icon: Clock,
+    color: 'text-muted-foreground bg-muted border-border',
+  },
+  APPROVED: {
+    icon: CheckCircle2,
+    color: 'text-primary bg-primary/10 border-primary/30',
+  },
+  IN_PROGRESS: {
+    icon: Beaker,
+    color: 'text-brand-accent bg-brand-accent/15 border-brand-accent/30',
+  },
+  COMPLETED: {
+    icon: Rocket,
+    color: 'text-brand-success bg-brand-success/15 border-brand-success/30',
+  },
 }
 
-export default async function DashboardPage({ searchParams }: DashboardPageProps) {
+export default async function DashboardPage({
+  searchParams,
+}: DashboardPageProps) {
   const session = await getSession()
 
   if (!session) {
@@ -94,13 +115,20 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       },
     }),
     prisma.idea.count({ where: { userId: session.sub, isDeleted: false } }),
-    prisma.idea.count({ where: { userId: session.sub, isDeleted: false, status: 'PENDING' } }),
-    prisma.idea.count({ where: { userId: session.sub, isDeleted: false, status: 'COMPLETED' } }),
+    prisma.idea.count({
+      where: { userId: session.sub, isDeleted: false, status: 'PENDING' },
+    }),
+    prisma.idea.count({
+      where: { userId: session.sub, isDeleted: false, status: 'COMPLETED' },
+    }),
   ])
 
   const approvedCount = Math.max(0, totalCount - pendingCount)
 
-  const buildDashboardHref = (nextStatus: StatusFilterKey, nextQuery: string | undefined = q) => {
+  const buildDashboardHref = (
+    nextStatus: StatusFilterKey,
+    nextQuery: string | undefined = q
+  ) => {
     const params = new URLSearchParams()
     if (nextQuery) params.set('q', nextQuery)
     if (nextStatus !== 'all') params.set('status', nextStatus)
@@ -120,8 +148,12 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
     <div className="container mx-auto px-4 py-12">
       <header className="mb-12 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <h1 className="font-heading font-bold text-3xl md:text-4xl text-brand-dark mb-2">我的点子</h1>
-          <p className="text-muted-foreground text-lg">查看你提交的项目进度。</p>
+          <h1 className="font-heading font-bold text-3xl md:text-4xl text-brand-dark mb-2">
+            我的点子
+          </h1>
+          <p className="text-muted-foreground text-lg">
+            查看你提交的项目进度。
+          </p>
         </div>
         <Button asChild>
           <Link href="/submit">
@@ -132,30 +164,42 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
       <section className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
-          <div className="w-12 h-12 bg-blue-100 text-brand-primary rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-blue-100 text-brand-primary rounded-full flex items-center justify-center dark:bg-primary/10 dark:text-primary">
             <FileText size={24} aria-hidden="true" />
           </div>
           <div>
-            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{totalCount}</div>
-            <div className="text-sm text-muted-foreground font-bold">提交总数</div>
+            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">
+              {totalCount}
+            </div>
+            <div className="text-sm text-muted-foreground font-bold">
+              提交总数
+            </div>
           </div>
         </div>
         <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
-          <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center dark:bg-amber-950/40 dark:text-amber-300">
             <Trophy size={24} aria-hidden="true" />
           </div>
           <div>
-            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{approvedCount}</div>
-            <div className="text-sm text-muted-foreground font-bold">已被采纳</div>
+            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">
+              {approvedCount}
+            </div>
+            <div className="text-sm text-muted-foreground font-bold">
+              已被采纳
+            </div>
           </div>
         </div>
         <div className="bg-surface border-2 border-brand-dark rounded-xl p-6 shadow-solid-sm flex items-center gap-4">
-          <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center dark:bg-pink-950/40 dark:text-pink-300">
             <ThumbsUp size={24} aria-hidden="true" />
           </div>
           <div>
-            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">{completedCount}</div>
-            <div className="text-sm text-muted-foreground font-bold">已上线</div>
+            <div className="text-3xl font-heading font-bold text-brand-dark tabular-nums">
+              {completedCount}
+            </div>
+            <div className="text-sm text-muted-foreground font-bold">
+              已上线
+            </div>
           </div>
         </div>
       </section>
@@ -176,7 +220,9 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
                   href={buildDashboardHref(filter.key)}
                   className={cn(
                     'px-4 py-2 rounded-md text-sm font-bold transition-colors',
-                    active ? 'bg-brand-dark text-background' : 'text-muted-foreground hover:bg-muted'
+                    active
+                      ? 'bg-brand-dark text-background dark:bg-primary dark:text-primary-foreground'
+                      : 'text-muted-foreground hover:bg-muted'
                   )}
                 >
                   {filter.label}
@@ -186,19 +232,31 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
           </div>
 
           {hasFilters ? (
-            <Link href="/dashboard" className="text-sm font-bold text-muted-foreground hover:text-brand-dark hover:underline">
+            <Link
+              href="/dashboard"
+              className="text-sm font-bold text-muted-foreground hover:text-brand-dark hover:underline"
+            >
               清除筛选
             </Link>
           ) : null}
         </div>
 
-        <form action="/dashboard" method="get" className="flex w-full max-w-md items-center gap-2">
-          {status !== 'all' ? <input type="hidden" name="status" value={status} /> : null}
+        <form
+          action="/dashboard"
+          method="get"
+          className="flex w-full max-w-md items-center gap-2"
+        >
+          {status !== 'all' ? (
+            <input type="hidden" name="status" value={status} />
+          ) : null}
           <label className="sr-only" htmlFor="dashboard-search">
             搜索
           </label>
           <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
+            <Search
+              className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+              aria-hidden="true"
+            />
             <input
               id="dashboard-search"
               name="q"
@@ -246,23 +304,33 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             return (
               <div
                 key={idea.id}
-                className="group bg-surface border border-border hover:border-brand-dark rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start shadow-sm hover:shadow-md transition-all"
+                className="group bg-surface border border-border hover:border-brand-dark rounded-xl p-6 flex flex-col md:flex-row gap-6 items-start shadow-sm hover:shadow-md transition-[border-color,box-shadow]"
               >
                 <div className="flex-grow">
                   <div className="flex items-center gap-3 mb-3">
-                    <h3 className="font-heading font-bold text-xl text-brand-dark">{idea.title}</h3>
-                    <div className="hidden md:block w-px h-4 bg-border" aria-hidden="true" />
+                    <h3 className="font-heading font-bold text-xl text-brand-dark">
+                      {idea.title}
+                    </h3>
+                    <div
+                      className="hidden md:block w-px h-4 bg-border"
+                      aria-hidden="true"
+                    />
                     <span className="text-xs font-mono text-muted-foreground">
                       Created: {format(new Date(idea.createdAt), 'yyyy-MM-dd')}
                     </span>
                   </div>
 
-                  <p className="text-muted-foreground mb-4 leading-relaxed max-w-3xl">{idea.description}</p>
+                  <p className="text-muted-foreground mb-4 leading-relaxed max-w-3xl">
+                    {idea.description}
+                  </p>
 
                   {idea.tags.length > 0 ? (
                     <div className="flex flex-wrap gap-2">
                       {idea.tags.map((tag) => (
-                        <span key={tag} className="px-2 py-1 bg-muted rounded text-xs text-muted-foreground font-mono">
+                        <span
+                          key={tag}
+                          className="px-2 py-1 bg-muted rounded text-xs text-muted-foreground font-mono"
+                        >
                           #{tag}
                         </span>
                       ))}
@@ -272,18 +340,28 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
                 <div className="w-full md:w-64 flex-shrink-0 bg-muted rounded-lg p-4 border border-border group-hover:bg-surface group-hover:shadow-inner transition-colors">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className={cn('p-2 rounded-lg border', statusMeta.color)}>
+                    <div
+                      className={cn('p-2 rounded-lg border', statusMeta.color)}
+                    >
                       <StatusIcon size={20} aria-hidden="true" />
                     </div>
-                    <span className="font-bold text-sm text-brand-dark">{STATUS_CONFIG[idea.status].label}</span>
+                    <span className="font-bold text-sm text-brand-dark">
+                      {STATUS_CONFIG[idea.status].label}
+                    </span>
                   </div>
 
-                  <div className="text-xs text-muted-foreground leading-snug">{STATUS_CONFIG[idea.status].description}</div>
+                  <div className="text-xs text-muted-foreground leading-snug">
+                    {STATUS_CONFIG[idea.status].description}
+                  </div>
 
                   {idea.assessment ? (
                     <div className="mt-3">
-                      <Link href={`/idea/${idea.id}/result`} className="text-xs font-bold text-brand-primary hover:underline inline-flex items-center gap-1">
-                        查看评估 <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                      <Link
+                        href={`/idea/${idea.id}/result`}
+                        className="text-xs font-bold text-primary hover:underline inline-flex items-center gap-1"
+                      >
+                        查看评估{' '}
+                        <ArrowUpRight className="size-3.5" aria-hidden="true" />
                       </Link>
                     </div>
                   ) : null}

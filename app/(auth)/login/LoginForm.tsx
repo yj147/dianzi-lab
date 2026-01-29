@@ -18,7 +18,11 @@ type LoginFormProps = {
 
 function getSafeCallbackUrl(callbackUrl: string | undefined): string {
   if (!callbackUrl) return '/dashboard'
-  return callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\') ? callbackUrl : '/dashboard'
+  return callbackUrl.startsWith('/') &&
+    !callbackUrl.startsWith('//') &&
+    !callbackUrl.includes('\\')
+    ? callbackUrl
+    : '/dashboard'
 }
 
 export default function LoginForm({ callbackUrl }: LoginFormProps) {
@@ -96,7 +100,11 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           />
         </div>
         {errors.email && (
-          <p id="email-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
+          <p
+            id="email-error"
+            role="alert"
+            className="mt-2 px-2 text-sm font-medium text-red-600"
+          >
             {errors.email.message}
           </p>
         )}
@@ -125,7 +133,11 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
           />
         </div>
         {errors.password && (
-          <p id="password-error" role="alert" className="mt-2 px-2 text-sm font-medium text-red-600">
+          <p
+            id="password-error"
+            role="alert"
+            className="mt-2 px-2 text-sm font-medium text-red-600"
+          >
             {errors.password.message}
           </p>
         )}
@@ -140,13 +152,16 @@ export default function LoginForm({ callbackUrl }: LoginFormProps) {
       <Button
         type="submit"
         size="lg"
-        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark"
+        className="w-full shadow-solid-sm hover:shadow-solid hover:bg-brand-dark dark:hover:bg-brand-accent"
         disabled={isSubmitting}
         aria-busy={isSubmitting}
       >
         {isSubmitting ? (
           <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none" />
+            <Loader2
+              className="mr-2 h-5 w-5 animate-spin motion-reduce:animate-none"
+              aria-hidden="true"
+            />
             登录中…
           </>
         ) : (

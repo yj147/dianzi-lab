@@ -42,7 +42,10 @@ function getAuthorName(email: string): string {
 export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
   const router = useRouter()
   const [busyIdeaId, setBusyIdeaId] = useState<string | null>(null)
-  const [rowError, setRowError] = useState<{ ideaId: string; message: string } | null>(null)
+  const [rowError, setRowError] = useState<{
+    ideaId: string
+    message: string
+  } | null>(null)
 
   const runRowAction = async (ideaId: string, action: () => Promise<void>) => {
     setRowError((prev) => (prev?.ideaId === ideaId ? null : prev))
@@ -51,7 +54,8 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
       await action()
       router.refresh()
     } catch (error) {
-      const message = error instanceof Error ? error.message : '操作失败，请重试'
+      const message =
+        error instanceof Error ? error.message : '操作失败，请重试'
       setRowError({ ideaId, message })
     } finally {
       setBusyIdeaId(null)
@@ -78,10 +82,13 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
               </th>
             </tr>
           </thead>
-        <tbody className="divide-y divide-border">
+          <tbody className="divide-y divide-border">
             {ideas.length === 0 ? (
               <tr>
-                <td colSpan={4} className="px-6 py-12 text-center text-muted-foreground">
+                <td
+                  colSpan={4}
+                  className="px-6 py-12 text-center text-muted-foreground"
+                >
                   没有找到符合条件的项目
                 </td>
               </tr>
@@ -92,7 +99,10 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                 const avatarText = authorName.slice(0, 1).toUpperCase()
 
                 return (
-                  <tr key={idea.id} className="group hover:bg-muted transition-colors">
+                  <tr
+                    key={idea.id}
+                    className="group hover:bg-muted transition-colors"
+                  >
                     <td className="max-w-xs px-6 py-4 md:max-w-md">
                       <div className="mb-1 font-bold text-brand-dark text-lg">
                         <Link
@@ -102,7 +112,9 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                           {idea.title}
                         </Link>
                       </div>
-                      <div className="line-clamp-2 text-sm text-muted-foreground">{idea.description}</div>
+                      <div className="line-clamp-2 text-sm text-muted-foreground">
+                        {idea.description}
+                      </div>
                       {idea.tags.length > 0 ? (
                         <div className="mt-2 flex gap-2">
                           {idea.tags.map((tag) => (
@@ -119,10 +131,12 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
 
                     <td className="px-6 py-4 align-top pt-5">
                       <div className="flex items-center gap-2">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-primary/10 text-xs font-bold text-brand-primary">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-xs font-bold text-primary">
                           {avatarText}
                         </div>
-                        <span className="text-sm font-medium text-foreground">{authorName}</span>
+                        <span className="text-sm font-medium text-foreground">
+                          {authorName}
+                        </span>
                       </div>
                     </td>
 
@@ -138,9 +152,17 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             size="sm"
                             disabled={isBusy}
                             className="h-9 border-brand-primary bg-brand-primary px-4 text-xs hover:bg-brand-primary/90"
-                            onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'APPROVED'))}
+                            onClick={() =>
+                              runRowAction(idea.id, () =>
+                                updateIdeaStatus(idea.id, 'APPROVED')
+                              )
+                            }
                           >
-                            <CheckCircle2 size={14} className="mr-1" aria-hidden="true" />
+                            <CheckCircle2
+                              size={14}
+                              className="mr-1"
+                              aria-hidden="true"
+                            />
                             通过审核
                           </Button>
                         ) : null}
@@ -151,9 +173,17 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             size="sm"
                             disabled={isBusy}
                             className="h-9 border-brand-accent bg-brand-accent px-4 text-xs text-white hover:bg-brand-accent/90"
-                            onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'IN_PROGRESS'))}
+                            onClick={() =>
+                              runRowAction(idea.id, () =>
+                                updateIdeaStatus(idea.id, 'IN_PROGRESS')
+                              )
+                            }
                           >
-                            <Hammer size={14} className="mr-1" aria-hidden="true" />
+                            <Hammer
+                              size={14}
+                              className="mr-1"
+                              aria-hidden="true"
+                            />
                             启动开发
                           </Button>
                         ) : null}
@@ -164,9 +194,17 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             size="sm"
                             disabled={isBusy}
                             className="h-9 border-brand-success bg-brand-success px-4 text-xs text-white hover:bg-brand-success/90"
-                            onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'COMPLETED'))}
+                            onClick={() =>
+                              runRowAction(idea.id, () =>
+                                updateIdeaStatus(idea.id, 'COMPLETED')
+                              )
+                            }
                           >
-                            <Rocket size={14} className="mr-1" aria-hidden="true" />
+                            <Rocket
+                              size={14}
+                              className="mr-1"
+                              aria-hidden="true"
+                            />
                             发布上线
                           </Button>
                         ) : null}
@@ -177,9 +215,17 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                             size="sm"
                             disabled={isBusy}
                             className="h-9 border-brand-accent bg-brand-accent px-4 text-xs text-white hover:bg-brand-accent/90"
-                            onClick={() => runRowAction(idea.id, () => updateIdeaStatus(idea.id, 'IN_PROGRESS'))}
+                            onClick={() =>
+                              runRowAction(idea.id, () =>
+                                updateIdeaStatus(idea.id, 'IN_PROGRESS')
+                              )
+                            }
                           >
-                            <RotateCcw size={14} className="mr-1" aria-hidden="true" />
+                            <RotateCcw
+                              size={14}
+                              className="mr-1"
+                              aria-hidden="true"
+                            />
                             回退到开发中
                           </Button>
                         ) : null}
@@ -199,16 +245,24 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
 
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>确认移至回收站？</AlertDialogTitle>
+                              <AlertDialogTitle>
+                                确认移至回收站？
+                              </AlertDialogTitle>
                               <AlertDialogDescription>
                                 移至回收站后，您可以在回收站中恢复或永久删除。
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel disabled={isBusy}>取消</AlertDialogCancel>
+                              <AlertDialogCancel disabled={isBusy}>
+                                取消
+                              </AlertDialogCancel>
                               <AlertDialogAction
                                 disabled={isBusy}
-                                onClick={() => runRowAction(idea.id, () => moveToTrash(idea.id))}
+                                onClick={() =>
+                                  runRowAction(idea.id, () =>
+                                    moveToTrash(idea.id)
+                                  )
+                                }
                               >
                                 确认移至回收站
                               </AlertDialogAction>
@@ -218,7 +272,9 @@ export default function IdeasTable({ ideas }: { ideas: IdeaRow[] }) {
                       </div>
 
                       {rowError?.ideaId === idea.id ? (
-                        <p className="mt-2 text-right text-xs font-bold text-red-600">{rowError.message}</p>
+                        <p className="mt-2 text-right text-xs font-bold text-red-600">
+                          {rowError.message}
+                        </p>
                       ) : null}
                     </td>
                   </tr>

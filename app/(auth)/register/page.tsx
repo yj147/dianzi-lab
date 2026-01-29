@@ -24,40 +24,55 @@ export default function RegisterPage() {
             <div className="space-y-6">
               <div
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
-                style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}
+                style={{
+                  animationDelay: '200ms',
+                  animationFillMode: 'backwards',
+                }}
               >
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Sparkles size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold">提交创意</h3>
-                  <p className="text-sm text-white/70">分享您的想法，让专业团队评估可行性</p>
+                  <p className="text-sm text-white/70">
+                    分享您的想法，让专业团队评估可行性
+                  </p>
                 </div>
               </div>
 
               <div
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
-                style={{ animationDelay: '350ms', animationFillMode: 'backwards' }}
+                style={{
+                  animationDelay: '350ms',
+                  animationFillMode: 'backwards',
+                }}
               >
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Target size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold">精准匹配</h3>
-                  <p className="text-sm text-white/70">根据项目需求匹配最合适的技术栈</p>
+                  <p className="text-sm text-white/70">
+                    根据项目需求匹配最合适的技术栈
+                  </p>
                 </div>
               </div>
 
               <div
                 className="flex items-start gap-4 animate-fade-in-up motion-reduce:animate-none"
-                style={{ animationDelay: '500ms', animationFillMode: 'backwards' }}
+                style={{
+                  animationDelay: '500ms',
+                  animationFillMode: 'backwards',
+                }}
               >
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface/20">
                   <Code size={20} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className="font-heading font-bold">专业开发</h3>
-                  <p className="text-sm text-white/70">经验丰富的工程师团队为您服务</p>
+                  <p className="text-sm text-white/70">
+                    经验丰富的工程师团队为您服务
+                  </p>
                 </div>
               </div>
             </div>
@@ -88,7 +103,10 @@ export default function RegisterPage() {
 
           <div className="border-t border-border bg-muted p-5 text-center text-sm text-muted-foreground">
             已经有账号？{' '}
-            <Link href="/login" className="font-bold text-brand-primary hover:underline">
+            <Link
+              href="/login"
+              className="font-bold text-primary hover:underline"
+            >
               直接登录
             </Link>
           </div>

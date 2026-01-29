@@ -30,7 +30,11 @@ function getDisplayName(userEmail?: string): string {
   return local ? local : '用户'
 }
 
-export default function NavbarClient({ isLoggedIn, userEmail, userRole }: NavbarClientProps) {
+export default function NavbarClient({
+  isLoggedIn,
+  userEmail,
+  userRole,
+}: NavbarClientProps) {
   const pathname = usePathname()
   const [isNavMenuOpen, setIsNavMenuOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
@@ -56,9 +60,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
         { name: '我的点子', href: '/dashboard' },
         ...(userRole === 'ADMIN' ? [{ name: '管理后台', href: '/admin' }] : []),
       ]
-    : [
-        { name: '探索', href: '/' },
-      ]
+    : [{ name: '探索', href: '/' }]
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b-2 border-border bg-background/90 backdrop-blur-md">
@@ -68,7 +70,7 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
             <Lightbulb size={20} strokeWidth={2.5} aria-hidden="true" />
           </div>
           <span className="font-heading text-2xl font-bold text-foreground">
-            Bambi<span className="text-brand-primary"> Lab Idea</span>
+            Bambi<span className="text-primary"> Lab Idea</span>
           </span>
         </Link>
 
@@ -82,8 +84,11 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   href={link.href}
                   className={cn(
                     'text-base font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                    isActive ? 'text-brand-primary' : 'text-muted-foreground hover:text-foreground'
+                    isActive
+                      ? 'text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
                   )}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   {link.name}
                 </Link>
@@ -96,17 +101,22 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
 
             <div className="hidden items-center gap-4 md:flex">
               {isLoggedIn ? (
-                <DropdownMenu open={isUserMenuOpen} onOpenChange={setIsUserMenuOpen}>
+                <DropdownMenu
+                  open={isUserMenuOpen}
+                  onOpenChange={setIsUserMenuOpen}
+                >
                   <DropdownMenuTrigger asChild>
                     <button
                       type="button"
                       aria-label="用户菜单"
-                      className="flex items-center gap-3 rounded-full bg-surface px-3 py-2 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-solid motion-reduce:transition-none"
+                      className="flex items-center gap-3 rounded-full bg-surface px-3 py-2 shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-solid focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
                     >
-                      <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-sm font-heading font-bold text-background">
+                      <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-sm font-heading font-bold text-background dark:border dark:border-border dark:bg-muted dark:text-foreground">
                         {initial}
                       </div>
-                      <span className="max-w-[160px] truncate text-sm font-bold text-foreground">{displayName}</span>
+                      <span className="max-w-[160px] truncate text-sm font-bold text-foreground">
+                        {displayName}
+                      </span>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -116,24 +126,38 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   >
                     <DropdownMenuLabel className="px-3 py-2">
                       <div className="flex items-center gap-2">
-                        <User size={16} className="text-muted-foreground" aria-hidden="true" />
-                        <p className="text-sm font-bold text-foreground">{displayName}</p>
+                        <User
+                          size={16}
+                          className="text-muted-foreground"
+                          aria-hidden="true"
+                        />
+                        <p className="text-sm font-bold text-foreground">
+                          {displayName}
+                        </p>
                       </div>
                       {userEmail ? (
-                        <p className="mt-1 truncate font-mono text-xs text-muted-foreground">{userEmail}</p>
+                        <p className="mt-1 truncate font-mono text-xs text-muted-foreground">
+                          {userEmail}
+                        </p>
                       ) : null}
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     {userRole === 'ADMIN' ? (
                       <DropdownMenuItem asChild>
-                        <Link href="/admin" className="flex items-center gap-2 font-bold">
+                        <Link
+                          href="/admin"
+                          className="flex items-center gap-2 font-bold"
+                        >
                           <Shield size={16} aria-hidden="true" />
                           管理后台
                         </Link>
                       </DropdownMenuItem>
                     ) : null}
                     <DropdownMenuItem asChild>
-                      <Link href="/dashboard" className="flex items-center gap-2 font-bold">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center gap-2 font-bold"
+                      >
                         <User size={16} aria-hidden="true" />
                         我的点子
                       </Link>
@@ -167,14 +191,21 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
             </div>
 
             <div className="md:hidden">
-              <DropdownMenu open={isNavMenuOpen} onOpenChange={setIsNavMenuOpen}>
+              <DropdownMenu
+                open={isNavMenuOpen}
+                onOpenChange={setIsNavMenuOpen}
+              >
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
                     aria-label={isNavMenuOpen ? '关闭菜单' : '打开菜单'}
                     className="inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
                   >
-                    {isNavMenuOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+                    {isNavMenuOpen ? (
+                      <X size={18} aria-hidden="true" />
+                    ) : (
+                      <Menu size={18} aria-hidden="true" />
+                    )}
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
@@ -186,13 +217,17 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                     <>
                       <DropdownMenuLabel className="px-3 py-2">
                         <div className="flex items-center gap-3">
-                          <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-sm font-heading font-bold text-background">
+                          <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-sm font-heading font-bold text-background dark:border dark:border-border dark:bg-muted dark:text-foreground">
                             {initial}
                           </div>
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-bold text-foreground">{displayName}</p>
+                            <p className="truncate text-sm font-bold text-foreground">
+                              {displayName}
+                            </p>
                             {userEmail ? (
-                              <p className="truncate font-mono text-xs text-muted-foreground">{userEmail}</p>
+                              <p className="truncate font-mono text-xs text-muted-foreground">
+                                {userEmail}
+                              </p>
                             ) : null}
                           </div>
                         </div>
@@ -202,7 +237,11 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                   ) : null}
                   {navLinks.map((link) => (
                     <DropdownMenuItem key={link.href} asChild>
-                      <Link href={link.href} className="font-bold" onClick={() => setIsNavMenuOpen(false)}>
+                      <Link
+                        href={link.href}
+                        className="font-bold"
+                        onClick={() => setIsNavMenuOpen(false)}
+                      >
                         {link.name}
                       </Link>
                     </DropdownMenuItem>
@@ -226,12 +265,20 @@ export default function NavbarClient({ isLoggedIn, userEmail, userRole }: Navbar
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem asChild>
-                        <Link href="/login" className="font-bold" onClick={() => setIsNavMenuOpen(false)}>
+                        <Link
+                          href="/login"
+                          className="font-bold"
+                          onClick={() => setIsNavMenuOpen(false)}
+                        >
                           登录
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem asChild>
-                        <Link href="/register" className="font-bold" onClick={() => setIsNavMenuOpen(false)}>
+                        <Link
+                          href="/register"
+                          className="font-bold"
+                          onClick={() => setIsNavMenuOpen(false)}
+                        >
                           加入实验室
                         </Link>
                       </DropdownMenuItem>
