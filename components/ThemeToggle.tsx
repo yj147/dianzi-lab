@@ -54,7 +54,10 @@ export default function ThemeToggle({ className }: { className?: string }) {
 
     if (stored !== 'auto') return
     if (getCachedSunTimes()) return
-    void requestLocationAndCacheSunTimes()
+
+    requestLocationAndCacheSunTimes().then((success) => {
+      if (success) applyTheme('auto')
+    })
   }, [])
 
   const handleToggle = () => {
