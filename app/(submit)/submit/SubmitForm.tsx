@@ -245,7 +245,7 @@ export default function SubmitForm() {
               className={cn(
                 'flex size-5 items-center justify-center rounded-full text-xs font-mono',
                 step === s.key
-                  ? 'bg-surface/15 text-background'
+                  ? 'bg-surface/15 text-background dark:text-foreground'
                   : 'bg-surface text-muted-foreground'
               )}
             >
