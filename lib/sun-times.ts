@@ -1,6 +1,7 @@
 const SUN_TIMES_CACHE_KEY = 'sun_times'
 const SUN_TIMES_GEO_BLOCKED_UNTIL_KEY = 'sun_times_geo_blocked_until'
 const CACHE_DURATION = 24 * 60 * 60 * 1000
+const GEOLOCATION_TIMEOUT_MS = 30 * 1000
 
 export interface CachedSunTimes {
   sunriseMs: number
@@ -105,6 +106,8 @@ export async function requestLocationAndCacheSunTimes(): Promise<boolean> {
   if (typeof navigator === 'undefined') return false
   if (!navigator.geolocation) return false
 
+  const sunCalcImport = import('suncalc')
+
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
@@ -113,7 +116,7 @@ export async function requestLocationAndCacheSunTimes(): Promise<boolean> {
           const lon = position.coords.longitude
           const now = new Date()
 
-          const SunCalcModule = await import('suncalc')
+          const SunCalcModule = await sunCalcImport
           const SunCalc =
             'default' in SunCalcModule && SunCalcModule.default
               ? (SunCalcModule.default as unknown as typeof import('suncalc'))
@@ -138,7 +141,11 @@ export async function requestLocationAndCacheSunTimes(): Promise<boolean> {
         }
         resolve(false)
       },
-      { timeout: 5000 }
+      {
+        timeout: GEOLOCATION_TIMEOUT_MS,
+        maximumAge: CACHE_DURATION,
+        enableHighAccuracy: false,
+      }
     )
   })
 }

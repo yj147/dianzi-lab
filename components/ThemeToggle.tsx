@@ -47,35 +47,49 @@ function getStoredMode(): ThemeMode {
 
 export default function ThemeToggle({ className }: { className?: string }) {
   const [mode, setMode] = React.useState<ThemeMode | null>(null)
+  const [, bumpSunTimesRevision] = React.useState(0)
 
   React.useEffect(() => {
+    let cancelled = false
+
     const stored = getStoredMode()
     setMode(stored)
 
-    if (stored !== 'auto') return
-    if (getCachedSunTimes()) return
+    if (stored === 'auto' && !getCachedSunTimes()) {
+      requestLocationAndCacheSunTimes().then((success) => {
+        if (!success) return
+        if (cancelled) return
+        if (getStoredMode() !== 'auto') return
+        applyTheme('auto')
+        bumpSunTimesRevision((value) => value + 1)
+      })
+    }
 
-    requestLocationAndCacheSunTimes().then((success) => {
-      if (success) applyTheme('auto')
-    })
+    return () => {
+      cancelled = true
+    }
   }, [])
 
+  const currentMode = mode ?? 'auto'
+  const autoIsDarkTime = isDarkTimeSync()
+
   const handleToggle = () => {
-    if (mode === 'auto') {
+    if (currentMode === 'auto') {
       // 从 auto 切换到相反的固定主题
-      const next: ThemeMode = isDarkTimeSync() ? 'light' : 'dark'
+      const next: ThemeMode = autoIsDarkTime ? 'light' : 'dark'
       applyTheme(next)
       setMode(next)
     } else {
       // 从固定主题切换回 auto
       applyTheme('auto')
       setMode('auto')
+      bumpSunTimesRevision((value) => value + 1)
     }
   }
 
-  const resolvedMode = mode ?? 'auto'
+  const resolvedMode = currentMode
   const isDark =
-    resolvedMode === 'dark' || (resolvedMode === 'auto' && isDarkTimeSync())
+    resolvedMode === 'dark' || (resolvedMode === 'auto' && autoIsDarkTime)
   const Icon = isDark ? Moon : Sun
 
   return (
