@@ -95,7 +95,9 @@ describe('loginUser action', () => {
 
   it('returns generic error if user not found', async () => {
     getUserByEmailMock.mockResolvedValue(null)
-    const result = await loginUser(makeFormData({ email: 'test@example.com', password: 'password123' }))
+    const result = await loginUser(
+      makeFormData({ email: 'test@example.com', password: 'password123' })
+    )
     expect(result).toEqual({ success: false, error: '邮箱或密码错误' })
   })
 
@@ -107,10 +109,15 @@ describe('loginUser action', () => {
       role: 'USER',
     })
     bcryptCompareMock.mockResolvedValue(false)
-    
-    const result = await loginUser(makeFormData({ email: 'test@example.com', password: 'wrong-password' }))
+
+    const result = await loginUser(
+      makeFormData({ email: 'test@example.com', password: 'wrong-password' })
+    )
     expect(result).toEqual({ success: false, error: '邮箱或密码错误' })
-    expect(bcryptCompareMock).toHaveBeenCalledWith('wrong-password', 'hashed-password')
+    expect(bcryptCompareMock).toHaveBeenCalledWith(
+      'wrong-password',
+      'hashed-password'
+    )
   })
 
   it('sets cookie and redirects on success', async () => {
@@ -124,7 +131,9 @@ describe('loginUser action', () => {
     signJWTMock.mockResolvedValue('fake-jwt-token')
 
     await expect(
-      loginUser(makeFormData({ email: 'test@example.com', password: 'password123' }))
+      loginUser(
+        makeFormData({ email: 'test@example.com', password: 'password123' })
+      )
     ).rejects.toThrow('NEXT_REDIRECT')
 
     expect(signJWTMock).toHaveBeenCalledWith({
@@ -147,7 +156,9 @@ describe('loginUser action', () => {
     signJWTMock.mockResolvedValue('fake-jwt-token')
 
     await expect(
-      loginUser(makeFormData({ email: 'admin@example.com', password: 'password123' })),
+      loginUser(
+        makeFormData({ email: 'admin@example.com', password: 'password123' })
+      )
     ).rejects.toThrow('NEXT_REDIRECT')
 
     expect(signJWTMock).toHaveBeenCalledWith({
@@ -161,7 +172,10 @@ describe('loginUser action', () => {
 
   it('blocks the seed default admin password in production', async () => {
     const originalNodeEnv = process.env.NODE_ENV
-    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+    })
 
     getUserByEmailMock.mockResolvedValue({
       id: 'admin-1',
@@ -170,7 +184,9 @@ describe('loginUser action', () => {
       role: 'ADMIN',
     })
 
-    const result = await loginUser(makeFormData({ email: 'admin@example.com', password: 'admin123' }))
+    const result = await loginUser(
+      makeFormData({ email: 'admin@example.com', password: 'admin123' })
+    )
 
     expect(result).toEqual({ success: false, error: '邮箱或密码错误' })
     expect(bcryptCompareMock).not.toHaveBeenCalled()
@@ -178,6 +194,9 @@ describe('loginUser action', () => {
     expect(setSessionCookieMock).not.toHaveBeenCalled()
     expect(redirectMock).not.toHaveBeenCalled()
 
-    Object.defineProperty(process.env, 'NODE_ENV', { value: originalNodeEnv, writable: true })
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: originalNodeEnv,
+      writable: true,
+    })
   })
 })

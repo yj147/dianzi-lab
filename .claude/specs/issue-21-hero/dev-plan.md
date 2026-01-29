@@ -1,15 +1,18 @@
 # Hero 区域 - 开发计划
 
 ## Issue 引用
+
 - **Issue**: #21 [Epic: 首页展示] Hero 区域
 - **URL**: https://github.com/yj147/dianzi-lab/issues/21
 
 ## 概述
+
 实现首页 Hero 区域，包含导航栏、标题、副标题、CTA 按钮和背景渐变效果，确保首屏加载性能（LCP < 2.5s）。
 
 ## 任务拆分
 
 ### Task 1: 实现导航栏 + Hero 首屏布局
+
 - **ID**: task-1
 - **type**: ui
 - **描述**: 创建 Navbar 和 Hero 组件，实现首屏布局、渐变背景、响应式设计
@@ -28,6 +31,7 @@
   - 响应式布局在移动端和桌面端正常
 
 ### Task 2: 补齐路由占位
+
 - **ID**: task-2
 - **type**: quick-fix
 - **描述**: 创建 /submit 和 /login 路由占位页面，添加 #tools 锚点支持
@@ -43,6 +47,7 @@
   - 点击"浏览工具"按钮平滑滚动到 #tools 锚点
 
 ### Task 3: 配置 Jest + RTL 测试基础设施
+
 - **ID**: task-3
 - **type**: default
 - **描述**: 安装并配置 Jest 和 React Testing Library，支持 TypeScript 和 Next.js 14
@@ -59,6 +64,7 @@
   - 覆盖率收集配置正确
 
 ### Task 4: 编写组件渲染测试
+
 - **ID**: task-4
 - **type**: default
 - **描述**: 为 Navbar 和 Hero 组件编写 Jest + RTL 测试，验证渲染和交互
@@ -76,10 +82,12 @@
 ## 执行顺序
 
 ### 并行执行组
+
 - **组 1**: task-1, task-2, task-3 可以并行执行（无依赖关系）
 - **组 2**: task-4 必须等待 task-1 和 task-3 完成后执行
 
 ### 推荐顺序
+
 1. 先执行 task-3（配置测试环境）
 2. 并行执行 task-1 和 task-2（UI 实现和路由占位）
 3. 最后执行 task-4（编写测试）

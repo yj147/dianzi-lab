@@ -54,7 +54,7 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
 
   const passwordMatch = await bcrypt.compare(
     parsed.data.password,
-    user.passwordHash,
+    user.passwordHash
   )
 
   if (!passwordMatch) {
@@ -72,7 +72,9 @@ export async function loginUser(formData: FormData): Promise<ActionResult> {
   // Validate callbackUrl to prevent open redirect
   // Must start with '/' but not '//' (protocol-relative URL) and not contain backslash
   const safeCallbackUrl =
-    callbackUrl.startsWith('/') && !callbackUrl.startsWith('//') && !callbackUrl.includes('\\')
+    callbackUrl.startsWith('/') &&
+    !callbackUrl.startsWith('//') &&
+    !callbackUrl.includes('\\')
       ? callbackUrl
       : '/dashboard'
 

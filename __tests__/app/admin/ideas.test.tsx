@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import type { IdeaStatus } from '@prisma/client'
 
 import AdminIdeasPage from '@/app/admin/ideas/page'
@@ -30,12 +36,18 @@ jest.mock('@/app/admin/ideas/actions', () => ({
 jest.mock('@/components/ui/alert-dialog', () => ({
   AlertDialog: ({ children }: { children: any }) => <div>{children}</div>,
   AlertDialogTrigger: ({ children }: { children: any }) => <>{children}</>,
-  AlertDialogContent: ({ children }: { children: any }) => <div>{children}</div>,
-  AlertDialogDescription: ({ children }: { children: any }) => <div>{children}</div>,
+  AlertDialogContent: ({ children }: { children: any }) => (
+    <div>{children}</div>
+  ),
+  AlertDialogDescription: ({ children }: { children: any }) => (
+    <div>{children}</div>
+  ),
   AlertDialogFooter: ({ children }: { children: any }) => <div>{children}</div>,
   AlertDialogHeader: ({ children }: { children: any }) => <div>{children}</div>,
   AlertDialogTitle: ({ children }: { children: any }) => <div>{children}</div>,
-  AlertDialogCancel: ({ children }: { children: any }) => <button type="button">{children}</button>,
+  AlertDialogCancel: ({ children }: { children: any }) => (
+    <button type="button">{children}</button>
+  ),
   AlertDialogAction: ({
     children,
     onClick,
@@ -102,11 +114,15 @@ describe('Admin Ideas Page + Table', () => {
     expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()
     expect(screen.getAllByText('u2')[0]).toBeInTheDocument()
 
-    const row1 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
+    const row1 = screen
+      .getAllByRole('row')
+      .find((r) => within(r).queryByText('Idea 1'))
     expect(row1).toBeTruthy()
     expect(within(row1 as HTMLElement).getByText('审核中')).toBeInTheDocument()
 
-    const row2 = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 2'))
+    const row2 = screen
+      .getAllByRole('row')
+      .find((r) => within(r).queryByText('Idea 2'))
     expect(row2).toBeTruthy()
     expect(within(row2 as HTMLElement).getByText('已立项')).toBeInTheDocument()
   })
@@ -148,14 +164,22 @@ describe('Admin Ideas Page + Table', () => {
       />
     )
 
-    const row = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea 1'))
+    const row = screen
+      .getAllByRole('row')
+      .find((r) => within(r).queryByText('Idea 1'))
     expect(row).toBeTruthy()
 
-    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '通过审核' }))
-    await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_1', 'APPROVED'))
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: '通过审核' })
+    )
+    await waitFor(() =>
+      expect(updateIdeaStatus).toHaveBeenCalledWith('idea_1', 'APPROVED')
+    )
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
 
-    fireEvent.click(within(row as HTMLElement).getByRole('button', { name: '确认移至回收站' }))
+    fireEvent.click(
+      within(row as HTMLElement).getByRole('button', { name: '确认移至回收站' })
+    )
     await waitFor(() => expect(moveToTrash).toHaveBeenCalledWith('idea_1'))
     await waitFor(() => expect(refreshMock).toHaveBeenCalled())
   })
@@ -193,19 +217,39 @@ describe('Admin Ideas Page + Table', () => {
             email: 'u3@example.com',
           }),
         ]}
-      />,
+      />
     )
 
-    const approvedRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea Approved'))
+    const approvedRow = screen
+      .getAllByRole('row')
+      .find((r) => within(r).queryByText('Idea Approved'))
     expect(approvedRow).toBeTruthy()
-    fireEvent.click(within(approvedRow as HTMLElement).getByRole('button', { name: '启动开发' }))
-    await waitFor(() => expect(updateIdeaStatus).toHaveBeenCalledWith('idea_approved', 'IN_PROGRESS'))
-
-    const inProgressRow = screen.getAllByRole('row').find((r) => within(r).queryByText('Idea In Progress'))
-    expect(inProgressRow).toBeTruthy()
-    fireEvent.click(within(inProgressRow as HTMLElement).getByRole('button', { name: '发布上线' }))
+    fireEvent.click(
+      within(approvedRow as HTMLElement).getByRole('button', {
+        name: '启动开发',
+      })
+    )
     await waitFor(() =>
-      expect(updateIdeaStatus).toHaveBeenCalledWith('idea_in_progress', 'COMPLETED'),
+      expect(updateIdeaStatus).toHaveBeenCalledWith(
+        'idea_approved',
+        'IN_PROGRESS'
+      )
+    )
+
+    const inProgressRow = screen
+      .getAllByRole('row')
+      .find((r) => within(r).queryByText('Idea In Progress'))
+    expect(inProgressRow).toBeTruthy()
+    fireEvent.click(
+      within(inProgressRow as HTMLElement).getByRole('button', {
+        name: '发布上线',
+      })
+    )
+    await waitFor(() =>
+      expect(updateIdeaStatus).toHaveBeenCalledWith(
+        'idea_in_progress',
+        'COMPLETED'
+      )
     )
   })
 })

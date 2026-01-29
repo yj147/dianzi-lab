@@ -22,11 +22,16 @@ describe('Login Page', () => {
   it('renders login form correctly', () => {
     render(<LoginPage />)
 
-    expect(screen.getByRole('heading', { level: 1, name: '欢迎回到实验室' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: '欢迎回到实验室' })
+    ).toBeInTheDocument()
     expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByLabelText('Password')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '登录' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '立即注册' })).toHaveAttribute('href', '/register')
+    expect(screen.getByRole('link', { name: '立即注册' })).toHaveAttribute(
+      'href',
+      '/register'
+    )
   })
 
   it('shows validation errors for invalid input', async () => {
@@ -78,7 +83,10 @@ describe('Login Page', () => {
     loginUserMock.mockImplementation(
       () =>
         new Promise((resolve) =>
-          setTimeout(() => resolve({ success: false, error: '邮箱或密码错误' }), 100)
+          setTimeout(
+            () => resolve({ success: false, error: '邮箱或密码错误' }),
+            100
+          )
         )
     )
     render(<LoginPage />)
@@ -125,7 +133,11 @@ describe('Login Page', () => {
   })
 
   it('shows field-specific error from server action', async () => {
-    loginUserMock.mockResolvedValue({ success: false, error: '邮箱格式不正确', field: 'email' })
+    loginUserMock.mockResolvedValue({
+      success: false,
+      error: '邮箱格式不正确',
+      field: 'email',
+    })
     render(<LoginPage />)
 
     fireEvent.change(screen.getByLabelText('Email'), {

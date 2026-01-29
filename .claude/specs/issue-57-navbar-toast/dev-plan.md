@@ -1,11 +1,13 @@
 # 共享组件与导航栏美化 - Development Plan
 
 ## Overview
+
 升级导航栏为响应式设计，添加滚动毛玻璃效果、用户下拉菜单和链接状态样式，并优化 Toast 组件的视觉反馈系统。
 
 ## Task Breakdown
 
 ### Task 1: 安装 DropdownMenu 依赖并封装组件
+
 - **ID**: task-1
 - **type**: default
 - **Description**: 安装 `@radix-ui/react-dropdown-menu` 依赖包，并参考现有 shadcn/ui 风格在 `components/ui/dropdown-menu.tsx` 中创建封装组件，导出 DropdownMenu、DropdownMenuTrigger、DropdownMenuContent、DropdownMenuItem、DropdownMenuSeparator 等子组件
@@ -18,6 +20,7 @@
   - Radix UI props 正确透传
 
 ### Task 2: 导航栏功能升级与样式优化
+
 - **ID**: task-2
 - **type**: ui
 - **Description**: 在 `NavbarClient.tsx` 中实现滚动监听（>50px 触发毛玻璃效果 `backdrop-blur-lg bg-white/80`），为导航链接添加 hover/active 状态（含 `aria-current="page"`），在桌面端集成 DropdownMenu 实现用户下拉菜单（显示邮箱、仪表板链接、登出按钮），验证移动端汉堡菜单功能正常
@@ -33,6 +36,7 @@
   - 响应式断点切换（mobile ↔ desktop）
 
 ### Task 3: Toast 变体优化与颜色系统
+
 - **ID**: task-3
 - **type**: ui
 - **Description**: 在 `components/ui/toast.tsx` 中新增 success 和 info 变体，使用 Tailwind 内置颜色类（success: green-500/green-100, destructive: red-500/red-100, info: blue-500/blue-100），更新 `use-toast.ts` 类型定义，确保 `toaster.tsx` 正确渲染新变体
@@ -47,6 +51,7 @@
   - 手动关闭 toast 交互
 
 ### Task 4: 测试覆盖率增强与配置优化
+
 - **ID**: task-4
 - **type**: default
 - **Description**: 调整 `jest.config.ts` 中的 coverage 收集范围和阈值（全局 ≥90%），补充 `__tests__/components/Navbar.test.tsx` 的边界场景测试（滚动阈值边界、未登录状态、移动端交互），新建 `__tests__/components/Toast.test.tsx` 覆盖所有 Toast 行为
@@ -60,6 +65,7 @@
   - 移动端特定交互（触摸事件、视口变化）
 
 ## Acceptance Criteria
+
 - [ ] 导航栏固定顶部，滚动超过 50px 时显示毛玻璃背景（backdrop-blur-lg bg-white/80）
 - [ ] 导航链接具有明确的 hover 和 active 状态，当前页面链接标记 aria-current="page"
 - [ ] 移动端导航栏折叠为汉堡菜单且功能正常
@@ -69,6 +75,7 @@
 - [ ] 代码覆盖率 ≥90%
 
 ## Technical Notes
+
 - **滚动检测优化**: 使用 `useEffect` 添加 scroll 监听器，通过 state 记录 `scrolled` 状态，仅在阈值穿越（49→51 或 51→49）时更新 state 以减少重渲染
 - **Active 链接判定**: 利用 Next.js `usePathname()` hook 获取当前路由，匹配时添加 active class 和 `aria-current="page"` 属性以符合 WCAG 标准
 - **DropdownMenu 封装**: 参考现有 `alert-dialog.tsx` 的封装模式，使用 forwardRef 和 React.ComponentPropsWithoutRef 保持类型安全

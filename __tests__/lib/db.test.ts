@@ -22,7 +22,7 @@ describe('lib/db', () => {
       return
     }
 
-    ;(globalThis as unknown as { prisma?: unknown }).prisma = originalGlobalPrisma
+    ;(globalThis as unknown as { prisma?: unknown }).prisma =
+      originalGlobalPrisma
   })
 })
-

@@ -1,5 +1,5 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,4 +16,3 @@ export function isNextRedirectError(error: unknown): boolean {
   const digest = (error as { digest?: unknown }).digest
   return typeof digest === 'string' && digest.startsWith('NEXT_REDIRECT')
 }
-

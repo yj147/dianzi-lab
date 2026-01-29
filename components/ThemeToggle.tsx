@@ -8,21 +8,22 @@ import { cn } from '@/lib/utils'
 const STORAGE_KEY = 'theme'
 const DARK_CLASS = 'dark'
 
-type ThemeMode = 'light' | 'dark' | 'system'
+type ThemeMode = 'light' | 'dark' | 'auto'
 
 function getRoot(): HTMLElement | null {
   return typeof document === 'undefined' ? null : document.documentElement
 }
 
-function getSystemDark(): boolean {
-  return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches
+function getTimeBasedDark(): boolean {
+  const hour = new Date().getHours()
+  return hour < 6 || hour >= 18
 }
 
 function applyTheme(mode: ThemeMode) {
   const root = getRoot()
   if (!root) return
 
-  const isDark = mode === 'dark' || (mode === 'system' && getSystemDark())
+  const isDark = mode === 'dark' || (mode === 'auto' && getTimeBasedDark())
   root.classList.toggle(DARK_CLASS, isDark)
   root.style.colorScheme = isDark ? 'dark' : 'light'
 
@@ -36,11 +37,12 @@ function applyTheme(mode: ThemeMode) {
 function getStoredMode(): ThemeMode {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored === 'light' || stored === 'dark' || stored === 'system') return stored
+    if (stored === 'light' || stored === 'dark' || stored === 'auto')
+      return stored
   } catch {
     // ignore
   }
-  return 'system'
+  return 'auto'
 }
 
 export default function ThemeToggle({ className }: { className?: string }) {
@@ -50,35 +52,28 @@ export default function ThemeToggle({ className }: { className?: string }) {
     setMode(getStoredMode())
   }, [])
 
-  React.useEffect(() => {
-    if (mode !== 'system') return
-    const mq = window.matchMedia('(prefers-color-scheme: dark)')
-    const handler = () => applyTheme('system')
-    mq.addEventListener('change', handler)
-    return () => mq.removeEventListener('change', handler)
-  }, [mode])
-
   const handleToggle = () => {
-    const next: ThemeMode = mode === 'light' ? 'dark' : mode === 'dark' ? 'system' : 'light'
-    applyTheme(next)
-    setMode(next)
+    if (mode === 'auto') {
+      // 从 auto 切换到相反的固定主题
+      const next: ThemeMode = getTimeBasedDark() ? 'light' : 'dark'
+      applyTheme(next)
+      setMode(next)
+    } else {
+      // 从固定主题切换回 auto
+      applyTheme('auto')
+      setMode('auto')
+    }
   }
 
-  const labels: Record<ThemeMode, string> = {
-    light: '切换主题',
-    dark: '切换主题',
-    system: '切换主题',
-  }
-  const label = mode ? labels[mode] : '切换主题'
-  const resolvedMode = mode ?? 'system'
-  const isDark = resolvedMode === 'dark' || (resolvedMode === 'system' && getSystemDark())
+  const resolvedMode = mode ?? 'auto'
+  const isDark =
+    resolvedMode === 'dark' || (resolvedMode === 'auto' && getTimeBasedDark())
   const Icon = isDark ? Moon : Sun
 
   return (
     <button
       type="button"
-      aria-label={label}
-      title={undefined}
+      aria-label="切换主题"
       onClick={handleToggle}
       className={cn(
         'inline-flex size-9 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors duration-200 hover:bg-muted/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none',

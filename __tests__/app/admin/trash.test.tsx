@@ -105,7 +105,8 @@ describe('Admin Trash Page + Table', () => {
   })
 
   it('restore button calls restoreIdea + refresh', async () => {
-    const { default: TrashTable } = await import('@/app/admin/trash/_components/TrashTable')
+    const { default: TrashTable } =
+      await import('@/app/admin/trash/_components/TrashTable')
 
     render(
       <TrashTable
@@ -117,7 +118,7 @@ describe('Admin Trash Page + Table', () => {
             email: 'u1@example.com',
           }),
         ]}
-      />,
+      />
     )
 
     // Find restore button by aria-label
@@ -131,7 +132,8 @@ describe('Admin Trash Page + Table', () => {
   })
 
   it('permanent delete shows confirmation and calls permanentDeleteIdea + refresh', async () => {
-    const { default: TrashTable } = await import('@/app/admin/trash/_components/TrashTable')
+    const { default: TrashTable } =
+      await import('@/app/admin/trash/_components/TrashTable')
 
     render(
       <TrashTable
@@ -143,7 +145,7 @@ describe('Admin Trash Page + Table', () => {
             email: 'u1@example.com',
           }),
         ]}
-      />,
+      />
     )
 
     // Find permanent delete button by aria-label

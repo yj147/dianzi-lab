@@ -60,7 +60,7 @@ jest.mock('@/components/validator/ValidatorForm', () => {
             disabled: Boolean(isLoading),
             onClick: () => onSubmit({ scores: makeScores(0) }),
           },
-          '提交低分评估',
+          '提交低分评估'
         ),
         React.createElement(
           'button',
@@ -69,8 +69,8 @@ jest.mock('@/components/validator/ValidatorForm', () => {
             disabled: Boolean(isLoading),
             onClick: () => onSubmit({ scores: makeScores(10) }),
           },
-          '提交高分评估',
-        ),
+          '提交高分评估'
+        )
       ),
   }
 })
@@ -82,7 +82,9 @@ jest.mock('@/components/validator/RadarChart', () => ({
 
 jest.mock('@/components/validator/ResultPanel', () => ({
   __esModule: true,
-  default: ({ result }: { result: any }) => <div data-testid="result-panel">{result?.overallScore ?? ''}</div>,
+  default: ({ result }: { result: any }) => (
+    <div data-testid="result-panel">{result?.overallScore ?? ''}</div>
+  ),
 }))
 
 async function click(el: HTMLElement) {
@@ -95,7 +97,9 @@ async function fillIdeaBasics() {
   fireEvent.change(screen.getByLabelText(/标题/), {
     target: { value: '测试点子' },
   })
-  fireEvent.change(screen.getByLabelText(/核心描述/), { target: { value: '这是一个测试描述' } })
+  fireEvent.change(screen.getByLabelText(/核心描述/), {
+    target: { value: '这是一个测试描述' },
+  })
 }
 
 describe('Submit Page (3-step)', () => {
@@ -118,28 +122,40 @@ describe('Submit Page (3-step)', () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    expect(screen.getByRole('heading', { level: 2, name: '登录后即可提交点子' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 2, name: '登录后即可提交点子' })
+    ).toBeInTheDocument()
 
     const loginLink = screen.getByRole('link', { name: '立即登录' })
     expect(loginLink).toHaveAttribute('href', '/login?callbackUrl=/submit')
 
     // SubmitForm 不应渲染
-    expect(screen.queryByRole('heading', { level: 1, name: '绘制蓝图' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { level: 1, name: '绘制蓝图' })
+    ).not.toBeInTheDocument()
   })
 
   it('已登录时渲染点子表单（含预览与标签输入）', async () => {
     const PageContent = await SubmitPage()
     render(PageContent)
 
-    expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: '绘制蓝图' })
+    ).toBeInTheDocument()
 
     expect(screen.getByRole('link', { name: /返回首页/ })).toBeInTheDocument()
 
-    expect(screen.getByPlaceholderText('给你的项目起个响亮的名字')).toBeInTheDocument()
     expect(
-      screen.getByPlaceholderText('解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景...'),
+      screen.getByPlaceholderText('给你的项目起个响亮的名字')
     ).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('工具, AI, 效率 (用逗号分隔)')).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText(
+        '解决了什么痛点？核心功能是什么？目标用户是谁？请尽可能详细描述场景...'
+      )
+    ).toBeInTheDocument()
+    expect(
+      screen.getByPlaceholderText('工具, AI, 效率 (用逗号分隔)')
+    ).toBeInTheDocument()
 
     expect(screen.getByText('实时预览')).toBeInTheDocument()
   })
@@ -164,12 +180,16 @@ describe('Submit Page (3-step)', () => {
     await click(screen.getByRole('button', { name: /下一步：创意评估/ }))
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '创意评估' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: '创意评估' })
+      ).toBeInTheDocument()
     })
 
     await click(screen.getByRole('button', { name: '返回修改项目' }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: '绘制蓝图' })
+      ).toBeInTheDocument()
     })
   })
 
@@ -188,7 +208,9 @@ describe('Submit Page (3-step)', () => {
     await click(screen.getByRole('button', { name: /下一步：创意评估/ }))
 
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '创意评估' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: '创意评估' })
+      ).toBeInTheDocument()
     })
 
     await click(screen.getByRole('button', { name: '提交低分评估' }))
@@ -202,7 +224,9 @@ describe('Submit Page (3-step)', () => {
 
     await click(screen.getByRole('button', { name: '修改项目' }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '绘制蓝图' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: '绘制蓝图' })
+      ).toBeInTheDocument()
     })
   })
 
@@ -220,17 +244,26 @@ describe('Submit Page (3-step)', () => {
     await fillIdeaBasics()
     await click(screen.getByRole('button', { name: /下一步：创意评估/ }))
     await waitFor(() => {
-      expect(screen.getByRole('heading', { level: 1, name: '创意评估' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('heading', { level: 1, name: '创意评估' })
+      ).toBeInTheDocument()
     })
 
     await click(screen.getByRole('button', { name: '提交高分评估' }))
 
     await waitFor(() => {
-      expect(screen.getByRole('link', { name: '查看我的点子' })).toBeInTheDocument()
-      expect(screen.getByRole('button', { name: '提交新项目' })).toBeInTheDocument()
+      expect(
+        screen.getByRole('link', { name: '查看我的点子' })
+      ).toBeInTheDocument()
+      expect(
+        screen.getByRole('button', { name: '提交新项目' })
+      ).toBeInTheDocument()
     })
 
-    expect(screen.getByRole('link', { name: '查看我的点子' })).toHaveAttribute('href', '/dashboard')
+    expect(screen.getByRole('link', { name: '查看我的点子' })).toHaveAttribute(
+      'href',
+      '/dashboard'
+    )
     expect(submitIdeaWithAssessment).toHaveBeenCalledTimes(1)
   })
 })

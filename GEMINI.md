@@ -25,11 +25,11 @@ Check if the project has a CLAUDE.md file. If it exists, read it as context.
 3. **Default to parallel**: ALL tools (Read, Grep, Glob, WebFetch, WebSearch, MCP tools, Bash, etc.) are parallelizable unless one depends on another's result
 4. **Cross-tool parallelization**: Mix different tool types in the same parallel batch (e.g., Read + Grep + MCP tool + WebFetch simultaneously)
 5. **Forbidden patterns**:
-   - [X] Read file A → wait → Read file B (when B doesn't depend on A's content)
-   - [X] Grep pattern X → wait → Grep pattern Y (when searching different patterns)
-   - [X] Sequential exploration of multiple components
-   - [X] Call MCP tool → wait → Read file (when they're independent)
-   - [X] Any sequential execution of independent operations
+   - [x] Read file A → wait → Read file B (when B doesn't depend on A's content)
+   - [x] Grep pattern X → wait → Grep pattern Y (when searching different patterns)
+   - [x] Sequential exploration of multiple components
+   - [x] Call MCP tool → wait → Read file (when they're independent)
+   - [x] Any sequential execution of independent operations
 
 **Examples**:
 
@@ -43,10 +43,11 @@ Check if the project has a CLAUDE.md file. If it exists, read it as context.
 
 [CORRECT] (parallel execution):
 Single message with:
+
 - Read README.md
 - Read package.json
 - Grep "API endpoint"
-</example>
+  </example>
 
 <example>
 [WRONG] (serial when no dependencies exist):
@@ -57,10 +58,11 @@ User: "Check error handling in client and server code"
 
 [CORRECT] (parallel independent searches):
 Single message with:
-- Grep "error" --glob "client/**/*.ts"
-- Grep "error" --glob "server/**/*.ts"
-- Grep "try.*catch" (alternative pattern)
-</example>
+
+- Grep "error" --glob "client/\*_/_.ts"
+- Grep "error" --glob "server/\*_/_.ts"
+- Grep "try.\*catch" (alternative pattern)
+  </example>
 
 <example>
 [WRONG] (sequential cross-tool execution):
@@ -75,14 +77,15 @@ User: "Analyze the API architecture and fetch latest best practices"
 
 [CORRECT] (parallel cross-tool execution):
 Single message with:
+
 - Read src/api/routes.ts
 - Read src/api/controllers.ts
-- Grep "endpoint" --glob "src/**/*.ts"
-- Grep "middleware" --glob "src/**/*.ts"
+- Grep "endpoint" --glob "src/\*_/_.ts"
+- Grep "middleware" --glob "src/\*_/_.ts"
 - MCP tool: query_database_schema
 - MCP tool: list_api_endpoints
 - WebFetch https://api-design-guide.example.com
-</example>
+  </example>
 
 ---
 
@@ -91,15 +94,17 @@ Single message with:
 **When to apply** (≥3 steps or multiple files):
 
 **Phase 1: Parallel Context Gathering** (single message, 3-8+ tool calls)
+
 - Read project manifests: package.json, pyproject.toml, go.mod, etc.
 - Read documentation: README, CONTRIBUTING, ARCHITECTURE
-- Glob for entry points: "main.*", "index.*", "src/**/*"
+- Glob for entry points: "main._", "index._", "src/\*_/_"
 - Grep for keywords related to the task
 - Call MCP tools if available (database queries, API exploration, etc.)
 - WebFetch external documentation or references if needed
 - ALL of the above should be executed in ONE parallel batch
 
 **Phase 2: Requirement Breakdown**
+
 - **Requirements**: Break the ask into explicit requirements, unclear areas, and hidden assumptions
 - **Scope mapping**: Identify codebase regions, files, functions, or libraries likely involved
 - **Dependencies**: Identify relevant frameworks, APIs, config files, data formats, and versioning concerns
@@ -115,6 +120,7 @@ Single message with:
 ## Self-Reflection Rubric
 
 Before finalizing, evaluate across at least five categories:
+
 - **Maintainability**: Is code easy to understand and modify?
 - **Performance**: Any obvious performance issues?
 - **Security**: Introduced vulnerabilities (OWASP Top 10)?
@@ -131,12 +137,14 @@ Revisit implementation if any category misses the bar.
 **Principle**: Unit tests must be requirement-driven, not implementation-driven.
 
 **Coverage**:
+
 - Happy path: all normal use cases from requirements
 - Edge cases: boundary values, empty inputs, max limits
 - Error handling: invalid inputs, failure scenarios, permission errors
 - State transitions: if stateful, cover all valid state changes
 
 **Process**:
+
 1. Extract test scenarios from requirements BEFORE writing tests
 2. Each requirement → ≥1 test case
 3. Enumerate all scenarios explicitly

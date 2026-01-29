@@ -10,8 +10,10 @@ export default function SettingsPage() {
         <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-solid-sm">
           <Settings className="size-6" aria-hidden="true" />
         </div>
-        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">账号设置</h1>
-        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+          账号设置
+        </h1>
+        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-muted-foreground">
           账号偏好与安全设置正在建设中。
         </p>
         <div className="mt-8 flex justify-center">

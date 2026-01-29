@@ -23,7 +23,7 @@ describe('middleware', () => {
       const { config } = await import('@/middleware')
 
       expect(config.matcher).toEqual(
-        expect.arrayContaining(['/dashboard/:path*', '/admin/:path*']),
+        expect.arrayContaining(['/dashboard/:path*', '/admin/:path*'])
       )
       expect(config.matcher).not.toContain('/submit')
     })
@@ -37,7 +37,7 @@ describe('middleware', () => {
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login?callbackUrl=%2Fdashboard',
+        'http://localhost:3000/login?callbackUrl=%2Fdashboard'
       )
     })
 
@@ -48,7 +48,7 @@ describe('middleware', () => {
 
       expect(response.status).toBe(307)
       expect(response.headers.get('location')).toBe(
-        'http://localhost:3000/login?callbackUrl=%2Fadmin',
+        'http://localhost:3000/login?callbackUrl=%2Fadmin'
       )
     })
   })

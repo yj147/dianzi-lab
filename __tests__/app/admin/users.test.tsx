@@ -57,12 +57,16 @@ describe('Admin: Dashboard + Users', () => {
     const element = await AdminUsersPage()
     render(element)
 
-    expect(screen.getByRole('heading', { level: 1, name: '主控制台' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { level: 1, name: '主控制台' })
+    ).toBeInTheDocument()
     expect(screen.getByText('管理实验室成员及其权限。')).toBeInTheDocument()
 
     // Header tabs
     expect(screen.getByRole('link', { name: '项目管理' })).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: '用户管理' })).toHaveClass('bg-brand-dark')
+    expect(screen.getByRole('link', { name: '用户管理' })).toHaveClass(
+      'bg-brand-dark'
+    )
     expect(screen.getByRole('link', { name: /回收站/ })).toBeInTheDocument()
 
     // Table headers
@@ -89,6 +93,8 @@ describe('Admin: Dashboard + Users', () => {
         _count: { select: { ideas: true } },
       },
     })
-    expect(prisma.idea.count).toHaveBeenCalledWith({ where: { isDeleted: true } })
+    expect(prisma.idea.count).toHaveBeenCalledWith({
+      where: { isDeleted: true },
+    })
   })
 })

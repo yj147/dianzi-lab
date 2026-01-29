@@ -1,8 +1,8 @@
-import '@testing-library/jest-dom';
-import { TextEncoder, TextDecoder } from 'util';
+import '@testing-library/jest-dom'
+import { TextEncoder, TextDecoder } from 'util'
 
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder as typeof global.TextDecoder;
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder as typeof global.TextDecoder
 
 // Avoid brittle per-test icon mocks: any Lucide icon becomes a harmless <svg />.
 jest.mock('lucide-react', () => {
@@ -17,6 +17,6 @@ jest.mock('lucide-react', () => {
         return (props: Record<string, unknown>) =>
           React.createElement('svg', { 'data-lucide': String(prop), ...props })
       },
-    },
+    }
   )
 })

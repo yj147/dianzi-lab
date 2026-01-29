@@ -79,7 +79,9 @@ describe('Admin Layout', () => {
   it('renders navbar/footer and children for ADMIN session', async () => {
     ;(getSession as jest.Mock).mockResolvedValue(mockAdminSession)
 
-    const LayoutContent = await AdminLayout({ children: <div>Admin Content</div> })
+    const LayoutContent = await AdminLayout({
+      children: <div>Admin Content</div>,
+    })
     render(LayoutContent)
 
     expect(screen.getByTestId('navbar')).toBeInTheDocument()

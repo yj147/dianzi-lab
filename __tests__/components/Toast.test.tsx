@@ -16,9 +16,9 @@ describe('Toast', () => {
     render(<Toaster />)
 
     const cases = [
-      { variant: 'success' as const, className: 'bg-green-50' },
-      { variant: 'destructive' as const, className: 'bg-red-50' },
-      { variant: 'info' as const, className: 'bg-blue-50' },
+      { variant: 'success' as const, className: 'bg-brand-success/15' },
+      { variant: 'destructive' as const, className: 'bg-destructive/10' },
+      { variant: 'info' as const, className: 'bg-primary/10' },
     ]
 
     for (const { variant, className } of cases) {
@@ -67,7 +67,10 @@ describe('Toast', () => {
       const { toast: pushToast, dismiss } = useToast()
       return (
         <div>
-          <button type="button" onClick={() => pushToast({ title: 'from-harness' })}>
+          <button
+            type="button"
+            onClick={() => pushToast({ title: 'from-harness' })}
+          >
             add
           </button>
           <button type="button" onClick={() => dismiss()}>
@@ -101,11 +104,17 @@ describe('Toast', () => {
     const t2 = { id: 't2', open: true, title: 't2' }
     const initial = { toasts: [t1, t2] }
 
-    const dismissedOne = reducer(initial as any, { type: 'DISMISS_TOAST', toastId: 't1' } as any)
+    const dismissedOne = reducer(
+      initial as any,
+      { type: 'DISMISS_TOAST', toastId: 't1' } as any
+    )
     expect(dismissedOne.toasts[0].open).toBe(false)
     expect(dismissedOne.toasts[1].open).toBe(true)
 
-    const removedAll = reducer(dismissedOne as any, { type: 'REMOVE_TOAST' } as any)
+    const removedAll = reducer(
+      dismissedOne as any,
+      { type: 'REMOVE_TOAST' } as any
+    )
     expect(removedAll.toasts).toEqual([])
   })
 

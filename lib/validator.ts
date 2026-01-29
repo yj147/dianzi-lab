@@ -62,10 +62,9 @@ const KILL_POWER = 2
  */
 export function calculateScore(input: AssessmentInput): number {
   // 线性底分
-  const L = (Object.entries(WEIGHTS) as [keyof AssessmentInput, number][]).reduce(
-    (sum, [key, w]) => sum + w * (input[key] / 10),
-    0
-  )
+  const L = (
+    Object.entries(WEIGHTS) as [keyof AssessmentInput, number][]
+  ).reduce((sum, [key, w]) => sum + w * (input[key] / 10), 0)
 
   // 乘数惩罚
   let M = 1
@@ -141,7 +140,9 @@ function evaluateRule(
   input: AssessmentInput,
   finalScore: number
 ): boolean {
-  return rule.when.all.every((cond) => evaluateCondition(cond, input, finalScore))
+  return rule.when.all.every((cond) =>
+    evaluateCondition(cond, input, finalScore)
+  )
 }
 
 /**

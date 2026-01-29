@@ -8,7 +8,7 @@ function normalizeEmail(email: string): string {
 
 export async function createUser(
   email: string,
-  hashedPassword: string,
+  hashedPassword: string
 ): Promise<User> {
   const normalizedEmail = normalizeEmail(email)
 

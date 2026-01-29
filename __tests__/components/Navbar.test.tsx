@@ -44,12 +44,14 @@ beforeEach(() => {
 describe('Navbar (Server Component)', () => {
   it('正确传递未登录状态给 NavbarClient', async () => {
     ;(auth.getSession as jest.Mock).mockResolvedValue(null)
-    
+
     const NavbarResolved = await Navbar()
     render(NavbarResolved)
-    
+
     expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: '用户菜单' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: '用户菜单' })
+    ).not.toBeInTheDocument()
   })
 
   it('正确传递已登录状态给 NavbarClient', async () => {
@@ -58,10 +60,10 @@ describe('Navbar (Server Component)', () => {
       sub: '123',
       role: 'USER',
     })
-    
+
     const NavbarResolved = await Navbar()
     render(NavbarResolved)
-    
+
     expect(screen.getByRole('button', { name: '用户菜单' })).toBeInTheDocument()
   })
 })
@@ -69,9 +71,9 @@ describe('Navbar (Server Component)', () => {
 describe('auth-actions', () => {
   it('logout action 清除 cookie 并重定向', async () => {
     const { logout } = jest.requireActual('@/lib/auth-actions')
-    
+
     await logout()
-    
+
     expect(auth.clearSessionCookie).toHaveBeenCalled()
     expect(redirect).toHaveBeenCalledWith('/login')
   })
@@ -90,13 +92,15 @@ describe('NavbarClient', () => {
     render(<NavbarClient isLoggedIn={false} />)
     expect(screen.getByRole('link', { name: '登录' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: '加入实验室' })).toBeInTheDocument()
-    expect(screen.queryByRole('button', { name: '用户菜单' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('button', { name: '用户菜单' })
+    ).not.toBeInTheDocument()
   })
 
   it('已登录时显示退出按钮和用户邮箱', () => {
     const email = 'test@example.com'
     render(<NavbarClient isLoggedIn={true} userEmail={email} />)
-    
+
     expect(screen.queryByRole('link', { name: '登录' })).not.toBeInTheDocument()
     expect(screen.getByRole('button', { name: '用户菜单' })).toBeInTheDocument()
   })
@@ -106,12 +110,16 @@ describe('NavbarClient', () => {
 
     const trigger = screen.getByRole('button', { name: '用户菜单' })
 
-    expect(screen.queryByRole('menuitem', { name: '我的点子' })).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole('menuitem', { name: '我的点子' })
+    ).not.toBeInTheDocument()
 
     trigger.focus()
     fireEvent.keyDown(trigger, { key: 'Enter', code: 'Enter' })
 
-    const dashboardItem = await screen.findByRole('menuitem', { name: '我的点子' })
+    const dashboardItem = await screen.findByRole('menuitem', {
+      name: '我的点子',
+    })
     expect(dashboardItem).toHaveAttribute('href', '/dashboard')
 
     const menu = dashboardItem.closest('[role="menu"]')
@@ -120,7 +128,9 @@ describe('NavbarClient', () => {
     // Escape 关闭菜单
     fireEvent.keyDown(document, { key: 'Escape', code: 'Escape' })
     await waitFor(() => {
-      expect(screen.queryByRole('menuitem', { name: '我的点子' })).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole('menuitem', { name: '我的点子' })
+      ).not.toBeInTheDocument()
     })
 
     // 再次打开并点击退出

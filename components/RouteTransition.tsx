@@ -4,7 +4,11 @@ import * as React from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { usePathname } from 'next/navigation'
 
-export default function RouteTransition({ children }: { children: React.ReactNode }) {
+export default function RouteTransition({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const pathname = usePathname()
   const reducedMotion = useReducedMotion()
 

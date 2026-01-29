@@ -9,11 +9,15 @@ function withSchema(databaseUrl: string, schema: string): string {
 }
 
 function createPrismaClient(): PrismaClient {
-  const isVercelDeployment = process.env.VERCEL === '1' || Boolean(process.env.VERCEL_ENV)
+  const isVercelDeployment =
+    process.env.VERCEL === '1' || Boolean(process.env.VERCEL_ENV)
 
-  const configuredSchema = isVercelDeployment ? process.env.DATABASE_SCHEMA?.trim() : undefined
+  const configuredSchema = isVercelDeployment
+    ? process.env.DATABASE_SCHEMA?.trim()
+    : undefined
   const schema =
-    configuredSchema || (process.env.VERCEL_ENV === 'preview' ? 'preview' : undefined)
+    configuredSchema ||
+    (process.env.VERCEL_ENV === 'preview' ? 'preview' : undefined)
 
   // Vercel preview deployments should never share the production schema.
   // Some claimable deployments don't expose VERCEL_ENV; DATABASE_SCHEMA provides an explicit override.

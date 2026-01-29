@@ -46,7 +46,7 @@ describe('IdeaCard Component', () => {
     const card = container.firstChild
     expect(card).toHaveClass('border-2')
     expect(card).toHaveClass('border-brand-dark')
-    expect(card).toHaveClass('bg-white')
+    expect(card).toHaveClass('bg-surface')
     expect(card).toHaveClass('shadow-solid-sm')
   })
 

@@ -13,7 +13,10 @@ async function requireAdmin(): Promise<void> {
 
 export async function restoreIdea(ideaId: string) {
   await requireAdmin()
-  await prisma.idea.update({ where: { id: ideaId }, data: { isDeleted: false } })
+  await prisma.idea.update({
+    where: { id: ideaId },
+    data: { isDeleted: false },
+  })
   revalidateTag('completed-ideas')
 }
 

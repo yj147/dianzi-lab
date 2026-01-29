@@ -42,6 +42,12 @@ next-env.d.ts
 .shared/
 dashboard-current.png
 dashboard-final.png
+homepage_after_fix.png
+homepage_check.png
+login_dark.png
+register_dark.png
+submit_dark.png
+scripts/bench-nested-access.js
 
 # local production verification artifacts (do not commit)
 tests/dianzi-production-test-*.md

@@ -1,7 +1,13 @@
 'use client'
 
 import type { IdeaStatus } from '@prisma/client'
-import { Beaker, CheckCircle2, Clock, Rocket, type LucideIcon } from 'lucide-react'
+import {
+  Beaker,
+  CheckCircle2,
+  Clock,
+  Rocket,
+  type LucideIcon,
+} from 'lucide-react'
 import { STATUS_CONFIG } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -23,10 +29,10 @@ export default function StatusBadge({
   const Icon = ICONS[status]
 
   const styles: Record<IdeaStatus, string> = {
-    PENDING: 'bg-gray-100 text-gray-500 border-gray-200',
-    APPROVED: 'bg-blue-50 text-brand-primary border-blue-200',
-    IN_PROGRESS: 'bg-orange-50 text-orange-600 border-orange-200',
-    COMPLETED: 'bg-green-50 text-brand-success border-green-200',
+    PENDING: 'bg-muted text-muted-foreground border-border',
+    APPROVED: 'bg-primary/10 text-primary border-primary/30',
+    IN_PROGRESS: 'bg-brand-accent/15 text-brand-accent border-brand-accent/30',
+    COMPLETED: 'bg-brand-success/15 text-brand-success border-brand-success/30',
   }
 
   return (
