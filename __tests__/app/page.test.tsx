@@ -25,14 +25,14 @@ describe('Home Page', () => {
     const { container } = render(element)
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /技术合伙人/ }),
+      screen.getByRole('heading', { level: 1, name: /技术合伙人/ })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole('heading', { level: 2, name: '为什么选择我们？' }),
+      screen.getByRole('heading', { level: 2, name: '为什么选择我们？' })
     ).toBeInTheDocument()
 
     expect(
-      screen.getByRole('heading', { level: 2, name: '客户案例库' }),
+      screen.getByRole('heading', { level: 2, name: '客户案例库' })
     ).toBeInTheDocument()
     expect(screen.getByText('暂无已交付案例')).toBeInTheDocument()
 

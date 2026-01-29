@@ -1,11 +1,13 @@
 # User Registration Page - Development Plan
 
 ## Overview
+
 Implement a full-stack user registration feature with email/password authentication, form validation, and bcrypt password hashing.
 
 ## Task Breakdown
 
 ### Task 1: Install Dependencies
+
 - **ID**: task-1
 - **type**: quick-fix
 - **Description**: Install required npm packages: react-hook-form, zod, @hookform/resolvers
@@ -15,6 +17,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - **Test Focus**: Verify dependencies are correctly installed and project builds without errors
 
 ### Task 2: Setup Database Client and User Repository
+
 - **ID**: task-2
 - **type**: default
 - **Description**: Create Prisma client singleton (lib/db.ts) and user write function with email normalization in lib/users.ts
@@ -24,6 +27,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - **Test Focus**: Test email normalization (trim + toLowerCase), Prisma client initialization, user creation function with mocked Prisma client
 
 ### Task 3: Implement Registration Server Action
+
 - **ID**: task-3
 - **type**: default
 - **Description**: Create registerUser Server Action with Zod schema validation, bcrypt hashing (cost=10), and unique email conflict handling (P2002)
@@ -33,6 +37,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - **Test Focus**: Test Zod schema validation (email format, password min 6 chars, confirmPassword match), bcrypt hashing with correct cost factor, P2002 unique constraint error handling, timing attack mitigation
 
 ### Task 4: Create Registration UI
+
 - **ID**: task-4
 - **type**: ui
 - **Description**: Build /register page with glassmorphism card design, responsive layout, react-hook-form integration, onBlur validation, and loading states
@@ -42,6 +47,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - **Test Focus**: Test form validation feedback, loading state during submission, error message display for unique email violations, successful redirect to /login
 
 ### Task 5: Create Login Page Placeholder
+
 - **ID**: task-5
 - **type**: quick-fix
 - **Description**: Create placeholder /login page for post-registration redirect target
@@ -51,6 +57,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - **Test Focus**: Verify page renders without errors and route is accessible
 
 ## Acceptance Criteria
+
 - [ ] /register page accessible and functional
 - [ ] Form fields implemented: email, password, confirmPassword
 - [ ] Email format validation (frontend + backend via Zod)
@@ -63,6 +70,7 @@ Implement a full-stack user registration feature with email/password authenticat
 - [ ] Code coverage ≥90%
 
 ## Technical Notes
+
 - Use Server Actions instead of API routes for registration logic
 - Zod schema shared between client and server for consistent validation
 - Email normalization: trim() + toLowerCase() before database write

@@ -27,7 +27,10 @@ describe('lib/auth', () => {
 
   beforeEach(() => {
     process.env.JWT_SECRET = secret
-    Object.defineProperty(process.env, 'NODE_ENV', { value: 'test', writable: true })
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'test',
+      writable: true,
+    })
     jest.clearAllMocks()
   })
 
@@ -83,7 +86,7 @@ describe('lib/auth', () => {
     const { signJWT } = await import('@/lib/auth')
 
     await expect(
-      signJWT({ sub: 'user_1', email: 'a@example.com', role: 'USER' }),
+      signJWT({ sub: 'user_1', email: 'a@example.com', role: 'USER' })
     ).rejects.toThrow('JWT_SECRET')
   })
 
@@ -121,7 +124,10 @@ describe('lib/auth', () => {
   })
 
   it('setSessionCookie: production 环境 secure=true', async () => {
-    Object.defineProperty(process.env, 'NODE_ENV', { value: 'production', writable: true })
+    Object.defineProperty(process.env, 'NODE_ENV', {
+      value: 'production',
+      writable: true,
+    })
 
     const set = jest.fn()
     const get = jest.fn()
@@ -131,7 +137,7 @@ describe('lib/auth', () => {
     setSessionCookie('token')
 
     expect(set).toHaveBeenCalledWith(
-      expect.objectContaining({ secure: true, maxAge: 60 * 60 * 24 * 7 }),
+      expect.objectContaining({ secure: true, maxAge: 60 * 60 * 24 * 7 })
     )
   })
 

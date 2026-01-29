@@ -1,12 +1,14 @@
 # Test Cases: Bambi Lab Idea
 
 ## Overview
+
 - **Feature**: Bambi Lab Idea - 软件开发服务平台
 - **Requirements Source**: docs/dianzi-prd.md
 - **Test Coverage**: 7个用户故事 + 5个核心功能模块
 - **Last Updated**: 2026-01-27
 
 ### Automation Notes (UI Refactor 2026-01-27)
+
 - 为避免路由转场动画导致 flaky：建议自动化运行时启用 `prefers-reduced-motion: reduce`（转场会被禁用）
 - 若不启用 reduced motion：导航后等待 `[data-route-transition]` 下的目标内容出现（避免直接 sleep）
 - 首页含连续动效（跑马灯/呼吸点）：仅断言元素存在与可交互，不断言动画帧
@@ -19,6 +21,7 @@
 ### Functional Tests
 
 #### TC-F-001: 首页 Hero 区域展示
+
 - **Requirement**: US-1 首页展示已完成点子
 - **Priority**: High
 - **Preconditions**:
@@ -33,6 +36,7 @@
 - **Postconditions**: 无
 
 #### TC-F-002: 首页展示已完成点子卡片
+
 - **Requirement**: US-1, US-6 首页展示已完成点子
 - **Priority**: High
 - **Preconditions**:
@@ -48,6 +52,7 @@
 - **Postconditions**: 无
 
 #### TC-F-003: 导航栏功能
+
 - **Requirement**: F1 首页
 - **Priority**: High
 - **Preconditions**:
@@ -65,6 +70,7 @@
 - **Postconditions**: 无
 
 #### TC-F-004: 已登录用户导航栏显示
+
 - **Requirement**: F1 首页
 - **Priority**: Medium
 - **Preconditions**:
@@ -81,6 +87,7 @@
 ### Edge Case Tests
 
 #### TC-E-001: 首页空状态展示
+
 - **Requirement**: US-1 空状态显示引导文案
 - **Priority**: Medium
 - **Preconditions**:
@@ -95,6 +102,7 @@
 - **Postconditions**: 无
 
 #### TC-E-002: 响应式布局 - 移动端
+
 - **Requirement**: US-1 支持响应式布局
 - **Priority**: High
 - **Preconditions**:
@@ -109,6 +117,7 @@
 - **Postconditions**: 无
 
 #### TC-E-003: 响应式布局 - 桌面端
+
 - **Requirement**: US-1 支持响应式布局
 - **Priority**: High
 - **Preconditions**:
@@ -122,6 +131,7 @@
 - **Postconditions**: 无
 
 #### TC-E-004: 点子状态变更后首页更新
+
 - **Requirement**: US-6 状态变更后首页自动更新
 - **Priority**: High
 - **Preconditions**:
@@ -143,6 +153,7 @@
 ### Functional Tests
 
 #### TC-F-005: 用户注册成功
+
 - **Requirement**: US-2 用户注册
 - **Priority**: High
 - **Preconditions**:
@@ -161,6 +172,7 @@
 - **Postconditions**: 用户账户已创建
 
 #### TC-F-006: 用户登录成功
+
 - **Requirement**: US-2 用户登录
 - **Priority**: High
 - **Preconditions**:
@@ -176,6 +188,7 @@
 - **Postconditions**: 用户已登录
 
 #### TC-F-007: 登录状态持久化
+
 - **Requirement**: US-2 登录状态持久化
 - **Priority**: High
 - **Preconditions**:
@@ -192,6 +205,7 @@
 ### Edge Case Tests
 
 #### TC-E-005: 注册 - 密码边界值（6位）
+
 - **Requirement**: US-2 密码最少6位
 - **Priority**: Medium
 - **Preconditions**:
@@ -209,6 +223,7 @@
 ### Error Handling Tests
 
 #### TC-ERR-001: 注册 - 无效邮箱格式
+
 - **Requirement**: US-2 邮箱格式验证
 - **Priority**: High
 - **Preconditions**:
@@ -223,6 +238,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-002: 注册 - 密码少于6位
+
 - **Requirement**: US-2 密码最少6位
 - **Priority**: High
 - **Preconditions**:
@@ -238,6 +254,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-003: 注册 - 确认密码不匹配
+
 - **Requirement**: US-2 确认密码
 - **Priority**: High
 - **Preconditions**:
@@ -254,6 +271,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-004: 注册 - 邮箱已存在
+
 - **Requirement**: US-2 邮箱唯一
 - **Priority**: High
 - **Preconditions**:
@@ -269,6 +287,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-005: 登录 - 错误密码
+
 - **Requirement**: US-2 用户登录
 - **Priority**: High
 - **Preconditions**:
@@ -284,6 +303,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-006: 登录 - 不存在的邮箱
+
 - **Requirement**: US-2 用户登录
 - **Priority**: Medium
 - **Preconditions**:
@@ -305,6 +325,7 @@
 ### Functional Tests
 
 #### TC-F-008: 管理员登录成功
+
 - **Requirement**: US-3 管理员登录
 - **Priority**: High
 - **Preconditions**:
@@ -322,6 +343,7 @@
 ### Error Handling Tests
 
 #### TC-ERR-007: 普通用户访问管理后台
+
 - **Requirement**: US-3 普通用户无法访问管理后台
 - **Priority**: High
 - **Preconditions**:
@@ -337,6 +359,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-008: 未登录用户访问管理后台
+
 - **Requirement**: US-3 管理后台访问控制
 - **Priority**: High
 - **Preconditions**:
@@ -355,6 +378,7 @@
 ### Functional Tests
 
 #### TC-F-009: 登录用户提交点子成功
+
 - **Requirement**: US-4 用户提交点子
 - **Priority**: High
 - **Preconditions**:
@@ -376,6 +400,7 @@
 - **Postconditions**: 点子已创建，状态为审核中（并生成评估结果）
 
 #### TC-F-010: 提交点子 - 仅必填项
+
 - **Requirement**: US-4 标签可选
 - **Priority**: Medium
 - **Preconditions**:
@@ -395,6 +420,7 @@
 ### Edge Case Tests
 
 #### TC-E-006: 提交点子 - 标题最大长度（50字符）
+
 - **Requirement**: US-4 标题最大50字符
 - **Priority**: Medium
 - **Preconditions**:
@@ -409,6 +435,7 @@
 - **Postconditions**: 无
 
 #### TC-E-007: 提交点子 - 描述最大长度（1000字符）
+
 - **Requirement**: US-4 描述最大1000字符
 - **Priority**: Medium
 - **Preconditions**:
@@ -423,6 +450,7 @@
 - **Postconditions**: 无
 
 #### TC-E-008: 提交点子 - 多选标签
+
 - **Requirement**: US-4 分类标签可选多选
 - **Priority**: Low
 - **Preconditions**:
@@ -440,6 +468,7 @@
 ### Error Handling Tests
 
 #### TC-ERR-009: 提交点子 - 标题为空
+
 - **Requirement**: US-4 标题必填
 - **Priority**: High
 - **Preconditions**:
@@ -455,6 +484,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-010: 提交点子 - 描述为空
+
 - **Requirement**: US-4 描述必填
 - **Priority**: High
 - **Preconditions**:
@@ -470,6 +500,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-011: 提交点子 - 标题超过50字符
+
 - **Requirement**: US-4 标题最大50字符
 - **Priority**: Medium
 - **Preconditions**:
@@ -485,6 +516,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-012: 提交点子 - 描述超过1000字符
+
 - **Requirement**: US-4 描述最大1000字符
 - **Priority**: Medium
 - **Preconditions**:
@@ -500,6 +532,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-013: 未登录用户访问提交页
+
 - **Requirement**: US-4 未登录用户点击提交引导至登录
 - **Priority**: High
 - **Preconditions**:
@@ -513,6 +546,7 @@
 - **Postconditions**: 无
 
 #### TC-ERR-014: 提交点子 - 评分未达标阻止提交
+
 - **Requirement**: US-4 用户提交点子（评估门槛）
 - **Priority**: Medium
 - **Preconditions**:
@@ -535,6 +569,7 @@
 ### Functional Tests
 
 #### TC-F-011: 查看点子列表
+
 - **Requirement**: US-5 查看所有点子
 - **Priority**: High
 - **Preconditions**:
@@ -549,6 +584,7 @@
 - **Postconditions**: 无
 
 #### TC-F-012: 按状态筛选点子
+
 - **Requirement**: US-5 按状态筛选
 - **Priority**: High
 - **Preconditions**:
@@ -567,6 +603,7 @@
 - **Postconditions**: 无
 
 #### TC-F-013: 更改点子状态
+
 - **Requirement**: US-5 可更改点子状态
 - **Priority**: High
 - **Preconditions**:
@@ -584,6 +621,7 @@
 - **Postconditions**: 点子状态已更新
 
 #### TC-F-014: 移至回收站（软删除）
+
 - **Requirement**: US-5 可将点子移至垃圾箱
 - **Priority**: High
 - **Preconditions**:
@@ -601,6 +639,7 @@
 - **Postconditions**: 点子已软删除
 
 #### TC-F-015: 垃圾箱恢复点子
+
 - **Requirement**: US-5 垃圾箱可恢复
 - **Priority**: High
 - **Preconditions**:
@@ -617,6 +656,7 @@
 - **Postconditions**: 点子已恢复
 
 #### TC-F-016: 垃圾箱永久删除点子
+
 - **Requirement**: US-5 垃圾箱可永久删除
 - **Priority**: High
 - **Preconditions**:
@@ -634,6 +674,7 @@
 - **Postconditions**: 点子已永久删除
 
 #### TC-F-017: 统计看板展示
+
 - **Requirement**: US-5 提供统计看板
 - **Priority**: Medium
 - **Preconditions**:
@@ -649,6 +690,7 @@
 - **Postconditions**: 无
 
 #### TC-F-018: 用户管理 - 查看用户列表
+
 - **Requirement**: US-5 提供用户管理
 - **Priority**: Medium
 - **Preconditions**:
@@ -665,6 +707,7 @@
 ### Edge Case Tests
 
 #### TC-E-009: 点子列表为空
+
 - **Requirement**: US-5 点子管理
 - **Priority**: Low
 - **Preconditions**:
@@ -678,6 +721,7 @@
 - **Postconditions**: 无
 
 #### TC-E-010: 垃圾箱为空
+
 - **Requirement**: US-5 垃圾箱管理
 - **Priority**: Low
 - **Preconditions**:
@@ -696,6 +740,7 @@
 ### Functional Tests
 
 #### TC-F-019: 查看我的点子列表
+
 - **Requirement**: US-7 用户查看点子进度
 - **Priority**: High
 - **Preconditions**:
@@ -712,6 +757,7 @@
 - **Postconditions**: 无
 
 #### TC-F-020: 点子状态颜色区分
+
 - **Requirement**: US-7 状态使用不同颜色区分
 - **Priority**: Medium
 - **Preconditions**:
@@ -729,6 +775,7 @@
 - **Postconditions**: 无
 
 #### TC-F-021: 用户退出登录
+
 - **Requirement**: F4 用户中心 - 退出登录
 - **Priority**: High
 - **Preconditions**:
@@ -745,6 +792,7 @@
 ### Edge Case Tests
 
 #### TC-E-011: 用户无点子时的用户中心
+
 - **Requirement**: US-7 我的点子列表
 - **Priority**: Medium
 - **Preconditions**:
@@ -764,6 +812,7 @@
 ### State Transition Tests
 
 #### TC-ST-001: 完整状态流转：审核中 → 已立项 → 开发中 → 已上线
+
 - **Requirement**: US-5 状态流转
 - **Priority**: High
 - **Preconditions**:
@@ -785,6 +834,7 @@
 - **Postconditions**: 点子状态为已上线
 
 #### TC-ST-002: 状态回退：已上线 → 开发中
+
 - **Requirement**: US-5, US-6 状态变更后首页更新
 - **Priority**: Medium
 - **Preconditions**:
@@ -800,6 +850,7 @@
 - **Postconditions**: 点子不再显示在首页
 
 #### TC-ST-003: 软删除与恢复流程
+
 - **Requirement**: US-5 垃圾箱管理
 - **Priority**: Medium
 - **Preconditions**:
@@ -824,6 +875,7 @@
 ### Security Tests
 
 #### TC-SEC-001: API 路由鉴权 - 未登录访问受保护接口
+
 - **Requirement**: 技术约束 - API 路由鉴权
 - **Priority**: High
 - **Preconditions**:
@@ -837,6 +889,7 @@
 - **Postconditions**: 无
 
 #### TC-SEC-002: 普通用户调用管理员 API
+
 - **Requirement**: 技术约束 - 管理后台访问控制
 - **Priority**: High
 - **Preconditions**:
@@ -851,6 +904,7 @@
 - **Postconditions**: 无
 
 #### TC-SEC-003: XSS 防护
+
 - **Requirement**: 技术约束 - XSS 防护
 - **Priority**: High
 - **Preconditions**:
@@ -868,6 +922,7 @@
 ### Performance Tests
 
 #### TC-PERF-001: 首页加载时间
+
 - **Requirement**: 技术约束 - 首页首次加载 < 3秒
 - **Priority**: Medium
 - **Preconditions**:
@@ -881,6 +936,7 @@
 - **Postconditions**: 无
 
 #### TC-PERF-002: API 响应时间
+
 - **Requirement**: 技术约束 - API 响应 < 500ms
 - **Priority**: Medium
 - **Preconditions**:
@@ -897,17 +953,17 @@
 
 ## Test Coverage Matrix
 
-| Requirement | Test Cases | Coverage |
-|------------|------------|----------|
-| US-1 首页展示 | TC-F-001, TC-F-002, TC-F-003, TC-F-004, TC-E-001, TC-E-002, TC-E-003 | ✓ Complete |
-| US-2 用户注册登录 | TC-F-005, TC-F-006, TC-F-007, TC-E-005, TC-ERR-001~006 | ✓ Complete |
-| US-3 管理员登录 | TC-F-008, TC-ERR-007, TC-ERR-008 | ✓ Complete |
-| US-4 点子提交 | TC-F-009, TC-F-010, TC-E-006~008, TC-ERR-009~014 | ✓ Complete |
-| US-5 管理后台 | TC-F-011~018, TC-E-009, TC-E-010 | ✓ Complete |
-| US-6 首页展示已完成 | TC-E-004, TC-ST-001, TC-ST-002 | ✓ Complete |
-| US-7 用户查看进度 | TC-F-019, TC-F-020, TC-F-021, TC-E-011 | ✓ Complete |
-| 安全要求 | TC-SEC-001~003 | ✓ Complete |
-| 性能要求 | TC-PERF-001, TC-PERF-002 | ✓ Complete |
+| Requirement         | Test Cases                                                           | Coverage   |
+| ------------------- | -------------------------------------------------------------------- | ---------- |
+| US-1 首页展示       | TC-F-001, TC-F-002, TC-F-003, TC-F-004, TC-E-001, TC-E-002, TC-E-003 | ✓ Complete |
+| US-2 用户注册登录   | TC-F-005, TC-F-006, TC-F-007, TC-E-005, TC-ERR-001~006               | ✓ Complete |
+| US-3 管理员登录     | TC-F-008, TC-ERR-007, TC-ERR-008                                     | ✓ Complete |
+| US-4 点子提交       | TC-F-009, TC-F-010, TC-E-006~008, TC-ERR-009~014                     | ✓ Complete |
+| US-5 管理后台       | TC-F-011~018, TC-E-009, TC-E-010                                     | ✓ Complete |
+| US-6 首页展示已完成 | TC-E-004, TC-ST-001, TC-ST-002                                       | ✓ Complete |
+| US-7 用户查看进度   | TC-F-019, TC-F-020, TC-F-021, TC-E-011                               | ✓ Complete |
+| 安全要求            | TC-SEC-001~003                                                       | ✓ Complete |
+| 性能要求            | TC-PERF-001, TC-PERF-002                                             | ✓ Complete |
 
 ---
 

@@ -10,8 +10,10 @@ export default function InboxPage() {
         <div className="mx-auto mb-6 flex size-14 items-center justify-center rounded-full bg-brand-primary text-white shadow-solid-sm">
           <Inbox className="size-6" aria-hidden="true" />
         </div>
-        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">消息中心</h1>
-        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-gray-600">
+        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+          消息中心
+        </h1>
+        <p className="text-pretty mx-auto mt-3 max-w-md text-sm text-muted-foreground">
           消息功能正在建设中。
         </p>
         <div className="mt-8 flex justify-center">

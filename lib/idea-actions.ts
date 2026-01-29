@@ -120,7 +120,18 @@ export async function getIdeaWithAssessment(ideaId: string) {
 
   const idea = await prisma.idea.findUnique({
     where: { id: ideaId },
-    include: { assessment: true },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      status: true,
+      tags: true,
+      userId: true,
+      isDeleted: true,
+      createdAt: true,
+      updatedAt: true,
+      assessment: true,
+    },
   })
 
   // 只允许查看自己的点子

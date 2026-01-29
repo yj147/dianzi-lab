@@ -1,11 +1,13 @@
 # 用户中心页面美化 - Development Plan
 
 ## Overview
+
 为用户中心页面应用毛玻璃卡片效果、hover 动效、增强空状态交互,提升视觉体验和用户引导。
 
 ## Task Breakdown
 
 ### Task 1: EmptyState 组件增强
+
 - **ID**: task-1
 - **type**: ui
 - **Description**: 为 EmptyState 组件添加可选的 `action?: ReactNode` 属性,用于在空状态下渲染行动按钮或其他交互元素,提升用户引导体验
@@ -21,6 +23,7 @@
   - 确保代码覆盖率 ≥90%
 
 ### Task 2: Dashboard 页面视觉升级
+
 - **ID**: task-2
 - **type**: ui
 - **Description**:
@@ -41,6 +44,7 @@
   - 确保代码覆盖率 ≥90%
 
 ## Acceptance Criteria
+
 - [ ] 页面头部返回首页链接采用按钮样式,清晰可见
 - [ ] 点子卡片采用毛玻璃效果(bg-white/80 backdrop-blur-xl border border-white/20)
 - [ ] 状态徽章颜色与管理后台一致(已验证:通过共享 STATUS_CONFIG 实现,无需修改)
@@ -53,6 +57,7 @@
 - [ ] `npm run build` 成功
 
 ## Technical Notes
+
 - **毛玻璃卡片最佳实践**:
   - 使用 `bg-white/80` 而非 `bg-white` 以实现半透明效果
   - 添加 `backdrop-blur-xl` 实现背景模糊

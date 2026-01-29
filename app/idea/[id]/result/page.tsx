@@ -6,7 +6,11 @@ import RadarChart from '@/components/validator/RadarChart'
 import ResultPanel from '@/components/validator/ResultPanel'
 import { Button } from '@/components/ui/button'
 import { DIMENSIONS } from '@/components/validator/constants'
-import type { DimensionScore, ValidationResult, FeedbackItem } from '@/components/validator/types'
+import type {
+  DimensionScore,
+  ValidationResult,
+  FeedbackItem,
+} from '@/components/validator/types'
 
 type Props = {
   params: Promise<{ id: string }>
@@ -30,7 +34,12 @@ export default async function IdeaResultPage({ params }: Props) {
 
   // 将 feedback 转换为 FeedbackItem 格式
   const feedbackItems: FeedbackItem[] = assessment.feedback.map((msg) => ({
-    type: assessment.finalScore >= 70 ? 'success' : assessment.finalScore >= 40 ? 'warning' : 'error',
+    type:
+      assessment.finalScore >= 70
+        ? 'success'
+        : assessment.finalScore >= 40
+          ? 'warning'
+          : 'error',
     message: msg,
   }))
 
@@ -46,16 +55,25 @@ export default async function IdeaResultPage({ params }: Props) {
         <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
           {idea.title}
         </h1>
-        <p className="text-pretty mt-2 text-sm text-gray-600">创业项目评估结果</p>
+        <p className="text-pretty mt-2 text-sm text-muted-foreground">
+          创业项目评估结果
+        </p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="rounded-xl border-2 border-brand-dark bg-brand-surface p-6 shadow-solid-sm">
-          <h2 className="font-heading text-lg font-bold text-brand-dark">维度分析</h2>
-          <RadarChart scores={scores} className="mx-auto mt-4 w-full max-w-[380px]" />
+          <h2 className="font-heading text-lg font-bold text-brand-dark">
+            维度分析
+          </h2>
+          <RadarChart
+            scores={scores}
+            className="mx-auto mt-4 w-full max-w-[380px]"
+          />
         </section>
         <section>
-          <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">评估结果</h2>
+          <h2 className="mb-4 font-heading text-lg font-bold text-brand-dark">
+            评估结果
+          </h2>
           <ResultPanel result={validationResult} />
         </section>
       </div>

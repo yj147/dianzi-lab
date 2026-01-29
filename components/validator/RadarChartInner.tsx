@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   RadarChart as RechartsRadar,
@@ -7,13 +7,13 @@ import {
   PolarRadiusAxis,
   Radar,
   ResponsiveContainer,
-} from "recharts";
-import type { RadarDataPoint } from "./types";
-import { MIN_SCORE, MAX_SCORE } from "./constants";
+} from 'recharts'
+import type { RadarDataPoint } from './types'
+import { MIN_SCORE, MAX_SCORE } from './constants'
 
 type RadarChartInnerProps = {
-  data: RadarDataPoint[];
-};
+  data: RadarDataPoint[]
+}
 
 export default function RadarChartInner({ data }: RadarChartInnerProps) {
   return (
@@ -22,12 +22,12 @@ export default function RadarChartInner({ data }: RadarChartInnerProps) {
         <PolarGrid stroke="#ddd6fe" />
         <PolarAngleAxis
           dataKey="dimension"
-          tick={{ fill: "#64748b", fontSize: 12 }}
+          tick={{ fill: '#64748b', fontSize: 12 }}
         />
         <PolarRadiusAxis
           angle={30}
           domain={[MIN_SCORE, MAX_SCORE]}
-          tick={{ fill: "#94a3b8", fontSize: 10 }}
+          tick={{ fill: '#94a3b8', fontSize: 10 }}
         />
         <Radar
           name="分数"
@@ -38,5 +38,5 @@ export default function RadarChartInner({ data }: RadarChartInnerProps) {
         />
       </RechartsRadar>
     </ResponsiveContainer>
-  );
+  )
 }

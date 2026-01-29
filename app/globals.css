@@ -37,14 +37,14 @@ html {
   --accent: 249 250 251;
   --accent-foreground: 26 26 26;
 
-  --destructive: 239 68 68;
+  --destructive: 185 28 28;
   --destructive-foreground: 255 255 255;
 
   --radius: 0.5rem;
 
-  --brand-primary: #2B4C7E;
-  --brand-accent: #E07A5F;
-  --brand-success: #81B29A;
+  --brand-primary: #2b4c7e;
+  --brand-accent: #e07a5f;
+  --brand-success: #81b29a;
 }
 
 /* Dark mode overrides (manual toggle via `html.dark`) */
@@ -70,6 +70,9 @@ html {
 
   --accent: 17 24 39;
   --accent-foreground: 249 250 251;
+
+  --destructive: 185 28 28;
+  --destructive-foreground: 255 255 255;
 }
 
 body {

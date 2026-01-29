@@ -27,11 +27,14 @@ export function useInView<T extends Element>(
       return
     }
 
-    const observer = new IntersectionObserver(([entry]) => setInView(Boolean(entry?.isIntersecting)), {
-      root,
-      rootMargin,
-      threshold,
-    })
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(Boolean(entry?.isIntersecting)),
+      {
+        root,
+        rootMargin,
+        threshold,
+      }
+    )
     observer.observe(node)
 
     return () => observer.disconnect()
