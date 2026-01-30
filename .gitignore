@@ -42,6 +42,7 @@ next-env.d.ts
 .sparv/
 .playwright-mcp/
 .shared/
+helloagents_backup_*/
 dashboard-current.png
 dashboard-final.png
 homepage_after_fix.png

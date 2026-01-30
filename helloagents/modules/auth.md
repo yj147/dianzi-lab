@@ -50,11 +50,11 @@
 
 ### User
 
-| 字段           | 类型   | 说明        |
-| -------------- | ------ | ----------- | -------- |
-| `email`        | string | 唯一        |
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `email` | string | 唯一 |
 | `passwordHash` | string | bcrypt hash |
-| `role`         | `USER  | ADMIN`      | 访问控制 |
+| `role` | `Role` | 访问控制（`USER`/`ADMIN`） |
 
 ## 依赖
 

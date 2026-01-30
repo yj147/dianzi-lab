@@ -66,3 +66,4 @@
 - **状态流转**: `PENDING → APPROVED → IN_PROGRESS → COMPLETED`
 - **标签集合（应用层）**: `工具 / 效率 / 娱乐 / 学习 / 其他`
 - **软删除**: `isDeleted=true` 视为进入垃圾箱；仅管理员可恢复或永久删除。
+

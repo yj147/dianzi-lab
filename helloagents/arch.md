@@ -71,3 +71,4 @@ sequenceDiagram
 | adr_id   | title | date | status | affected_modules | details |
 | -------- | ----- | ---- | ------ | ---------------- | ------- |
 | （暂无） |       |      |        |                  |         |
+
