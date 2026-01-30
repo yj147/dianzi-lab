@@ -9,3 +9,5 @@ export const STATUS_CONFIG: Record<
   IN_PROGRESS: { label: '开发中', description: '工程师正在将想法变为现实。' },
   COMPLETED: { label: '已上线', description: '成品已发布，欢迎体验！' },
 }
+
+export const MESSAGE_MAX_LENGTH = 1000
