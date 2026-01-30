@@ -126,6 +126,13 @@ export async function deleteDeliverable(
   }
 
   const supabase = getSupabaseAdmin()
+  const { error: removeError } = await supabase.storage
+    .from(DELIVERABLES_BUCKET)
+    .remove([deliverable.storagePath])
+
+  if (removeError) {
+    return { success: false, error: '存储删除失败，请重试' }
+  }
 
   try {
     await prisma.deliverable.delete({
@@ -134,8 +141,6 @@ export async function deleteDeliverable(
   } catch {
     return { success: false, error: '删除文件记录失败' }
   }
-
-  await supabase.storage.from(DELIVERABLES_BUCKET).remove([deliverable.storagePath])
 
   revalidatePath(`/admin/ideas/${deliverable.ideaId}`)
 

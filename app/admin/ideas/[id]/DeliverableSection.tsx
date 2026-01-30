@@ -233,6 +233,7 @@ export default function DeliverableSection({
     event.preventDefault()
     event.stopPropagation()
     setIsDragActive(false)
+    if (isUploading) return
     enqueueFiles(Array.from(event.dataTransfer.files))
   }
 
@@ -348,7 +349,7 @@ export default function DeliverableSection({
               disabled={isBusy}
               className="shadow-solid-sm hover:shadow-solid transition-all active:shadow-none active:translate-y-0.5"
             >
-              {isPending ? '正在处理...' : '选择文件'}
+              {isBusy ? '正在处理...' : '选择文件'}
             </Button>
           </div>
         </div>
