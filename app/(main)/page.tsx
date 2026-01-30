@@ -196,9 +196,10 @@ export default async function Home() {
           {completedIdeas.length > 0 ? (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
               {completedIdeas.map((idea) => (
-                <div
+                <Link
                   key={idea.id}
-                  className="group cursor-pointer border-2 border-brand-dark bg-surface shadow-solid transition-[transform] duration-200 hover:-translate-y-1 motion-reduce:transition-none"
+                  href={`/idea/${idea.id}`}
+                  className="group block border-2 border-brand-dark bg-surface shadow-solid transition-[transform] duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
                 >
                   <div className="relative flex h-48 items-center justify-center overflow-hidden border-b-2 border-brand-dark bg-muted">
                     <div className="h-3/4 w-3/4 rounded border-2 border-border bg-surface shadow-sm transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none" />
@@ -221,7 +222,7 @@ export default async function Home() {
                       已交付
                     </span>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           ) : (
