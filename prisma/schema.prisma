@@ -26,11 +26,20 @@ enum Role {
   ADMIN
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
 model Idea {
   id          String      @id @default(cuid())
   title       String      @db.VarChar(50)
   description String      @db.VarChar(1000)
   status      IdeaStatus  @default(PENDING)
+  price         Decimal?       @db.Decimal(10, 2)
+  paymentStatus PaymentStatus  @default(PENDING)
+  paidAt        DateTime?
   tags        String[]
   userId      String
   user        User        @relation(fields: [userId], references: [id])

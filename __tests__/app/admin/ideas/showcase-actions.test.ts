@@ -75,7 +75,38 @@ describe('app/admin/ideas/actions.updateIdeaShowcase', () => {
         duration: '',
         externalUrl: 'not-a-url',
       })
-    ).resolves.toEqual({ success: false, error: '链接格式不正确' })
+    ).resolves.toEqual({ success: false, error: '链接格式不正确（仅支持 http/https）' })
+
+    expect(prisma.findUnique).not.toHaveBeenCalled()
+    expect(prisma.update).not.toHaveBeenCalled()
+  })
+
+  it('rejects javascript: and data: URL schemes (XSS prevention)', async () => {
+    getSessionMock().mockResolvedValue({
+      sub: 'admin_1',
+      email: 'admin@example.com',
+      role: 'ADMIN',
+    })
+
+    const prisma = getPrismaIdeaMock()
+
+    await expect(
+      updateIdeaShowcase('idea_1', {
+        screenshots: [],
+        techStack: [],
+        duration: '',
+        externalUrl: 'javascript:alert(1)',
+      })
+    ).resolves.toEqual({ success: false, error: '链接格式不正确（仅支持 http/https）' })
+
+    await expect(
+      updateIdeaShowcase('idea_1', {
+        screenshots: ['data:image/png;base64,abc'],
+        techStack: [],
+        duration: '',
+        externalUrl: '',
+      })
+    ).resolves.toEqual({ success: false, error: '截图 URL 格式不正确（仅支持 http/https）' })
 
     expect(prisma.findUnique).not.toHaveBeenCalled()
     expect(prisma.update).not.toHaveBeenCalled()
