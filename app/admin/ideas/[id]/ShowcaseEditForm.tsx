@@ -361,7 +361,7 @@ export default function ShowcaseEditForm({
               <a
                 href={externalUrlPreview}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-lg border-2 border-brand-dark bg-brand-accent/20 px-3 py-2 text-xs font-bold text-brand-dark shadow-solid-sm transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-solid motion-reduce:transition-none"
               >
                 <ExternalLink className="size-4" aria-hidden="true" />
