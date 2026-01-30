@@ -42,6 +42,17 @@ export default async function PublicIdeaDetailPage({
   const hasTechStack = idea.techStack.some((tag) => tag.trim().length > 0)
   const hasDuration = Boolean(idea.duration?.trim())
 
+  const safeExternalUrl = (() => {
+    const url = idea.externalUrl?.trim()
+    if (!url) return null
+    try {
+      const parsed = new URL(url)
+      return parsed.protocol === 'http:' || parsed.protocol === 'https:' ? url : null
+    } catch {
+      return null
+    }
+  })()
+
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
       <header className="mb-8">
@@ -119,10 +130,10 @@ export default async function PublicIdeaDetailPage({
       </div>
 
       <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-        {idea.externalUrl ? (
+        {safeExternalUrl ? (
           <Button asChild size="lg">
             <a
-              href={idea.externalUrl}
+              href={safeExternalUrl}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2"

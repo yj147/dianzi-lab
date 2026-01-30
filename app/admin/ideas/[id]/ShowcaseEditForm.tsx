@@ -47,7 +47,8 @@ function toSafeExternalUrl(value: string): string | null {
   if (!trimmed) return null
 
   try {
-    new URL(trimmed)
+    const url = new URL(trimmed)
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') return null
     return trimmed
   } catch {
     return null

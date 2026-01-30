@@ -1,0 +1,9 @@
+session_id: "20260129184051"
+feature_name: "iOS-style sunrise/sunset theme switching"
+current_phase: "review"
+action_count: 5
+consecutive_failures: 0
+max_iterations: 12
+iteration_count: 0
+completion_promise: "主题将在用户所在地的真实日出日落时间自动切换，定位失败时降级到固定时间（6:00/18:00）"
+ehrb_flags: []
