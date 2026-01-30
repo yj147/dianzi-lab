@@ -40,6 +40,12 @@ model Idea {
   assessment  Assessment?
   messages    Message[]
 
+  // 案例展示扩展字段
+  screenshots String[]    @default([])
+  techStack   String[]    @default([])
+  duration    String?
+  externalUrl String?
+
   @@index([userId])
   @@index([status])
 }
