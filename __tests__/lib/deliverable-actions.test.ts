@@ -189,14 +189,60 @@ describe('lib/deliverable-actions', () => {
     })
 
     it('rejects when not idea owner', async () => {
-      getSessionMock().mockResolvedValue({ sub: 'user_2' })
+      getSessionMock().mockResolvedValue({ sub: 'user_2', role: 'USER' })
       getPrismaMock().deliverable.findUnique.mockResolvedValue({
         storagePath: 'path',
-        idea: { userId: 'user_1' },
+        idea: { userId: 'user_1', status: 'COMPLETED', paymentStatus: 'PAID' },
       })
 
       const result = await getSignedUrl('del_1')
       expect(result).toEqual({ success: false, error: '无权限' })
+    })
+
+    it('rejects when idea not COMPLETED', async () => {
+      getSessionMock().mockResolvedValue({ sub: 'user_1', role: 'USER' })
+      getPrismaMock().deliverable.findUnique.mockResolvedValue({
+        storagePath: 'path',
+        idea: { userId: 'user_1', status: 'IN_PROGRESS', paymentStatus: 'PAID' },
+      })
+
+      const result = await getSignedUrl('del_1')
+      expect(result).toEqual({ success: false, error: '项目未完成或未支付，无法下载' })
+    })
+
+    it('rejects when payment not PAID', async () => {
+      getSessionMock().mockResolvedValue({ sub: 'user_1', role: 'USER' })
+      getPrismaMock().deliverable.findUnique.mockResolvedValue({
+        storagePath: 'path',
+        idea: { userId: 'user_1', status: 'COMPLETED', paymentStatus: 'PENDING' },
+      })
+
+      const result = await getSignedUrl('del_1')
+      expect(result).toEqual({ success: false, error: '项目未完成或未支付，无法下载' })
+    })
+
+    it('allows admin to download regardless of status', async () => {
+      getSessionMock().mockResolvedValue({ sub: 'admin_1', role: 'ADMIN' })
+      getPrismaMock().deliverable.findUnique.mockResolvedValue({
+        storagePath: 'path/to/file',
+        idea: { userId: 'user_1', status: 'IN_PROGRESS', paymentStatus: 'PENDING' },
+      })
+      mockCreateSignedUrl.mockResolvedValue({ data: { signedUrl: 'https://signed.url' }, error: null })
+
+      const result = await getSignedUrl('del_1')
+      expect(result).toEqual({ success: true, signedUrl: 'https://signed.url' })
+    })
+
+    it('returns signed URL when owner + COMPLETED + PAID', async () => {
+      getSessionMock().mockResolvedValue({ sub: 'user_1', role: 'USER' })
+      getPrismaMock().deliverable.findUnique.mockResolvedValue({
+        storagePath: 'path/to/file',
+        idea: { userId: 'user_1', status: 'COMPLETED', paymentStatus: 'PAID' },
+      })
+      mockCreateSignedUrl.mockResolvedValue({ data: { signedUrl: 'https://signed.url' }, error: null })
+
+      const result = await getSignedUrl('del_1')
+      expect(result).toEqual({ success: true, signedUrl: 'https://signed.url' })
     })
   })
 })

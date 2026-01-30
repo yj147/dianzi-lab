@@ -6,6 +6,7 @@ import {
   Beaker,
   CheckCircle2,
   Clock,
+  Download,
   FileText,
   Lightbulb,
   Plus,
@@ -110,8 +111,10 @@ export default async function DashboardPage({
         description: true,
         tags: true,
         status: true,
+        paymentStatus: true,
         createdAt: true,
         assessment: { select: { id: true } },
+        _count: { select: { deliverables: true } },
       },
     }),
     prisma.idea.count({ where: { userId: session.sub, isDeleted: false } }),
@@ -362,6 +365,18 @@ export default async function DashboardPage({
                       >
                         查看评估{' '}
                         <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                      </Link>
+                    </div>
+                  ) : null}
+
+                  {idea._count.deliverables > 0 ? (
+                    <div className="mt-3">
+                      <Link
+                        href={`/dashboard/idea/${idea.id}`}
+                        className="text-xs font-bold text-brand-success hover:underline inline-flex items-center gap-1"
+                      >
+                        <Download className="size-3.5" aria-hidden="true" />
+                        下载文件 ({idea._count.deliverables})
                       </Link>
                     </div>
                   ) : null}
