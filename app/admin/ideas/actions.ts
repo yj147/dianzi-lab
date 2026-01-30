@@ -2,7 +2,7 @@
 
 import type { IdeaStatus } from '@prisma/client'
 
-import { getSession } from '@/lib/auth'
+import { getSession, type SessionPayload } from '@/lib/auth'
 import { MESSAGE_MAX_LENGTH } from '@/lib/constants'
 import { prisma } from '@/lib/db'
 import { revalidatePath, revalidateTag } from 'next/cache'
@@ -11,11 +11,13 @@ export type AdminSendMessageResult =
   | { success: true; messageId: string }
   | { success: false; error: string }
 
-async function requireAdmin(): Promise<void> {
+async function requireAdmin(): Promise<SessionPayload> {
   const session = await getSession()
   if (!session || session.role !== 'ADMIN') {
     throw new Error('Unauthorized')
   }
+
+  return session
 }
 
 export async function updateIdeaStatus(ideaId: string, status: IdeaStatus) {
@@ -35,12 +37,7 @@ export async function adminSendMessage(
   content: string
 ): Promise<AdminSendMessageResult> {
   try {
-    await requireAdmin()
-
-    const session = await getSession()
-    if (!session) {
-      return { success: false, error: '未登录' }
-    }
+    const session = await requireAdmin()
 
     const normalized = content.trim()
     if (normalized.length < 1) {

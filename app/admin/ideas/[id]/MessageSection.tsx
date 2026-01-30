@@ -2,6 +2,8 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { format } from 'date-fns'
+import { zhCN } from 'date-fns/locale'
 
 import { MESSAGE_MAX_LENGTH } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
@@ -20,11 +22,11 @@ type MessageItem = {
 
 export default function MessageSection({
   ideaId,
-  ideaUserId,
+  ideaOwnerId,
   initialMessages,
 }: {
   ideaId: string
-  ideaUserId: string
+  ideaOwnerId: string
   initialMessages: MessageItem[]
 }) {
   const router = useRouter()
@@ -38,26 +40,34 @@ export default function MessageSection({
   function formatTimestamp(value: string): string {
     const date = new Date(value)
     if (Number.isNaN(date.getTime())) return value
-    return date.toLocaleString('zh-CN')
+    return format(date, 'yyyy-MM-dd HH:mm', { locale: zhCN })
   }
 
   function handleSend(): void {
     if (!canSend) return
 
     startTransition(async () => {
-      const result = await adminSendMessage(ideaId, trimmedContent)
-      if (!result.success) {
+      try {
+        const result = await adminSendMessage(ideaId, trimmedContent)
+        if (!result.success) {
+          toast({
+            title: '发送失败',
+            description: result.error,
+            variant: 'destructive',
+          })
+          return
+        }
+
+        setContent('')
+        toast({ title: '消息已发送', variant: 'success' })
+        router.refresh()
+      } catch {
         toast({
           title: '发送失败',
-          description: result.error,
+          description: '网络异常，请稍后再试',
           variant: 'destructive',
         })
-        return
       }
-
-      setContent('')
-      toast({ title: '消息已发送', variant: 'success' })
-      router.refresh()
     })
   }
 
@@ -100,7 +110,7 @@ export default function MessageSection({
       <div className="mt-12 space-y-6">
         {initialMessages.length > 0 ? (
           initialMessages.map((message) => {
-            const isFromOwner = message.senderId === ideaUserId
+            const isFromOwner = message.senderId === ideaOwnerId
             return (
               <article
                 key={message.id}

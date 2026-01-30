@@ -189,7 +189,7 @@ export default async function AdminIdeaDetailPage({
 
       <MessageSection
         ideaId={idea.id}
-        ideaUserId={idea.userId}
+        ideaOwnerId={idea.userId}
         initialMessages={initialMessages}
       />
     </div>
