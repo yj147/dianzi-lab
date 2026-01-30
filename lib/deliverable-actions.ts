@@ -106,7 +106,12 @@ export async function deleteDeliverable(
   const urlParts = deliverable.url.split(`/${DELIVERABLES_BUCKET}/`)
   if (urlParts.length > 1) {
     const filePath = urlParts[1]
-    await supabase.storage.from(DELIVERABLES_BUCKET).remove([filePath])
+    const { error: removeError } = await supabase.storage
+      .from(DELIVERABLES_BUCKET)
+      .remove([filePath])
+    if (removeError) {
+      return { success: false, error: `存储删除失败: ${removeError.message}` }
+    }
   }
 
   await prisma.deliverable.delete({
