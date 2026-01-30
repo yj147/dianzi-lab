@@ -135,7 +135,7 @@ export default async function PublicIdeaDetailPage({
             <a
               href={safeExternalUrl}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2"
             >
               <ExternalLink className="size-5" aria-hidden="true" />
