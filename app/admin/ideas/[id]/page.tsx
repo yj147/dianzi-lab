@@ -11,6 +11,7 @@ import { DIMENSIONS } from '@/components/validator/constants'
 import MessageSection from './MessageSection'
 import PaymentSection from './PaymentSection'
 import ShowcaseEditForm from './ShowcaseEditForm'
+import DeliverableSection from './DeliverableSection'
 
 async function getIdeaWithAssessment(id: string) {
   return prisma.idea.findUnique({
@@ -29,9 +30,13 @@ async function getIdeaWithAssessment(id: string) {
       techStack: true,
       duration: true,
       externalUrl: true,
-      price: true,
+price: true,
       paymentStatus: true,
       paidAt: true,
+      deliverables: {
+        select: { id: true, name: true, size: true, createdAt: true },
+        orderBy: { createdAt: 'desc' },
+      },
     },
   })
 }
@@ -85,6 +90,11 @@ export default async function AdminIdeaDetailPage({
   const initialMessages = messages.map((message) => ({
     ...message,
     createdAt: message.createdAt.toISOString(),
+  }))
+
+  const initialDeliverables = idea.deliverables.map((deliverable) => ({
+    ...deliverable,
+    createdAt: deliverable.createdAt.toISOString(),
   }))
 
   const scores: DimensionScore[] = idea.assessment
@@ -212,6 +222,11 @@ export default async function AdminIdeaDetailPage({
         initialDuration={idea.duration}
         initialExternalUrl={idea.externalUrl}
         canEdit={idea.status === 'COMPLETED'}
+      />
+
+      <DeliverableSection
+        ideaId={idea.id}
+        deliverables={initialDeliverables}
       />
 
       <MessageSection

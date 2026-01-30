@@ -4,6 +4,7 @@ import type { IdeaStatus } from '@prisma/client'
 import AdminIdeaDetailPage from '@/app/admin/ideas/[id]/page'
 
 const showcaseProps: any[] = []
+const deliverableProps: any[] = []
 
 jest.mock('@/app/admin/ideas/[id]/ShowcaseEditForm', () => ({
   __esModule: true,
@@ -16,6 +17,14 @@ jest.mock('@/app/admin/ideas/[id]/ShowcaseEditForm', () => ({
 jest.mock('@/app/admin/ideas/[id]/MessageSection', () => ({
   __esModule: true,
   default: () => <div data-testid="message-section" />,
+}))
+
+jest.mock('@/app/admin/ideas/[id]/DeliverableSection', () => ({
+  __esModule: true,
+  default: (props: any) => {
+    deliverableProps.push(props)
+    return <div data-testid="deliverable-section" />
+  },
 }))
 
 jest.mock('@/lib/db', () => ({
@@ -50,6 +59,7 @@ function createIdea(overrides: { id: string; status: IdeaStatus }) {
     techStack: [],
     duration: null,
     externalUrl: null,
+    deliverables: [],
   }
 }
 
@@ -57,6 +67,7 @@ describe('/admin/ideas/[id] showcase integration', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     showcaseProps.length = 0
+    deliverableProps.length = 0
   })
 
   it('queries idea with showcase fields', async () => {
@@ -79,6 +90,7 @@ describe('/admin/ideas/[id] showcase integration', () => {
         techStack: true,
         duration: true,
         externalUrl: true,
+        deliverables: expect.any(Object),
       }),
     })
   })
@@ -93,12 +105,18 @@ describe('/admin/ideas/[id] showcase integration', () => {
     expect(showcaseProps[0]).toEqual(
       expect.objectContaining({ ideaId: 'idea_1', canEdit: true })
     )
+    expect(deliverableProps[0]).toEqual(
+      expect.objectContaining({ ideaId: 'idea_1', deliverables: [] })
+    )
 
     prisma.idea.findUnique.mockResolvedValue(createIdea({ id: 'idea_2', status: 'IN_PROGRESS' }))
     render(await AdminIdeaDetailPage({ params: { id: 'idea_2' } }))
 
     expect(showcaseProps[1]).toEqual(
       expect.objectContaining({ ideaId: 'idea_2', canEdit: false })
+    )
+    expect(deliverableProps[1]).toEqual(
+      expect.objectContaining({ ideaId: 'idea_2', deliverables: [] })
     )
   })
 })

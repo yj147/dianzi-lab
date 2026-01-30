@@ -4,6 +4,11 @@ import { revalidatePath } from 'next/cache'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { getSupabaseAdmin, DELIVERABLES_BUCKET } from '@/lib/supabase'
+import {
+  MAX_FILE_SIZE,
+  isAcceptedExtension,
+  describeAcceptedTypes,
+} from '@/lib/deliverable-constants'
 
 export type UploadDeliverableResult =
   | { success: true; deliverable: { id: string; name: string; storagePath: string; size: number } }
@@ -35,9 +40,16 @@ export async function uploadDeliverable(
     return { success: false, error: '未提供文件' }
   }
 
-  const MAX_FILE_SIZE = 50 * 1024 * 1024
   if (file.size > MAX_FILE_SIZE) {
     return { success: false, error: '文件大小超过 50MB 限制' }
+  }
+
+  const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+  if (!isAcceptedExtension(extension)) {
+    return {
+      success: false,
+      error: `不支持的文件类型（仅支持 ${describeAcceptedTypes()}）`,
+    }
   }
 
   const idea = await prisma.idea.findUnique({
@@ -69,17 +81,22 @@ export async function uploadDeliverable(
     return { success: false, error: `上传失败: ${uploadError.message}` }
   }
 
-  const deliverable = await prisma.deliverable.create({
-    data: {
-      name: file.name,
-      storagePath: fileName,
-      size: file.size,
-      ideaId,
-    },
-  })
+  let deliverable
+  try {
+    deliverable = await prisma.deliverable.create({
+      data: {
+        name: file.name,
+        storagePath: fileName,
+        size: file.size,
+        ideaId,
+      },
+    })
+  } catch {
+    await supabase.storage.from(DELIVERABLES_BUCKET).remove([fileName])
+    return { success: false, error: '保存文件记录失败' }
+  }
 
   revalidatePath(`/admin/ideas/${ideaId}`)
-  revalidatePath(`/dashboard`)
 
   return {
     success: true,
@@ -112,16 +129,20 @@ export async function deleteDeliverable(
   const { error: removeError } = await supabase.storage
     .from(DELIVERABLES_BUCKET)
     .remove([deliverable.storagePath])
+
   if (removeError) {
-    return { success: false, error: `存储删除失败: ${removeError.message}` }
+    return { success: false, error: '存储删除失败，请重试' }
   }
 
-  await prisma.deliverable.delete({
-    where: { id: deliverableId },
-  })
+  try {
+    await prisma.deliverable.delete({
+      where: { id: deliverableId },
+    })
+  } catch {
+    return { success: false, error: '删除文件记录失败' }
+  }
 
   revalidatePath(`/admin/ideas/${deliverable.ideaId}`)
-  revalidatePath(`/dashboard`)
 
   return { success: true }
 }

@@ -62,7 +62,6 @@ function getPrismaMock() {
   }
 }
 
-
 describe('lib/deliverable-actions', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -104,7 +103,7 @@ describe('lib/deliverable-actions', () => {
       getPrismaMock().idea.findUnique.mockResolvedValue(null)
 
       const formData = new FormData()
-      formData.append('file', new File(['test'], 'test.txt'))
+      formData.append('file', new File(['test'], 'test.pdf'))
 
       const result = await uploadDeliverable('idea_1', formData)
       expect(result).toEqual({ success: false, error: '点子不存在' })
@@ -124,7 +123,7 @@ describe('lib/deliverable-actions', () => {
       })
 
       const formData = new FormData()
-      formData.append('file', new File(['test'], '../../../etc/passwd'))
+      formData.append('file', new File(['test'], '../../../etc/passwd.pdf'))
 
       await uploadDeliverable('idea_1', formData)
 
