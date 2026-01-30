@@ -389,19 +389,40 @@ describe('lib/message-actions.getInboxMessages', () => {
     })
 
     const prisma = getPrismaMock()
-    const messages = [
+    const prismaMessages = [
       {
         id: 'm1',
         content: 'hi',
         isRead: false,
         createdAt: new Date('2026-01-02T00:00:00Z'),
         sender: { id: 'u_sender', email: 'sender@example.com' },
-        idea: { id: 'idea_1', title: 't' },
+        idea: {
+          id: 'idea_1',
+          title: 't',
+          price: 12.34,
+          paymentStatus: 'PENDING',
+          paidAt: null,
+        },
       },
     ]
-    prisma.message.findMany.mockResolvedValue(messages)
+    prisma.message.findMany.mockResolvedValue(prismaMessages)
 
-    await expect(getInboxMessages()).resolves.toEqual(messages)
+    await expect(getInboxMessages()).resolves.toEqual([
+      {
+        id: 'm1',
+        content: 'hi',
+        isRead: false,
+        createdAt: new Date('2026-01-02T00:00:00Z'),
+        sender: { id: 'u_sender', email: 'sender@example.com' },
+        idea: {
+          id: 'idea_1',
+          title: 't',
+          price: '12.34',
+          paymentStatus: 'PENDING',
+          paidAt: null,
+        },
+      },
+    ])
 
     expect(prisma.message.findMany).toHaveBeenCalledWith({
       where: { receiverId: 'u_receiver' },
@@ -412,7 +433,15 @@ describe('lib/message-actions.getInboxMessages', () => {
         isRead: true,
         createdAt: true,
         sender: { select: { id: true, email: true } },
-        idea: { select: { id: true, title: true } },
+        idea: {
+          select: {
+            id: true,
+            title: true,
+            price: true,
+            paymentStatus: true,
+            paidAt: true,
+          },
+        },
       },
     })
   })

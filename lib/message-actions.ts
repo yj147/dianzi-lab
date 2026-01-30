@@ -1,6 +1,7 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import type { PaymentStatus } from '@prisma/client'
 
 import { MESSAGE_MAX_LENGTH } from '@/lib/constants'
 import { getSession } from '@/lib/auth'
@@ -33,7 +34,13 @@ export type InboxMessage = {
   isRead: boolean
   createdAt: Date
   sender: UserSummary
-  idea: { id: string; title: string }
+  idea: {
+    id: string
+    title: string
+    price: string | null
+    paymentStatus: PaymentStatus
+    paidAt: Date | null
+  }
 }
 
 function normalizeContent(content: string): string {
@@ -148,7 +155,7 @@ export async function getInboxMessages(): Promise<InboxMessage[]> {
     redirect('/login')
   }
 
-  return prisma.message.findMany({
+  const messages = await prisma.message.findMany({
     where: { receiverId: session.sub },
     orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     select: {
@@ -157,7 +164,18 @@ export async function getInboxMessages(): Promise<InboxMessage[]> {
       isRead: true,
       createdAt: true,
       sender: { select: { id: true, email: true } },
-      idea: { select: { id: true, title: true } },
+      idea: {
+        select: { id: true, title: true, price: true, paymentStatus: true, paidAt: true },
+      },
     },
   })
+
+  return messages.map((msg) => ({
+    ...msg,
+    idea: {
+      ...msg.idea,
+      price: msg.idea.price?.toString() ?? null,
+      paidAt: msg.idea.paidAt ?? null,
+    },
+  }))
 }

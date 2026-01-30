@@ -125,6 +125,9 @@ export async function getIdeaWithAssessment(ideaId: string) {
       title: true,
       description: true,
       status: true,
+      price: true,
+      paymentStatus: true,
+      paidAt: true,
       tags: true,
       userId: true,
       isDeleted: true,
@@ -139,5 +142,9 @@ export async function getIdeaWithAssessment(ideaId: string) {
     return null
   }
 
-  return idea
+  return {
+    ...idea,
+    price: idea.price?.toString() ?? null,
+    paidAt: idea.paidAt ?? null,
+  }
 }

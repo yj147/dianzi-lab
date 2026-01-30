@@ -162,8 +162,8 @@ model Idea {
 
 **配置**:
 - 环境变量存储收款码图片 URL
-- `WECHAT_PAY_QR_URL`
-- `ALIPAY_QR_URL`
+- `NEXT_PUBLIC_WECHAT_PAY_QR`
+- `NEXT_PUBLIC_ALIPAY_QR`
 
 **Phase 2: Stripe（海外，后期）**
 
