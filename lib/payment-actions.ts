@@ -18,25 +18,32 @@ export async function updateIdeaPrice(
     return { success: false, error: '无权限操作' }
   }
 
-  if (price !== null) {
-    if (!PRICE_REGEX.test(price)) {
+  const normalizedPrice = price?.trim() ?? null
+  const sanitizedPrice = normalizedPrice && normalizedPrice.length > 0 ? normalizedPrice : null
+
+  if (sanitizedPrice !== null) {
+    if (!PRICE_REGEX.test(sanitizedPrice)) {
       return { success: false, error: '价格格式无效，应为数字且最多两位小数' }
     }
-    const numPrice = parseFloat(price)
+    const numPrice = parseFloat(sanitizedPrice)
     if (numPrice < 0 || numPrice > MAX_PRICE) {
       return { success: false, error: `价格必须在 0 到 ${MAX_PRICE} 之间` }
     }
   }
 
-  const idea = await prisma.idea.update({
-    where: { id: ideaId },
-    data: { price: price ? parseFloat(price) : null },
-    select: { id: true, price: true },
-  })
+  try {
+    const idea = await prisma.idea.update({
+      where: { id: ideaId },
+      data: { price: sanitizedPrice ? parseFloat(sanitizedPrice) : null },
+      select: { id: true, price: true },
+    })
 
-  revalidatePath(`/admin/ideas/${ideaId}`)
+    revalidatePath(`/admin/ideas/${ideaId}`)
 
-  return { success: true, idea: { id: idea.id, price: idea.price?.toString() ?? null } }
+    return { success: true, idea: { id: idea.id, price: idea.price?.toString() ?? null } }
+  } catch {
+    return { success: false, error: '更新失败，请稍后重试' }
+  }
 }
 
 export async function updatePaymentStatus(
@@ -55,13 +62,17 @@ export async function updatePaymentStatus(
         ? null
         : undefined
 
-  const idea = await prisma.idea.update({
-    where: { id: ideaId },
-    data: { paymentStatus: status, paidAt },
-    select: { id: true, paymentStatus: true, paidAt: true },
-  })
+  try {
+    const idea = await prisma.idea.update({
+      where: { id: ideaId },
+      data: { paymentStatus: status, paidAt },
+      select: { id: true, paymentStatus: true, paidAt: true },
+    })
 
-  revalidatePath(`/admin/ideas/${ideaId}`)
+    revalidatePath(`/admin/ideas/${ideaId}`)
 
-  return { success: true, idea }
+    return { success: true, idea }
+  } catch {
+    return { success: false, error: '更新失败，请稍后重试' }
+  }
 }

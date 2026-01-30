@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import type { PaymentStatus } from '@prisma/client'
+import { useState } from 'react'
+import { PaymentStatus } from '@prisma/client'
 import { Banknote, CheckCircle2, Clock, RotateCcw } from 'lucide-react'
 import {
   AlertDialog,
@@ -56,29 +56,40 @@ export default function PaymentSection({
   const [paidAt, setPaidAt] = useState(initialPaidAt)
   const [priceError, setPriceError] = useState<string | null>(null)
   const [statusError, setStatusError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
   const [pendingAction, setPendingAction] = useState<'price' | 'status' | null>(
     null
   )
+  const isBusy = pendingAction !== null
 
-  const handleSavePrice = () => {
+  const handleSavePrice = async () => {
+    if (isBusy) return
+
     setPriceError(null)
     setPendingAction('price')
-    startTransition(async () => {
-      const result = await updateIdeaPrice(ideaId, price || null)
+    try {
+      const normalizedPrice = price.trim()
+      const result = await updateIdeaPrice(
+        ideaId,
+        normalizedPrice.length > 0 ? normalizedPrice : null
+      )
       if (result.success) {
         setPrice(result.idea.price ?? '')
       } else {
         setPriceError(result.error)
       }
+    } catch {
+      setPriceError('保存失败，请稍后重试')
+    } finally {
       setPendingAction(null)
-    })
+    }
   }
 
-  const handleStatusChange = (newStatus: PaymentStatus) => {
+  const handleStatusChange = async (newStatus: PaymentStatus) => {
+    if (isBusy) return
+
     setStatusError(null)
     setPendingAction('status')
-    startTransition(async () => {
+    try {
       const result = await updatePaymentStatus(ideaId, newStatus)
       if (result.success) {
         setPaymentStatus(result.idea.paymentStatus)
@@ -86,11 +97,15 @@ export default function PaymentSection({
       } else {
         setStatusError(result.error)
       }
+    } catch {
+      setStatusError('更新失败，请稍后重试')
+    } finally {
       setPendingAction(null)
-    })
+    }
   }
 
-  const config = PAYMENT_STATUS_CONFIG[paymentStatus]
+  const config =
+    PAYMENT_STATUS_CONFIG[paymentStatus] ?? PAYMENT_STATUS_CONFIG.PENDING
   const Icon = config.icon
 
   return (
@@ -119,15 +134,16 @@ export default function PaymentSection({
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="0.00"
+              disabled={isBusy}
               className="w-full rounded-lg border-2 border-gray-200 bg-gray-50 px-4 py-2.5 font-mono text-sm transition-colors focus:border-brand-primary focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
             />
             <button
               type="button"
               onClick={handleSavePrice}
-              disabled={isPending && pendingAction === 'price'}
+              disabled={isBusy}
               className="shrink-0 rounded-lg border-2 border-brand-dark bg-brand-dark px-4 py-2 font-heading font-bold text-white shadow-solid-sm transition-all hover:-translate-y-0.5 hover:bg-brand-accent hover:shadow-solid active:translate-y-0 active:shadow-none disabled:pointer-events-none disabled:opacity-50"
             >
-              {isPending && pendingAction === 'price' ? '保存中...' : '保存'}
+              {pendingAction === 'price' ? '保存中...' : '保存'}
             </button>
           </div>
           {priceError && (
@@ -151,12 +167,12 @@ export default function PaymentSection({
               {config.label}
             </span>
 
-            {paymentStatus === 'PENDING' && (
+            {paymentStatus === PaymentStatus.PENDING && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
                     type="button"
-                    disabled={isPending && pendingAction === 'status'}
+                    disabled={isBusy}
                     className="rounded-lg border-2 border-brand-success bg-brand-success/10 px-3 py-1.5 font-heading text-sm font-bold text-brand-success transition-all hover:bg-brand-success hover:text-white disabled:pointer-events-none disabled:opacity-50"
                   >
                     确认付款
@@ -172,7 +188,7 @@ export default function PaymentSection({
                   <AlertDialogFooter>
                     <AlertDialogCancel>取消</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => handleStatusChange('PAID')}
+                      onClick={() => handleStatusChange(PaymentStatus.PAID)}
                     >
                       确认
                     </AlertDialogAction>
@@ -181,12 +197,12 @@ export default function PaymentSection({
               </AlertDialog>
             )}
 
-            {paymentStatus === 'PAID' && (
+            {paymentStatus === PaymentStatus.PAID && (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
                     type="button"
-                    disabled={isPending && pendingAction === 'status'}
+                    disabled={isBusy}
                     className="rounded-lg border-2 border-amber-500 bg-amber-50 px-3 py-1.5 font-heading text-sm font-bold text-amber-600 transition-all hover:bg-amber-500 hover:text-white disabled:pointer-events-none disabled:opacity-50"
                   >
                     标记退款
@@ -202,7 +218,9 @@ export default function PaymentSection({
                   <AlertDialogFooter>
                     <AlertDialogCancel>取消</AlertDialogCancel>
                     <AlertDialogAction
-                      onClick={() => handleStatusChange('REFUNDED')}
+                      onClick={() =>
+                        handleStatusChange(PaymentStatus.REFUNDED)
+                      }
                     >
                       确认
                     </AlertDialogAction>
