@@ -42,7 +42,7 @@ export default async function InboxPage() {
                       来自: {msg.sender.email}
                     </div>
                     <Link
-                      href={`/idea/${msg.idea.id}`}
+                      href={`/idea/${msg.idea.id}/result`}
                       className="font-heading font-bold text-brand-primary hover:underline"
                     >
                       项目: {msg.idea.title}
