@@ -40,6 +40,24 @@ export async function uploadDeliverable(
     return { success: false, error: '文件大小超过 50MB 限制' }
   }
 
+  const ACCEPTED_EXTENSIONS = [
+    'zip',
+    'rar',
+    'pdf',
+    'docx',
+    'xlsx',
+    'png',
+    'jpg',
+    'jpeg',
+  ]
+  const extension = file.name.split('.').pop()?.toLowerCase() ?? ''
+  if (!ACCEPTED_EXTENSIONS.includes(extension)) {
+    return {
+      success: false,
+      error: `不支持的文件类型（仅支持 ${ACCEPTED_EXTENSIONS.filter((ext) => ext !== 'jpeg').join(' / ')}）`,
+    }
+  }
+
   const idea = await prisma.idea.findUnique({
     where: { id: ideaId },
     select: { id: true },
