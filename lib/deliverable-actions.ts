@@ -14,7 +14,7 @@ export type DeleteDeliverableResult =
   | { success: false; error: string }
 
 export type GetDeliverablesResult =
-  | { success: true; deliverables: { id: string; name: string; storagePath: string; size: number; createdAt: Date }[] }
+  | { success: true; deliverables: { id: string; name: string; storagePath: string; size: number; createdAt: string }[] }
   | { success: false; error: string }
 
 export type GetSignedUrlResult =
@@ -35,6 +35,11 @@ export async function uploadDeliverable(
     return { success: false, error: '未提供文件' }
   }
 
+  const MAX_FILE_SIZE = 50 * 1024 * 1024
+  if (file.size > MAX_FILE_SIZE) {
+    return { success: false, error: '文件大小超过 50MB 限制' }
+  }
+
   const idea = await prisma.idea.findUnique({
     where: { id: ideaId },
     select: { id: true },
@@ -44,7 +49,12 @@ export async function uploadDeliverable(
   }
 
   const supabase = getSupabaseAdmin()
-  const fileName = `${ideaId}/${Date.now()}-${file.name}`
+  const sanitizedName = file.name
+    .replace(/[\/\\]/g, '_')
+    .replace(/\.\./g, '_')
+    .replace(/[\x00-\x1f\x7f]/g, '')
+    .slice(0, 200)
+  const fileName = `${ideaId}/${Date.now()}-${sanitizedName}`
   const arrayBuffer = await file.arrayBuffer()
   const buffer = Buffer.from(arrayBuffer)
 
@@ -148,7 +158,13 @@ export async function getDeliverables(
     orderBy: { createdAt: 'desc' },
   })
 
-  return { success: true, deliverables }
+  return {
+    success: true,
+    deliverables: deliverables.map((d) => ({
+      ...d,
+      createdAt: d.createdAt.toISOString(),
+    })),
+  }
 }
 
 export async function getSignedUrl(
