@@ -62,7 +62,6 @@ function getPrismaMock() {
   }
 }
 
-
 describe('lib/deliverable-actions', () => {
   beforeEach(() => {
     jest.clearAllMocks()

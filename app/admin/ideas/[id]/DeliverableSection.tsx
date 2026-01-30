@@ -8,13 +8,18 @@ import {
   useMemo,
   useRef,
   useState,
-  useTransition,
 } from 'react'
 import { useRouter } from 'next/navigation'
 import { FileUp, Loader2, Trash2 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { uploadDeliverable, deleteDeliverable } from '@/lib/deliverable-actions'
+import {
+  MAX_FILE_SIZE,
+  isAcceptedExtension,
+  getAcceptAttribute,
+  describeAcceptedTypes,
+} from '@/lib/deliverable-constants'
 import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
@@ -46,17 +51,6 @@ type UploadItem = {
   message?: string
 }
 
-const MAX_FILE_SIZE = 50 * 1024 * 1024
-const ACCEPTED_EXTENSIONS = [
-  'zip',
-  'rar',
-  'pdf',
-  'docx',
-  'xlsx',
-  'png',
-  'jpg',
-  'jpeg',
-] as const
 
 function formatFileSize(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return '—'
@@ -86,12 +80,7 @@ function getExtension(name: string): string {
 }
 
 function isAcceptedFileType(file: File): boolean {
-  const ext = getExtension(file.name)
-  return (ACCEPTED_EXTENSIONS as readonly string[]).includes(ext)
-}
-
-function describeAcceptedTypes(): string {
-  return 'zip / rar / pdf / docx / xlsx / png / jpg'
+  return isAcceptedExtension(getExtension(file.name))
 }
 
 export default function DeliverableSection({
@@ -103,26 +92,26 @@ export default function DeliverableSection({
 }) {
   const router = useRouter()
   const { toast } = useToast()
-  const [isPending, startTransition] = useTransition()
 
   const inputId = useId()
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const [isDragActive, setIsDragActive] = useState(false)
   const [uploadItems, setUploadItems] = useState<UploadItem[]>([])
-  const [deletingId, setDeletingId] = useState<string | null>(null)
+  const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set())
 
-  const acceptAttribute = useMemo(
-    () => ACCEPTED_EXTENSIONS.map((ext) => `.${ext}`).join(','),
-    []
-  )
+  const isUploading = uploadItems.some((item) => item.status === 'uploading')
+  const isDeleting = deletingIds.size > 0
+  const isBusy = isUploading || isDeleting
+
+  const acceptAttribute = useMemo(() => getAcceptAttribute(), [])
 
   useEffect(() => {
     setUploadItems((prev) => prev.filter((item) => item.status !== 'success'))
   }, [deliverables])
 
   function openFilePicker() {
-    if (isPending) return
+    if (isBusy) return
     fileInputRef.current?.click()
   }
 
@@ -182,12 +171,14 @@ export default function DeliverableSection({
 
     if (validFiles.length === 0) return
 
-    startTransition(() => {
-      void (async () => {
-        let hasSuccess = false
+    const CONCURRENCY_LIMIT = 3
+    void (async () => {
+      let hasSuccess = false
 
+      for (let i = 0; i < validFiles.length; i += CONCURRENCY_LIMIT) {
+        const batch = validFiles.slice(i, i + CONCURRENCY_LIMIT)
         await Promise.all(
-          validFiles.map(async ({ file, uploadId }) => {
+          batch.map(async ({ file, uploadId }) => {
             try {
               const formData = new FormData()
               formData.append('file', file)
@@ -222,12 +213,12 @@ export default function DeliverableSection({
             }
           })
         )
+      }
 
-        if (hasSuccess) {
-          router.refresh()
-        }
-      })()
-    })
+      if (hasSuccess) {
+        router.refresh()
+      }
+    })()
   }
 
   function handleFileInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -248,7 +239,7 @@ export default function DeliverableSection({
   function handleDragOver(event: DragEvent<HTMLDivElement>) {
     event.preventDefault()
     event.stopPropagation()
-    setIsDragActive(true)
+    if (!isDragActive) setIsDragActive(true)
   }
 
   function handleDragLeave(event: DragEvent<HTMLDivElement>) {
@@ -258,37 +249,37 @@ export default function DeliverableSection({
   }
 
   function handleDelete(deliverableId: string) {
-    if (isPending) return
+    if (deletingIds.has(deliverableId)) return
 
-    setDeletingId(deliverableId)
-    startTransition(() => {
-      void (async () => {
-        try {
-          const result = await deleteDeliverable(deliverableId)
-          if (!result.success) {
-            toast({
-              title: '删除失败',
-              description: result.error,
-              variant: 'destructive',
-            })
-            return
-          }
-
-          toast({ title: '已删除', variant: 'success' })
-          router.refresh()
-        } catch {
+    setDeletingIds((prev) => new Set(prev).add(deliverableId))
+    void (async () => {
+      try {
+        const result = await deleteDeliverable(deliverableId)
+        if (!result.success) {
           toast({
             title: '删除失败',
-            description: '网络异常，请稍后再试',
+            description: result.error,
             variant: 'destructive',
           })
-        } finally {
-          setDeletingId((current) =>
-            current === deliverableId ? null : current
-          )
+          return
         }
-      })()
-    })
+
+        toast({ title: '已删除', variant: 'success' })
+        router.refresh()
+      } catch {
+        toast({
+          title: '删除失败',
+          description: '网络异常，请稍后再试',
+          variant: 'destructive',
+        })
+      } finally {
+        setDeletingIds((prev) => {
+          const next = new Set(prev)
+          next.delete(deliverableId)
+          return next
+        })
+      }
+    })()
   }
 
   return (
@@ -354,7 +345,7 @@ export default function DeliverableSection({
             <Button
               type="button"
               variant="secondary"
-              disabled={isPending}
+              disabled={isBusy}
               className="shadow-solid-sm hover:shadow-solid transition-all active:shadow-none active:translate-y-0.5"
             >
               {isPending ? '正在处理...' : '选择文件'}
@@ -469,7 +460,7 @@ export default function DeliverableSection({
                           type="button"
                           variant="ghost"
                           size="sm"
-                          disabled={isPending || deletingId === deliverable.id}
+                          disabled={deletingIds.has(deliverable.id)}
                           className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                         >
                           <Trash2 className="mr-2 size-4" aria-hidden="true" />
@@ -485,11 +476,11 @@ export default function DeliverableSection({
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                          <AlertDialogCancel disabled={isPending}>
+                          <AlertDialogCancel disabled={isBusy}>
                             取消
                           </AlertDialogCancel>
                           <AlertDialogAction
-                            disabled={isPending}
+                            disabled={isBusy}
                             onClick={() => handleDelete(deliverable.id)}
                           >
                             确认删除
