@@ -8,6 +8,7 @@ import ResultPanel from '@/components/validator/ResultPanel'
 import StatusBadge from '@/components/StatusBadge'
 import type { DimensionScore, FeedbackItem } from '@/components/validator/types'
 import { DIMENSIONS } from '@/components/validator/constants'
+import MessageSection from './MessageSection'
 
 async function getIdeaWithAssessment(id: string) {
   return prisma.idea.findUnique({
@@ -19,8 +20,23 @@ async function getIdeaWithAssessment(id: string) {
       status: true,
       tags: true,
       createdAt: true,
+      userId: true,
       user: { select: { email: true } },
       assessment: true,
+    },
+  })
+}
+
+async function getMessagesForIdea(ideaId: string) {
+  return prisma.message.findMany({
+    where: { ideaId },
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+    select: {
+      id: true,
+      content: true,
+      senderId: true,
+      createdAt: true,
+      sender: { select: { email: true } },
     },
   })
 }
@@ -55,6 +71,12 @@ export default async function AdminIdeaDetailPage({
   if (!idea) {
     notFound()
   }
+
+  const messages = await getMessagesForIdea(idea.id)
+  const initialMessages = messages.map((message) => ({
+    ...message,
+    createdAt: message.createdAt.toISOString(),
+  }))
 
   const scores: DimensionScore[] = idea.assessment
     ? DIMENSIONS.map((dim) => ({
@@ -164,6 +186,12 @@ export default async function AdminIdeaDetailPage({
           </p>
         </section>
       )}
+
+      <MessageSection
+        ideaId={idea.id}
+        ideaUserId={idea.userId}
+        initialMessages={initialMessages}
+      />
     </div>
   )
 }
