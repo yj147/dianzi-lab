@@ -3,6 +3,7 @@ import { ArrowLeft, Inbox, MessageSquare } from 'lucide-react'
 import { format } from 'date-fns'
 import { zhCN } from 'date-fns/locale'
 
+import { PaymentStatusWithDialog } from '@/components/payment/PaymentStatusWithDialog'
 import { Button } from '@/components/ui/button'
 import { getInboxMessages } from '@/lib/message-actions'
 
@@ -49,9 +50,16 @@ export default async function InboxPage() {
                     </Link>
                   </div>
                 </div>
-                <time className="font-mono text-xs text-muted-foreground">
-                  {format(msg.createdAt, 'yyyy-MM-dd HH:mm', { locale: zhCN })}
-                </time>
+                <div className="flex flex-col items-end gap-2">
+                  <PaymentStatusWithDialog
+                    paymentStatus={msg.idea.paymentStatus}
+                    price={msg.idea.price}
+                    paidAtISO={msg.idea.paidAt ? msg.idea.paidAt.toISOString() : null}
+                  />
+                  <time className="font-mono text-xs text-muted-foreground">
+                    {format(msg.createdAt, 'yyyy-MM-dd HH:mm', { locale: zhCN })}
+                  </time>
+                </div>
               </div>
               <p className="text-pretty border-l-4 border-brand-primary/20 pl-4 text-base leading-relaxed text-brand-dark">
                 {msg.content}

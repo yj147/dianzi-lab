@@ -5,6 +5,7 @@ import { getIdeaWithAssessment } from '@/lib/idea-actions'
 import RadarChart from '@/components/validator/RadarChart'
 import ResultPanel from '@/components/validator/ResultPanel'
 import { Button } from '@/components/ui/button'
+import { PaymentStatusWithDialog } from '@/components/payment/PaymentStatusWithDialog'
 import { DIMENSIONS } from '@/components/validator/constants'
 import type {
   DimensionScore,
@@ -52,12 +53,21 @@ export default async function IdeaResultPage({ params }: Props) {
   return (
     <div className="mx-auto w-full max-w-5xl px-4 py-10">
       <header className="mb-8">
-        <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
-          {idea.title}
-        </h1>
-        <p className="text-pretty mt-2 text-sm text-muted-foreground">
-          创业项目评估结果
-        </p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h1 className="text-balance font-heading text-3xl font-bold text-brand-dark md:text-4xl">
+              {idea.title}
+            </h1>
+            <p className="text-pretty mt-2 text-sm text-muted-foreground">
+              创业项目评估结果
+            </p>
+          </div>
+          <PaymentStatusWithDialog
+            paymentStatus={idea.paymentStatus}
+            price={idea.price}
+            paidAtISO={idea.paidAt ? idea.paidAt.toISOString() : null}
+          />
+        </div>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
