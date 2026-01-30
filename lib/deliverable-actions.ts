@@ -6,7 +6,7 @@ import { prisma } from '@/lib/db'
 import { getSupabaseAdmin, DELIVERABLES_BUCKET } from '@/lib/supabase'
 
 export type UploadDeliverableResult =
-  | { success: true; deliverable: { id: string; name: string; url: string; size: number } }
+  | { success: true; deliverable: { id: string; name: string; storagePath: string; size: number } }
   | { success: false; error: string }
 
 export type DeleteDeliverableResult =
@@ -14,7 +14,7 @@ export type DeleteDeliverableResult =
   | { success: false; error: string }
 
 export type GetDeliverablesResult =
-  | { success: true; deliverables: { id: string; name: string; url: string; size: number; createdAt: Date }[] }
+  | { success: true; deliverables: { id: string; name: string; storagePath: string; size: number; createdAt: Date }[] }
   | { success: false; error: string }
 
 export type GetSignedUrlResult =
@@ -59,14 +59,10 @@ export async function uploadDeliverable(
     return { success: false, error: `上传失败: ${uploadError.message}` }
   }
 
-  const { data: urlData } = supabase.storage
-    .from(DELIVERABLES_BUCKET)
-    .getPublicUrl(fileName)
-
   const deliverable = await prisma.deliverable.create({
     data: {
       name: file.name,
-      url: urlData.publicUrl,
+      storagePath: fileName,
       size: file.size,
       ideaId,
     },
@@ -80,7 +76,7 @@ export async function uploadDeliverable(
     deliverable: {
       id: deliverable.id,
       name: deliverable.name,
-      url: deliverable.url,
+      storagePath: deliverable.storagePath,
       size: deliverable.size,
     },
   }
@@ -96,22 +92,18 @@ export async function deleteDeliverable(
 
   const deliverable = await prisma.deliverable.findUnique({
     where: { id: deliverableId },
-    select: { id: true, url: true, ideaId: true },
+    select: { id: true, storagePath: true, ideaId: true },
   })
   if (!deliverable) {
     return { success: false, error: '文件不存在' }
   }
 
   const supabase = getSupabaseAdmin()
-  const urlParts = deliverable.url.split(`/${DELIVERABLES_BUCKET}/`)
-  if (urlParts.length > 1) {
-    const filePath = urlParts[1]
-    const { error: removeError } = await supabase.storage
-      .from(DELIVERABLES_BUCKET)
-      .remove([filePath])
-    if (removeError) {
-      return { success: false, error: `存储删除失败: ${removeError.message}` }
-    }
+  const { error: removeError } = await supabase.storage
+    .from(DELIVERABLES_BUCKET)
+    .remove([deliverable.storagePath])
+  if (removeError) {
+    return { success: false, error: `存储删除失败: ${removeError.message}` }
   }
 
   await prisma.deliverable.delete({
@@ -149,7 +141,7 @@ export async function getDeliverables(
     select: {
       id: true,
       name: true,
-      url: true,
+      storagePath: true,
       size: true,
       createdAt: true,
     },
@@ -169,7 +161,7 @@ export async function getSignedUrl(
 
   const deliverable = await prisma.deliverable.findUnique({
     where: { id: deliverableId },
-    include: { idea: { select: { userId: true } } },
+    select: { storagePath: true, idea: { select: { userId: true } } },
   })
   if (!deliverable) {
     return { success: false, error: '文件不存在' }
@@ -180,15 +172,9 @@ export async function getSignedUrl(
   }
 
   const supabase = getSupabaseAdmin()
-  const urlParts = deliverable.url.split(`/${DELIVERABLES_BUCKET}/`)
-  if (urlParts.length <= 1) {
-    return { success: false, error: '无效的文件路径' }
-  }
-
-  const filePath = urlParts[1]
   const { data, error } = await supabase.storage
     .from(DELIVERABLES_BUCKET)
-    .createSignedUrl(filePath, 3600)
+    .createSignedUrl(deliverable.storagePath, 3600)
 
   if (error || !data) {
     return { success: false, error: `获取签名URL失败: ${error?.message}` }

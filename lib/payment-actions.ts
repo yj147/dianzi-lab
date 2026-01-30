@@ -2,38 +2,51 @@
 
 import { revalidatePath } from 'next/cache'
 
-import { getSession, type SessionPayload } from '@/lib/auth'
+import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { PaymentStatus } from '@prisma/client'
 
-async function requireAdmin(): Promise<SessionPayload> {
+const PRICE_REGEX = /^\d+(\.\d{1,2})?$/
+const MAX_PRICE = 9999999.99
+
+export async function updateIdeaPrice(
+  ideaId: string,
+  price: string | null
+): Promise<{ success: true; idea: { id: string; price: string | null } } | { success: false; error: string }> {
   const session = await getSession()
   if (!session || session.role !== 'ADMIN') {
-    throw new Error('Unauthorized')
+    return { success: false, error: '无权限操作' }
   }
 
-  return session
-}
-
-export async function updateIdeaPrice(ideaId: string, price: number | null) {
-  await requireAdmin()
-
-  if (price !== null && !Number.isFinite(price)) {
-    throw new Error('Invalid price')
+  if (price !== null) {
+    if (!PRICE_REGEX.test(price)) {
+      return { success: false, error: '价格格式无效，应为数字且最多两位小数' }
+    }
+    const numPrice = parseFloat(price)
+    if (numPrice < 0 || numPrice > MAX_PRICE) {
+      return { success: false, error: `价格必须在 0 到 ${MAX_PRICE} 之间` }
+    }
   }
 
   const idea = await prisma.idea.update({
     where: { id: ideaId },
-    data: { price },
+    data: { price: price ? parseFloat(price) : null },
+    select: { id: true, price: true },
   })
 
   revalidatePath(`/admin/ideas/${ideaId}`)
 
-  return idea
+  return { success: true, idea: { id: idea.id, price: idea.price?.toString() ?? null } }
 }
 
-export async function updatePaymentStatus(ideaId: string, status: PaymentStatus) {
-  await requireAdmin()
+export async function updatePaymentStatus(
+  ideaId: string,
+  status: PaymentStatus
+): Promise<{ success: true; idea: { id: string; paymentStatus: PaymentStatus; paidAt: Date | null } } | { success: false; error: string }> {
+  const session = await getSession()
+  if (!session || session.role !== 'ADMIN') {
+    return { success: false, error: '无权限操作' }
+  }
 
   const paidAt =
     status === PaymentStatus.PAID
@@ -45,9 +58,10 @@ export async function updatePaymentStatus(ideaId: string, status: PaymentStatus)
   const idea = await prisma.idea.update({
     where: { id: ideaId },
     data: { paymentStatus: status, paidAt },
+    select: { id: true, paymentStatus: true, paidAt: true },
   })
 
   revalidatePath(`/admin/ideas/${ideaId}`)
 
-  return idea
+  return { success: true, idea }
 }

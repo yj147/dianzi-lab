@@ -108,13 +108,13 @@ model Assessment {
 }
 
 model Deliverable {
-  id        String   @id @default(cuid())
-  name      String
-  url       String
-  size      Int
-  ideaId    String
-  idea      Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
-  createdAt DateTime @default(now())
+  id          String   @id @default(cuid())
+  name        String
+  storagePath String
+  size        Int
+  ideaId      String
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
 
   @@index([ideaId])
 }
