@@ -2,6 +2,7 @@
 
 import { redirect } from 'next/navigation'
 
+import { MESSAGE_MAX_LENGTH } from '@/lib/constants'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 
@@ -42,7 +43,7 @@ function normalizeContent(content: string): string {
 function validateContent(content: string): string | null {
   const normalized = normalizeContent(content)
   if (normalized.length < 1) return '消息内容不能为空'
-  if (normalized.length > 1000) return '消息内容不能超过1000个字符'
+  if (normalized.length > MESSAGE_MAX_LENGTH) return `消息内容不能超过${MESSAGE_MAX_LENGTH}个字符`
   return null
 }
 
@@ -116,20 +117,17 @@ export async function getMessagesByIdeaId(
   }
 
   const isOwner = idea.userId === session.sub
-  if (!isOwner) {
-    const participant = await prisma.message.findFirst({
-      where: {
+
+  const whereClause = isOwner
+    ? { ideaId: idea.id }
+    : {
         ideaId: idea.id,
         OR: [{ senderId: session.sub }, { receiverId: session.sub }],
-      },
-      select: { id: true },
-    })
-    if (!participant) return []
-  }
+      }
 
   return prisma.message.findMany({
-    where: { ideaId: idea.id },
-    orderBy: { createdAt: 'asc' },
+    where: whereClause,
+    orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
     select: {
       id: true,
       content: true,
@@ -152,7 +150,7 @@ export async function getInboxMessages(): Promise<InboxMessage[]> {
 
   return prisma.message.findMany({
     where: { receiverId: session.sub },
-    orderBy: { createdAt: 'desc' },
+    orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
     select: {
       id: true,
       content: true,
@@ -163,4 +161,3 @@ export async function getInboxMessages(): Promise<InboxMessage[]> {
     },
   })
 }
-

@@ -64,9 +64,9 @@ model Message {
   receiver User @relation("ReceivedMessages", fields: [receiverId], references: [id])
   idea     Idea @relation(fields: [ideaId], references: [id])
 
-  @@index([receiverId])
-  @@index([ideaId])
-  @@index([senderId])
+  @@index([receiverId, createdAt])
+  @@index([ideaId, createdAt])
+  @@index([senderId, createdAt])
 }
 
 model Assessment {

@@ -27,7 +27,6 @@ jest.mock('@/lib/db', () => ({
     message: {
       create: jest.fn(),
       findMany: jest.fn(),
-      findFirst: jest.fn(),
     },
   },
 }))
@@ -44,7 +43,7 @@ function getPrismaMock() {
   return jest.requireMock('@/lib/db').prisma as {
     idea: { findUnique: jest.Mock }
     user: { findUnique: jest.Mock }
-    message: { create: jest.Mock; findMany: jest.Mock; findFirst: jest.Mock }
+    message: { create: jest.Mock; findMany: jest.Mock }
   }
 }
 
@@ -175,6 +174,69 @@ describe('lib/message-actions.createMessage', () => {
       select: { id: true },
     })
   })
+
+  it('idea 不存在时返回错误', async () => {
+    getSessionMock().mockResolvedValue({
+      sub: 'u1',
+      email: 'a@example.com',
+      role: 'USER',
+    })
+
+    const prisma = getPrismaMock()
+    prisma.idea.findUnique.mockResolvedValue(null)
+
+    await expect(createMessage('idea_x', 'u2', 'hi')).resolves.toEqual({
+      success: false,
+      error: '点子不存在或已删除',
+    })
+
+    expect(prisma.message.create).not.toHaveBeenCalled()
+  })
+
+  it('idea 已删除时返回错误', async () => {
+    getSessionMock().mockResolvedValue({
+      sub: 'u1',
+      email: 'a@example.com',
+      role: 'USER',
+    })
+
+    const prisma = getPrismaMock()
+    prisma.idea.findUnique.mockResolvedValue({
+      id: 'idea_1',
+      userId: 'u_owner',
+      isDeleted: true,
+    })
+
+    await expect(createMessage('idea_1', 'u2', 'hi')).resolves.toEqual({
+      success: false,
+      error: '点子不存在或已删除',
+    })
+
+    expect(prisma.message.create).not.toHaveBeenCalled()
+  })
+
+  it('收件人不存在时返回错误', async () => {
+    getSessionMock().mockResolvedValue({
+      sub: 'u_owner',
+      email: 'owner@example.com',
+      role: 'USER',
+    })
+
+    const prisma = getPrismaMock()
+    prisma.idea.findUnique.mockResolvedValue({
+      id: 'idea_1',
+      userId: 'u_owner',
+      isDeleted: false,
+    })
+    prisma.user.findUnique.mockResolvedValue(null)
+
+    await expect(createMessage('idea_1', 'u_nobody', 'hi')).resolves.toEqual({
+      success: false,
+      error: '收件人不存在',
+    })
+
+    expect(prisma.message.create).not.toHaveBeenCalled()
+  })
 })
 
 describe('lib/message-actions.getMessagesByIdeaId', () => {
@@ -221,10 +283,9 @@ describe('lib/message-actions.getMessagesByIdeaId', () => {
 
     await expect(getMessagesByIdeaId('idea_1')).resolves.toEqual(messages)
 
-    expect(prisma.message.findFirst).not.toHaveBeenCalled()
     expect(prisma.message.findMany).toHaveBeenCalledWith({
       where: { ideaId: 'idea_1' },
-      orderBy: { createdAt: 'asc' },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
       select: expect.objectContaining({
         sender: { select: { id: true, email: true } },
         receiver: { select: { id: true, email: true } },
@@ -245,7 +306,6 @@ describe('lib/message-actions.getMessagesByIdeaId', () => {
       userId: 'u_owner',
       isDeleted: false,
     })
-    prisma.message.findFirst.mockResolvedValue({ id: 'm0' })
 
     const messages = [
       {
@@ -264,14 +324,17 @@ describe('lib/message-actions.getMessagesByIdeaId', () => {
 
     await expect(getMessagesByIdeaId('idea_1')).resolves.toEqual(messages)
 
-    expect(prisma.message.findFirst).toHaveBeenCalledWith({
+    expect(prisma.message.findMany).toHaveBeenCalledWith({
       where: {
         ideaId: 'idea_1',
         OR: [{ senderId: 'u_participant' }, { receiverId: 'u_participant' }],
       },
-      select: { id: true },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      select: expect.objectContaining({
+        sender: { select: { id: true, email: true } },
+        receiver: { select: { id: true, email: true } },
+      }),
     })
-    expect(prisma.message.findMany).toHaveBeenCalled()
   })
 
   it('无关用户不可查看，返回空数组', async () => {
@@ -287,11 +350,21 @@ describe('lib/message-actions.getMessagesByIdeaId', () => {
       userId: 'u_owner',
       isDeleted: false,
     })
-    prisma.message.findFirst.mockResolvedValue(null)
+    prisma.message.findMany.mockResolvedValue([])
 
     await expect(getMessagesByIdeaId('idea_1')).resolves.toEqual([])
 
-    expect(prisma.message.findMany).not.toHaveBeenCalled()
+    expect(prisma.message.findMany).toHaveBeenCalledWith({
+      where: {
+        ideaId: 'idea_1',
+        OR: [{ senderId: 'u_other' }, { receiverId: 'u_other' }],
+      },
+      orderBy: [{ createdAt: 'asc' }, { id: 'asc' }],
+      select: expect.objectContaining({
+        sender: { select: { id: true, email: true } },
+        receiver: { select: { id: true, email: true } },
+      }),
+    })
   })
 })
 
@@ -332,7 +405,7 @@ describe('lib/message-actions.getInboxMessages', () => {
 
     expect(prisma.message.findMany).toHaveBeenCalledWith({
       where: { receiverId: 'u_receiver' },
-      orderBy: { createdAt: 'desc' },
+      orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       select: {
         id: true,
         content: true,
@@ -344,4 +417,3 @@ describe('lib/message-actions.getInboxMessages', () => {
     })
   })
 })
-
