@@ -9,6 +9,7 @@ import StatusBadge from '@/components/StatusBadge'
 import type { DimensionScore, FeedbackItem } from '@/components/validator/types'
 import { DIMENSIONS } from '@/components/validator/constants'
 import MessageSection from './MessageSection'
+import PaymentSection from './PaymentSection'
 import ShowcaseEditForm from './ShowcaseEditForm'
 
 async function getIdeaWithAssessment(id: string) {
@@ -28,6 +29,9 @@ async function getIdeaWithAssessment(id: string) {
       techStack: true,
       duration: true,
       externalUrl: true,
+      price: true,
+      paymentStatus: true,
+      paidAt: true,
     },
   })
 }
@@ -191,6 +195,13 @@ export default async function AdminIdeaDetailPage({
           </p>
         </section>
       )}
+
+      <PaymentSection
+        ideaId={idea.id}
+        initialPrice={idea.price?.toString() ?? null}
+        initialPaymentStatus={idea.paymentStatus}
+        initialPaidAt={idea.paidAt?.toISOString() ?? null}
+      />
 
       <ShowcaseEditForm
         ideaId={idea.id}

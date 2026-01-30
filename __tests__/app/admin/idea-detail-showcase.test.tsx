@@ -38,6 +38,9 @@ function createIdea(overrides: { id: string; status: IdeaStatus }) {
     title: 'Idea Title',
     description: 'Idea Description',
     status: overrides.status,
+    price: null,
+    paymentStatus: 'PENDING',
+    paidAt: null,
     tags: ['工具'],
     createdAt: new Date('2026-01-01T00:00:00Z'),
     userId: 'user_1',
@@ -69,6 +72,9 @@ describe('/admin/ideas/[id] showcase integration', () => {
         id: true,
         title: true,
         status: true,
+        price: true,
+        paymentStatus: true,
+        paidAt: true,
         screenshots: true,
         techStack: true,
         duration: true,
@@ -96,4 +102,3 @@ describe('/admin/ideas/[id] showcase integration', () => {
     )
   })
 })
-
