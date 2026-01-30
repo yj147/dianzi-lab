@@ -55,6 +55,8 @@ model Idea {
   duration    String?
   externalUrl String?
 
+  deliverables Deliverable[]
+
   @@index([userId])
   @@index([status])
 }
@@ -103,4 +105,16 @@ model Assessment {
   ideaId        String?  @unique
   idea          Idea?    @relation(fields: [ideaId], references: [id])
   @@index([userId])
+}
+
+model Deliverable {
+  id          String   @id @default(cuid())
+  name        String
+  storagePath String
+  size        Int
+  ideaId      String
+  idea        Idea     @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+
+  @@index([ideaId])
 }

@@ -38,6 +38,8 @@ next-env.d.ts
 
 # agent / automation artifacts
 .agent/
+.claude/
+.sparv/
 .playwright-mcp/
 .shared/
 dashboard-current.png
