@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 import { useInView } from '@/lib/use-in-view'
@@ -22,7 +23,10 @@ function ShipmentCard({ idea }: { idea: Shipment }) {
   const typeLabel = getTypeLabel(idea.tags)
 
   return (
-    <div className="group relative mx-4 flex h-80 w-72 shrink-0 cursor-pointer flex-col border-2 border-transparent bg-surface transition-transform duration-200 hover:-translate-y-1 motion-reduce:transition-none">
+    <Link
+      href={`/idea/${idea.id}`}
+      className="group relative mx-4 flex h-80 w-72 shrink-0 flex-col border-2 border-transparent bg-surface transition-transform duration-200 hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background motion-reduce:transition-none"
+    >
       <div className="relative z-10 flex items-center gap-3 border-b-2 border-border bg-surface p-5">
         <div className="flex size-10 items-center justify-center rounded-full bg-brand-dark font-heading font-bold text-background dark:bg-muted dark:text-foreground">
           {name.slice(0, 1)}
@@ -64,7 +68,7 @@ function ShipmentCard({ idea }: { idea: Shipment }) {
       </div>
 
       <div className="pointer-events-none absolute inset-0 border-2 border-brand-primary opacity-0 transition-opacity duration-200 group-hover:opacity-100 motion-reduce:transition-none" />
-    </div>
+    </Link>
   )
 }
 

@@ -9,6 +9,7 @@ import StatusBadge from '@/components/StatusBadge'
 import type { DimensionScore, FeedbackItem } from '@/components/validator/types'
 import { DIMENSIONS } from '@/components/validator/constants'
 import MessageSection from './MessageSection'
+import ShowcaseEditForm from './ShowcaseEditForm'
 
 async function getIdeaWithAssessment(id: string) {
   return prisma.idea.findUnique({
@@ -23,6 +24,10 @@ async function getIdeaWithAssessment(id: string) {
       userId: true,
       user: { select: { email: true } },
       assessment: true,
+      screenshots: true,
+      techStack: true,
+      duration: true,
+      externalUrl: true,
     },
   })
 }
@@ -186,6 +191,17 @@ export default async function AdminIdeaDetailPage({
           </p>
         </section>
       )}
+
+      <ShowcaseEditForm
+        ideaId={idea.id}
+        ideaTitle={idea.title}
+        ideaDescription={idea.description}
+        initialScreenshots={idea.screenshots}
+        initialTechStack={idea.techStack}
+        initialDuration={idea.duration}
+        initialExternalUrl={idea.externalUrl}
+        canEdit={idea.status === 'COMPLETED'}
+      />
 
       <MessageSection
         ideaId={idea.id}
