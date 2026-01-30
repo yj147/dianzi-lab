@@ -177,14 +177,31 @@ export async function getSignedUrl(
 
   const deliverable = await prisma.deliverable.findUnique({
     where: { id: deliverableId },
-    select: { storagePath: true, idea: { select: { userId: true } } },
+    select: {
+      storagePath: true,
+      idea: {
+        select: {
+          userId: true,
+          status: true,
+          paymentStatus: true,
+        },
+      },
+    },
   })
   if (!deliverable) {
     return { success: false, error: '文件不存在' }
   }
 
-  if (deliverable.idea.userId !== session.sub) {
+  if (session.role !== 'ADMIN' && deliverable.idea.userId !== session.sub) {
     return { success: false, error: '无权限' }
+  }
+
+  if (
+    session.role !== 'ADMIN' &&
+    (deliverable.idea.status !== 'COMPLETED' ||
+      deliverable.idea.paymentStatus !== 'PAID')
+  ) {
+    return { success: false, error: '项目未完成或未支付，无法下载' }
   }
 
   const supabase = getSupabaseAdmin()
