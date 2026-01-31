@@ -29,10 +29,13 @@ export const metadata: Metadata = {
   description: '让好点子不再只是想法',
 }
 
+// 生产数据库在亚太区域，为降低 Server Actions/SSR 到数据库的往返延迟，固定 Vercel 执行区域。
+export const preferredRegion = 'hkg1'
+
 const themeInitScript = `
-	(() => {
-	  try {
-	    const storageKey = 'theme';
+		(() => {
+		  try {
+		    const storageKey = 'theme';
 	    const classNameDark = 'dark';
 	    const root = document.documentElement;
 	    const SUN_TIMES_CACHE_KEY = 'sun_times';
