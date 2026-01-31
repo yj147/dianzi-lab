@@ -105,10 +105,20 @@ describe('Admin Ideas Page + Table', () => {
         email: 'u2@example.com',
       }),
     ])
+    ;(prisma.idea.count as jest.Mock)
+      .mockResolvedValueOnce(101) // pending
+      .mockResolvedValueOnce(102) // approved
+      .mockResolvedValueOnce(103) // in progress
+      .mockResolvedValueOnce(104) // completed
+      .mockResolvedValueOnce(0) // trash
 
     render(await AdminIdeasPage({ searchParams: {} }))
 
     expect(screen.getByText('项目管理')).toBeInTheDocument()
+    expect(screen.getByText('101')).toBeInTheDocument()
+    expect(screen.getByText('102')).toBeInTheDocument()
+    expect(screen.getByText('103')).toBeInTheDocument()
+    expect(screen.getByText('104')).toBeInTheDocument()
     expect(screen.getAllByText('Idea 1')[0]).toBeInTheDocument()
     expect(screen.getAllByText('u1')[0]).toBeInTheDocument()
     expect(screen.getAllByText('Idea 2')[0]).toBeInTheDocument()

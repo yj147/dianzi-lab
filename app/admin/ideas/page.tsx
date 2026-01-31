@@ -36,13 +36,21 @@ async function getIdeas(status?: IdeaStatus) {
 }
 
 async function getIdeaStats() {
-  const [pendingCount, buildingCount, trashCount] = await Promise.all([
+  const [
+    pendingCount,
+    approvedCount,
+    inProgressCount,
+    completedCount,
+    trashCount,
+  ] = await Promise.all([
     prisma.idea.count({ where: { isDeleted: false, status: 'PENDING' } }),
+    prisma.idea.count({ where: { isDeleted: false, status: 'APPROVED' } }),
     prisma.idea.count({ where: { isDeleted: false, status: 'IN_PROGRESS' } }),
+    prisma.idea.count({ where: { isDeleted: false, status: 'COMPLETED' } }),
     prisma.idea.count({ where: { isDeleted: true } }),
   ])
 
-  return { pendingCount, buildingCount, trashCount }
+  return { pendingCount, approvedCount, inProgressCount, completedCount, trashCount }
 }
 
 export default async function AdminIdeasPage({
@@ -85,10 +93,28 @@ export default async function AdminIdeasPage({
 
         <div className="rounded-xl border-2 border-brand-dark bg-surface p-5 shadow-solid-sm">
           <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            开发中
+            {STATUS_CONFIG.APPROVED.label}
+          </div>
+          <div className="font-heading text-3xl font-bold tabular-nums text-primary">
+            {stats.approvedCount}
+          </div>
+        </div>
+
+        <div className="rounded-xl border-2 border-brand-dark bg-surface p-5 shadow-solid-sm">
+          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {STATUS_CONFIG.IN_PROGRESS.label}
           </div>
           <div className="font-heading text-3xl font-bold tabular-nums text-orange-600">
-            {stats.buildingCount}
+            {stats.inProgressCount}
+          </div>
+        </div>
+
+        <div className="rounded-xl border-2 border-brand-dark bg-surface p-5 shadow-solid-sm">
+          <div className="mb-1 text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {STATUS_CONFIG.COMPLETED.label}
+          </div>
+          <div className="font-heading text-3xl font-bold tabular-nums text-green-600">
+            {stats.completedCount}
           </div>
         </div>
       </section>
