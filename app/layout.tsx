@@ -29,8 +29,8 @@ export const metadata: Metadata = {
   description: '让好点子不再只是想法',
 }
 
-// 生产数据库在亚太区域，为降低 Server Actions/SSR 到数据库的往返延迟，固定 Vercel 执行区域。
-export const preferredRegion = 'hkg1'
+// 生产数据库在 ap-northeast-1（Supabase），为降低 Server Actions/SSR 到数据库的往返延迟，固定 Vercel 执行区域。
+export const preferredRegion = 'hnd1'
 
 const themeInitScript = `
 		(() => {
