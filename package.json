@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write .",
+    "ops:seed-admin:production": "bash scripts/seed-admin-production.sh",
     "test": "node ./scripts/jest.js",
     "test:coverage": "node ./scripts/jest.js --coverage",
     "setup:storage": "npx ts-node scripts/setup-storage-bucket.ts"

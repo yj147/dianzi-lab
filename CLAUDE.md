@@ -51,7 +51,7 @@ middleware.ts         # 路由保护：/dashboard/* 和 /admin/* 需登录，/ad
 
 prisma/
 ├── schema.prisma     # User + Idea 模型
-└── seed.ts           # 管理员种子 admin@dianzi.com / admin123
+└── seed.ts           # 管理员种子（本地默认账号仅用于开发环境；生产请用 SEED_ADMIN_* 初始化/重置）
 ```
 
 ## 数据模型
@@ -97,7 +97,27 @@ npx prisma migrate dev --name <name>  # 创建迁移
 - **Cookie**: `session`，httpOnly，sameSite=lax
 - **Middleware**: 保护 `/dashboard/*` 和 `/admin/*`
 - **角色**: `USER` 只能访问用户中心；`ADMIN` 可访问管理后台
-- **种子账号**: `admin@dianzi.com` / `admin123`
+- **本地开发默认种子账号**: `admin@dianzi.com` / `admin123`（仅本地开发使用）
+- **生产管理员初始化/重置**:
+  - 生产环境不会“自动知道”管理员明文密码；密码只会以 hash 形式存在于数据库。
+  - 忘记密码无法找回，只能重置：重新跑 `prisma db seed` 并提供 `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD`。
+  - 生产环境禁止使用默认密码 `admin123`（`prisma/seed.ts` 会拒绝）。
+
+### 生产管理员初始化/重置（推荐流程）
+
+1. 确认 Vercel CLI 已登录且项目已 link（仓库根目录存在 `.vercel/project.json`）：
+
+```bash
+vercel whoami
+```
+
+2. 运行交互式脚本：临时拉取 Vercel Production 环境变量到临时文件，并提示输入管理员邮箱/密码，然后执行 `prisma db seed`：
+
+```bash
+npm run ops:seed-admin:production
+```
+
+3. 用你输入的邮箱/密码访问 `/login` 登录。
 
 ## 代码规范
 
