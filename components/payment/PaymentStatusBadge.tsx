@@ -16,12 +16,12 @@ export function PaymentStatusBadge({
   paidAt,
   onPayClick,
 }: PaymentStatusBadgeProps) {
-  // PAID: 显示「已支付」+ 时间
+  // PAID: 显示「已支付」(+ 金额) + 时间
   if (paymentStatus === 'PAID') {
     return (
       <div className="flex items-center gap-2 text-sm">
         <span className="rounded bg-brand-success/15 px-2 py-0.5 font-bold text-brand-success">
-          已支付
+          已支付{price ? ` ¥${price}` : ''}
         </span>
         {paidAt && (
           <span className="text-xs text-muted-foreground">
@@ -32,11 +32,11 @@ export function PaymentStatusBadge({
     )
   }
 
-  // REFUNDED: 显示「已退款」
+  // REFUNDED: 显示「已退款」(+ 金额)
   if (paymentStatus === 'REFUNDED') {
     return (
       <span className="rounded bg-muted px-2 py-0.5 text-sm font-bold text-muted-foreground">
-        已退款
+        已退款{price ? ` ¥${price}` : ''}
       </span>
     )
   }
@@ -68,4 +68,3 @@ export function PaymentStatusBadge({
     </div>
   )
 }
-
