@@ -77,8 +77,10 @@ describe('Dashboard Page', () => {
         description: '这是一个测试点子的描述',
         tags: [],
         status: 'PENDING',
+        paymentStatus: 'PENDING',
         createdAt: new Date('2025-01-20'),
         assessment: null,
+        _count: { deliverables: 0 },
       },
     ]
     ;(getSession as jest.Mock).mockResolvedValue(mockSession)

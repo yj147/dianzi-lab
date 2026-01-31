@@ -73,7 +73,7 @@ export default async function AdminIdeasPage({
       <section className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
         <div className="rounded-xl bg-brand-dark p-5 text-background shadow-solid-sm dark:bg-surface dark:text-foreground">
           <div className="mb-1 text-xs font-bold uppercase tracking-wider text-background/50 dark:text-muted-foreground">
-            待审核
+            {STATUS_CONFIG.PENDING.label}
           </div>
           <div className="flex items-center gap-2 font-heading text-3xl font-bold tabular-nums">
             {stats.pendingCount}

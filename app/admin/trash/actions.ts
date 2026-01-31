@@ -22,6 +22,8 @@ export async function restoreIdea(ideaId: string) {
 
 export async function permanentDeleteIdea(ideaId: string) {
   await requireAdmin()
+  await prisma.message.deleteMany({ where: { ideaId } })
+  await prisma.assessment.deleteMany({ where: { ideaId } })
   await prisma.idea.delete({ where: { id: ideaId } })
   revalidateTag('completed-ideas')
 }
