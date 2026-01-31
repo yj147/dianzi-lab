@@ -2,6 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { Prisma } from '@prisma/client'
+import { randomUUID } from 'crypto'
 import { getSession } from '@/lib/auth'
 import { prisma } from '@/lib/db'
 import { submitIdeaSchema, TAGS } from '@/app/(submit)/submit/schema'
@@ -75,37 +77,68 @@ export async function submitIdeaWithAssessment(
     }
   }
 
-  // 事务：创建 Idea 和 Assessment
-  const result = await prisma.$transaction(async (tx) => {
-    const idea = await tx.idea.create({
-      data: {
-        title: ideaParsed.data.title,
-        description: ideaParsed.data.description,
-        tags: ideaParsed.data.tags,
-        userId: session.sub,
-        status: 'PENDING',
-      },
-    })
+  // 用单次 SQL 往返写入（相比 interactive transaction 显著减少延迟）。
+  // 注意：Postgres 侧没有 cuid() 默认值，因此这里手动生成 id。
+  const ideaId = randomUUID()
+  const assessmentId = randomUUID()
 
-    await tx.assessment.create({
-      data: {
-        ...assessmentParsed.data,
-        userId: session.sub,
-        finalScore,
-        feedback,
-        ideaId: idea.id,
-      },
-    })
-
-    return idea
-  })
+  await prisma.$queryRaw(
+    Prisma.sql`
+      WITH new_idea AS (
+        INSERT INTO "Idea" (
+          "id", "title", "description", "status", "tags", "userId", "updatedAt"
+        ) VALUES (
+          ${ideaId},
+          ${ideaParsed.data.title},
+          ${ideaParsed.data.description},
+          ${'PENDING'}::"IdeaStatus",
+          ${ideaParsed.data.tags}::text[],
+          ${session.sub},
+          NOW()
+        )
+        RETURNING "id"
+      )
+      INSERT INTO "Assessment" (
+        "id",
+        "userId",
+        "targetUser",
+        "channel",
+        "market",
+        "tech",
+        "budget",
+        "businessModel",
+        "team",
+        "risk",
+        "traffic",
+        "finalScore",
+        "feedback",
+        "ideaId"
+      )
+      SELECT
+        ${assessmentId},
+        ${session.sub},
+        ${assessmentParsed.data.targetUser},
+        ${assessmentParsed.data.channel},
+        ${assessmentParsed.data.market},
+        ${assessmentParsed.data.tech},
+        ${assessmentParsed.data.budget},
+        ${assessmentParsed.data.businessModel},
+        ${assessmentParsed.data.team},
+        ${assessmentParsed.data.risk},
+        ${assessmentParsed.data.traffic},
+        ${finalScore},
+        ${feedback}::text[],
+        new_idea."id"
+      FROM new_idea;
+    `
+  )
 
   // 提交点子后，用户中心列表需要刷新（Next Router Cache 可能复用旧的 RSC 结果）
   revalidatePath('/dashboard')
 
   return {
     success: true,
-    ideaId: result.id,
+    ideaId,
     finalScore,
     feedback,
   }
