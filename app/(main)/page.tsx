@@ -7,6 +7,8 @@ import HomeMarquee from '@/components/HomeMarquee'
 import { Button } from '@/components/ui/button'
 import { prisma } from '@/lib/db'
 
+export const preferredRegion = 'hnd1'
+
 const COMPLETED_IDEAS_CACHE_TAG = 'completed-ideas'
 
 async function getCompletedIdeas() {

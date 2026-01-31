@@ -25,6 +25,8 @@ import { STATUS_CONFIG } from '@/lib/constants'
 import { prisma } from '@/lib/db'
 import { cn } from '@/lib/utils'
 
+export const preferredRegion = 'hnd1'
+
 type DashboardPageProps = {
   searchParams?: {
     status?: string

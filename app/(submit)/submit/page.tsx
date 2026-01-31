@@ -5,6 +5,8 @@ import { getSession } from '@/lib/auth'
 import { Button } from '@/components/ui/button'
 import SubmitForm from './SubmitForm'
 
+export const preferredRegion = 'hnd1'
+
 export default async function SubmitPage() {
   const session = await getSession()
 
